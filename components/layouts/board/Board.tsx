@@ -1,4 +1,4 @@
-import style from "../styles/components/board.module.scss";
+import style from "./board.module.scss";
 
 const contentList = [
   { title: "2025.08.18 주보", href: "", writer: "작성자", date: "2025.08.18" },

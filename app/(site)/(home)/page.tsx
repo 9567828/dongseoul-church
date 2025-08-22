@@ -1,8 +1,8 @@
-import Hero from "../../../components/home/Hero";
-import About from "../../../components/home/About";
-import QucickBtnSection from "../../../components/home/QuickBtnSection";
-import Youtube from "../../../components/home/Youtube";
-import Gallery from "../../../components/home/Gallery";
+import Hero from "../../../components/home/hero/Hero";
+import About from "../../../components/home/about/About";
+import QucickBtnSection from "../../../components/home/quickbtn/QuickBtnSection";
+import Youtube from "../../../components/home/youtube/Youtube";
+import Gallery from "../../../components/home/gallery/Gallery";
 export default function Home() {
   return (
     <>

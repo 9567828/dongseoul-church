@@ -1,4 +1,4 @@
-import style from "../../styles/components/layouts/pagetitle.module.scss";
+import style from "./pagetitle.module.scss";
 
 interface Ititle {
   title: string;

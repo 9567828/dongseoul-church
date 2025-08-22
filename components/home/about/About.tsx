@@ -1,8 +1,8 @@
 "use client";
 
 import { MouseEvent } from "react";
-import style from "../../styles/components/screens/home/about.module.scss";
-import PrimaryBtn from "../ui/PrimaryBtn";
+import style from "./about.module.scss";
+import PrimaryBtn from "../../ui/primarybtn/PrimaryBtn";
 
 export default function About() {
   const onClick = (e: MouseEvent<HTMLButtonElement>) => {
