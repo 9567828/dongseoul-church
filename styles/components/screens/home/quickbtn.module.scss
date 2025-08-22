@@ -1,0 +1,51 @@
+.section {
+  width: 100%;
+  height: auto;
+  @include bgImg(null);
+  background-attachment: fixed;
+  padding: 100px 80px;
+}
+
+.btn-wrap {
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  @include flex($justi:space-between, $align: center, $gap: null);
+}
+
+.button {
+  @include flex(true, center, center, 20px);
+  width: 340px;
+  height: 100%;
+  padding: 20px 0;
+  border-radius: 20px;
+  background-color: $white;
+}
+
+.icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 100%;
+  background-color: $match-color200;
+  position: relative;
+  img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+}
+
+.txt {
+  @include font-theme($bodyLg-m);
+}
+
+@media (max-width: 960px) {
+  .section {
+    padding: 100px 50px;
+  }
+  .btn-wrap {
+    flex-direction: column;
+    gap: 50px;
+  }
+}

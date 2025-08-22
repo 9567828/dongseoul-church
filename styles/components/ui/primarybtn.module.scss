@@ -1,0 +1,16 @@
+.btn {
+  width: fit-content;
+  height: 100%;
+  padding: 8px 10px;
+  background-color: $main-color;
+  color: $white;
+  border-radius: 10px;
+  @include font-theme($bodyMd-m);
+  &:hover {
+    background-color: $main-hover;
+  }
+}
+
+.more {
+  width: 130px;
+}

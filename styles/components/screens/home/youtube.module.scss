@@ -1,0 +1,40 @@
+.section {
+  width: 100%;
+  height: 100%;
+  padding: 100px 0;
+  background-color: $bright-bg;
+}
+
+.slide-wrap {
+  width: 100%;
+  @include flex($justi: center, $align: center, $gap: 30px);
+  overflow: hidden;
+}
+
+.tit-wrap {
+  @include flex(true, center, center, 8px);
+  padding-bottom: 80px;
+  p:first-child {
+    @include font-theme($head3Xl-b);
+  }
+  p:last-child {
+    @include font-theme($bodyLg-m);
+    color: $gray-500;
+  }
+}
+
+.imgWrap {
+  width: 100%;
+  height: auto;
+  &.active {
+    transform: scale(1.2);
+    img {
+      width: 100%;
+      height: 100%;
+    }
+  }
+  img {
+    width: 100%;
+    height: 100%;
+  }
+}

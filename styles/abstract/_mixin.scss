@@ -1,0 +1,60 @@
+@use "sass:map";
+@use "./variables" as *;
+
+@mixin flex($isCol: false, $justi, $align, $gap) {
+  display: flex;
+  @if $isCol {
+    flex-direction: column;
+  }
+  @if $justi {
+    justify-content: $justi
+  }
+  @if $align {
+    align-items: $align
+  }
+  @if $gap {
+    gap: $gap
+  }
+}
+
+@mixin bgImg($url, $position:center, $size:cover, $repeat: no-repeat) {
+  @if ($url) {
+    background-image: url($url);
+  }
+  background-position: $position;
+  background-size: $size;
+  background-repeat: $repeat;
+}
+
+@mixin grid-col($col, $justi, $align, $gap) {
+  display: grid;
+  @if $col {
+    grid-template-columns: $col;
+  }
+  @if $justi {
+    justify-content: $justi
+  }
+  @if $align {
+    align-items: $align
+  }
+  @if $gap {
+    gap: $gap
+  }
+}
+
+// @mixin font-style($size, $weight, $line, $letter) {
+//   font-size: $size;
+//   font-weight: $weight;
+//   line-height: $line;
+//   letter-spacing: $letter;
+// }
+
+@mixin font-theme($name) {
+  $f: map.get($font-map, $name);
+  @if $f == null { @error "Unknown theme `#{$name}`"; }
+
+  font-size: map.get($f, size);
+  font-weight: map.get($f, weight);
+  line-height: map.get($f, line);
+  letter-spacing: map.get($f, letter);
+}
