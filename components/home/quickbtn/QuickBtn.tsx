@@ -1,7 +1,7 @@
 "use client";
 
 import { MouseEvent } from "react";
-import style from "../../styles/components/screens/home/quickbtn.module.scss";
+import style from "./quickbtn.module.scss";
 
 interface IQuick {
   id: string;

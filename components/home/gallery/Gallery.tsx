@@ -1,4 +1,4 @@
-import style from "../../styles/components/screens/home/gallery.module.scss";
+import style from "./gallery.module.scss";
 
 const imgList = [
   { src: "imgs/home/image 64.png", alt: "사진" },

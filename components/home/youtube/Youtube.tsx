@@ -1,5 +1,5 @@
 "use client";
-import style from "../../styles/components/screens/home/youtube.module.scss";
+import style from "./youtube.module.scss";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import { MouseEvent, useState } from "react";

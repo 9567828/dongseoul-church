@@ -1,5 +1,5 @@
 "use client";
-import style from "../../styles/components/screens/home/hero.module.scss";
+import style from "./hero.module.scss";
 
 interface IHero {
   url: string;

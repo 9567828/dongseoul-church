@@ -1,6 +1,6 @@
-import PageTitle from "@/components/layouts/PageTitle";
-import Board from "../../../../../components/Board";
-import style from "../../../../../styles/components/screens/bulletin/page.module.scss";
+import PageTitle from "@/components/layouts/pageTitle/PageTitle";
+import Board from "../../../../../components/layouts/board/Board";
+import style from "./page.module.scss";
 
 export default function Page() {
   return (

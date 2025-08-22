@@ -1,7 +1,7 @@
 "use client";
 
 import { MouseEvent } from "react";
-import style from "../../styles/components/ui/primarybtn.module.scss";
+import style from "./primarybtn.module.scss";
 
 interface IButton {
   label: string;
