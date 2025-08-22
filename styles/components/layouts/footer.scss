@@ -1,0 +1,27 @@
+footer {
+  @include flex($justi: space-between, $align: center, $gap: null);
+  padding: 40px 80px;
+  background-color: $gray-700;
+  color: $white;
+
+  .footer-left {
+    color: $gray-500;
+    @include font-theme($bodyMd-m);
+    @include flex(true, center, null, 10px);
+    h1 {
+      color: $white;
+      @include font-theme($head3Xl-m);
+    }
+    span {
+      color: $gray-400;
+      font-family: "PT Serif Caption", serif;
+    }
+  }
+
+  .footer-right {
+    @include flex($justi: center, $align: center, $gap: 30px);
+    li {
+      padding: 8px 4px;
+    }
+  }
+}

@@ -1,0 +1,37 @@
+.section {
+  width: 100%;
+  height: 100%;
+  padding: 100px 150px;
+}
+
+.img-wrap {
+  width: 100%;
+  @include flex($justi: center, $align: center, $gap: null);
+  flex-wrap: wrap;
+}
+
+.item-box {
+  width: calc(100% / 4);
+  height: 243px;
+  img {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.txt-wrap {
+  @include flex(true, center, center, null);
+  p:first-child {
+    @include font-theme($display4Xl-m);
+  }
+  p:last-child {
+    @include font-theme($display5Xl-b);
+  }
+}
+
+.more {
+  cursor: pointer;
+  &:hover p:last-child {
+    text-decoration: underline;
+  }
+}
