@@ -3,7 +3,6 @@
 import { headerMenuList } from "@/utils/menuList";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect } from "react";
 
 export default function Header() {
   const path = usePathname();

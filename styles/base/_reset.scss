@@ -19,6 +19,8 @@ time, mark, audio, video, button, input {
   font: inherit;
   vertical-align: baseline;
   background-color: initial;
+  word-break: keep-all;
+  overflow-wrap: break-word;
 }
 /* HTML5 display-role reset for older browsers */
 article, aside, details, figcaption, figure,

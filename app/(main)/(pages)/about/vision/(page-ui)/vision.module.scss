@@ -1,0 +1,45 @@
+.vision-wrap {
+  @include flex($justi: center, $align: center, $gap: 50px);
+  flex-wrap: wrap;
+  &.top {
+    margin-bottom: 50px;
+  }
+}
+
+.polygon {
+  position: relative;
+  @include bgImg("/imgs/about/polygon.svg", $size: 288px 290px);
+  width: 290px;
+  height: 290px;
+}
+
+.txt-wrap {
+  @include position-center();
+  @include flex(true, center, center, 10px);
+  text-align: center;
+  white-space: pre-line;
+  h1, p {
+    @include font-theme($bodyMd, $b)
+  }
+  h1 {
+    color: $main-color;
+  }
+  p {
+    font-weight: $m;
+    color: $dark-bg;
+  }
+}
+
+.small-polygon {
+  position: relative;
+  width: 95px;
+  height: 95px;
+  & svg, .number {
+    @include position-center();
+  }
+  .number {
+    @include font-theme($head3Xl-plus, $b);
+    font-weight: 900;
+    color: white;
+  }
+}
