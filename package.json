@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@tanstack/react-query": "^5.90.5",
+    "firebase": "^12.4.0",
     "motion": "^12.23.12",
     "next": "15.4.7",
     "react": "19.1.0",
