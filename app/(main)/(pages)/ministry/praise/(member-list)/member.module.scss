@@ -1,0 +1,77 @@
+.section {
+  width: 100%;
+  padding: 80px 40px;
+  background-color: $bright-bg;
+  text-align: center;
+}
+
+.text-wrap {
+  width: 100%;
+  text-align: center;
+  margin-bottom: 80px;
+  h1 {
+    @include font-theme($display5Xl, $b);
+    color: $dark-bg;
+  }
+  p {
+    @include font-theme($title2Xl, $m);
+    color: $main-300;
+  }
+}
+
+// 사진리스트 스타일
+.member-container {
+  @include flex(true, $gap: 50px);
+}
+
+.member-wrap {
+  width: 100%;
+  margin-top: 20px;
+  @include flex($align: center, $gap: 30px);
+}
+
+.member {
+  width: fit-content;
+  @include flex(true, null, center, 10px);
+}
+
+.img {
+  width: 100px;
+  height: 100px;
+  img {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+// 표 스타일
+.table {
+  width: 100%;
+  max-width: 1170px;
+  background-color: white;
+  margin: 0 auto;
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1px solid $gray-300;
+}
+
+.table-row {
+  @include grid-col(120px 1fr, $justiItem: start, $align: center);
+  border-bottom: 1px solid $gray-300;
+  &:last-child {
+    border-bottom: unset;
+  }
+}
+
+.table-head {
+  width: 100%;
+  height: 100%;
+  padding: 30px 20px;
+  color: $match-color200;
+}
+
+.table-content {
+  padding: 30px 20px;
+  @include flex(true, $align: flex-start, $gap: 10px);
+  @include font-theme($bodyMd, $m);
+}
