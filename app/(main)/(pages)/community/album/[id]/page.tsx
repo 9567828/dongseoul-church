@@ -1,7 +1,7 @@
 export default function Page() {
   return (
     <div>
-      <h1>예배당안내</h1>
+      <h1>상세</h1>
     </div>
   );
 }

@@ -66,18 +66,12 @@ export default function MemberList() {
       <div className={style.table}>
         {memList.map((t, i) => (
           <div key={i} className={style["table-row"]}>
-            <div className={style["table-head"]}>
-              <p className="bodyMd-b">{t.title}</p>
-            </div>
+            <p className={`${style["table-head"]} ${t.title === "밴드" ? style.band : ""}`.trim()}>{t.title}</p>
             <div className={style["table-content"]}>
               {t.group.map((g, idx) => {
                 const deal = g.deal;
                 const name = g.member.map((m) => m.name).join(", ");
-                return (
-                  <p key={idx} className={deal !== "" ? style.band : ""}>
-                    {deal !== "" ? `${deal}-${name}` : name}
-                  </p>
-                );
+                return <p key={idx}>{deal !== "" ? `${deal}-${name}` : name}</p>;
               })}
             </div>
           </div>

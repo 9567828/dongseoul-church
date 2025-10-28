@@ -4,10 +4,6 @@
   overflow: hidden;
 }
 
-// .table-inner {
-//   padding: 10px;
-// }
-
 .table-head, .table-content {
   @include grid-col(1fr 1fr 1fr, $justiItem: center);
   li {

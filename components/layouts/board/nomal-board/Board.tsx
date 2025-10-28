@@ -1,14 +1,17 @@
 import style from "./board.module.scss";
 
-const contentList = [
-  { title: "2025.08.18 주보", href: "", writer: "작성자", date: "2025.08.18" },
-  { title: "2025.08.18 주보", href: "", writer: "작성자", date: "2025.08.18" },
-  { title: "2025.08.18 주보", href: "", writer: "작성자", date: "2025.08.18" },
-  { title: "2025.08.18 주보", href: "", writer: "작성자", date: "2025.08.18" },
-  { title: "2025.08.18 주보", href: "", writer: "작성자", date: "2025.08.18" },
-];
+export interface IBoardField {
+  title: string;
+  href: string;
+  writer: string;
+  date: string;
+}
 
-export default function Board() {
+interface IBoard {
+  list: IBoardField[];
+}
+
+export default function Board({ list }: IBoard) {
   return (
     <div className={style["table-wrap"]}>
       <ul className={`${style.table} ${style["table-head"]}`}>
@@ -22,7 +25,7 @@ export default function Board() {
         </li>
       </ul>
       <ul className={style["table-content-wrap"]}>
-        {contentList.map((c, i) => (
+        {list.map((c, i) => (
           <li key={i} className={`${style.table} ${style["table-content"]}`}>
             <div className={style["table-line"]}>
               <p className={style.num}>{i + 1}</p>
