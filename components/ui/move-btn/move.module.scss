@@ -1,0 +1,10 @@
+.btn-wrap {
+  padding: 20px;
+  border-bottom: 1px solid $gray-300;
+  background-color: $bg-color-100;
+}
+
+.btn {
+  @include flex($align: center, $gap: 10px);
+  color: $gray-700;
+}

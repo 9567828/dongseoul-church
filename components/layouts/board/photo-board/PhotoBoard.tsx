@@ -3,7 +3,6 @@
 import Link from "next/link";
 import style from "./photo.module.scss";
 import { usePathname } from "next/navigation";
-import { useHooks } from "@/hooks/useHooks";
 
 export interface IPhotoList {
   id: string;
@@ -20,7 +19,6 @@ interface IPhotoBoard {
 
 export default function PhotoBoard({ list, variant }: IPhotoBoard) {
   const path = usePathname();
-  const { useRoute } = useHooks();
 
   return (
     <ul className={style.wrapper}>

@@ -1,0 +1,4 @@
+.btn {
+  @include flex($align: center, $gap: 5px);
+  color: $gray-600;
+}
