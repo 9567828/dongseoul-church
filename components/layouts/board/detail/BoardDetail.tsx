@@ -5,13 +5,14 @@ import style from "./board-detail.module.scss";
 import BackBtn from "@/components/ui/back-btn/BackBtn";
 import MoveBtn from "@/components/ui/move-btn/MoveBtn";
 import { useHooks } from "@/hooks/useHooks";
+import { AlbumRow } from "../photo-board/PhotoBoard";
 
 export interface IPhotoDetail {
-  id: number | string;
+  id: string | number;
   created_at: string | null;
   updated_at?: string | null;
-  title: string | null;
-  thumbnail: string | null;
+  title?: string | null;
+  thumbnail?: string | null;
   writer?: string | null;
   /**
    * @param album table 필드
@@ -21,8 +22,8 @@ export interface IPhotoDetail {
    * @param sermon table 필드
    */
   youtube_URL?: string | null;
-  prev?: string | null;
-  next?: string | null;
+  prev_id?: string | number | null;
+  next_id?: string | number | null;
 }
 
 interface IDetail {
@@ -46,7 +47,7 @@ export default function BoardDetail({ detail, variant }: IDetail) {
       <BackBtn onClick={() => useRoute(basePath)} />
       <div className={style["board-wrap"]}>
         <div className={style.head}>
-          <p className="bodyMd-m">{detail.title}</p>
+          <p className="bodyMd-m">{detail.title!}</p>
           <p>{detail.created_at}</p>
         </div>
         <div className={style.content}>
@@ -59,8 +60,8 @@ export default function BoardDetail({ detail, variant }: IDetail) {
           )}
         </div>
         <div>
-          <MoveBtn variant="prev" isNull={detail.prev === null} onClick={() => useRoute(`${basePath}/${detail.prev}`)} />
-          <MoveBtn variant="next" isNull={detail.next === null} onClick={() => useRoute(`${basePath}/${detail.next}`)} />
+          <MoveBtn variant="prev" isNull={detail.prev_id === null} onClick={() => useRoute(`${basePath}/${detail.prev_id}`)} />
+          <MoveBtn variant="next" isNull={detail.prev_id === null} onClick={() => useRoute(`${basePath}/${detail.prev_id}`)} />
         </div>
       </div>
     </div>

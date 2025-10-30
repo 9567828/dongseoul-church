@@ -17,11 +17,13 @@ export const useSelectList = (tableName: tablesName, limit: number) => {
 
 export const useSelectOne = (tableName: tablesName, id: number | string) => {
   return useQuery({
-    queryKey: [tableName],
+    queryKey: [tableName, id],
     queryFn: async () => {
       const { data, error } = await selectOne(tableName, id);
       if (error) throw error;
-      return { data };
+
+      console.log(data);
+      return { data: data ?? "" };
     },
   });
 };

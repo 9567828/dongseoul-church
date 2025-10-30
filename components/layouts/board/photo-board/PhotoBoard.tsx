@@ -6,8 +6,8 @@ import { usePathname } from "next/navigation";
 import { formatDate } from "@/utils/formatDate";
 import { Database, Tables } from "@/database.types";
 
-export type AlbumRow = Database["public"]["Tables"]["albums"]["Row"];
-export type SermonRow = Database["public"]["Tables"]["sermons"]["Row"];
+export type AlbumRow = Tables<"albums">;
+export type SermonRow = Tables<"sermons">;
 
 export interface IPhotoList {
   id?: string | number;

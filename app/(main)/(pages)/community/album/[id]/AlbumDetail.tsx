@@ -10,6 +10,8 @@ export default function AlbumDetail() {
   const idStr = String(id);
   const { data, error, isLoading } = useSelectOne("albums", idStr);
 
+  console.log(error);
+
   if (isLoading) {
     return <div>로딩중</div>;
   }
@@ -18,8 +20,5 @@ export default function AlbumDetail() {
     return <div>조회된 데이터가 없습니다</div>;
   }
 
-  return (
-    <div>{idStr}</div>
-    // <BoardDetail detail={data?.data as AlbumRow} variant="album" />
-  );
+  return <BoardDetail detail={data?.data} variant="album" />;
 }
