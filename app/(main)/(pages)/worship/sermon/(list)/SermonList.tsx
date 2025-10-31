@@ -1,22 +1,22 @@
 "use client";
 
-import PhotoBoard, { SermonRow } from "@/components/layouts/board/photo-board/PhotoBoard";
-import { useSelectList } from "@/hooks/react-query/useQuerys/useSelectQueries";
+import PhotoBoard from "@/components/layouts/board/photo-board/PhotoBoard";
+import { useSelectList } from "@/tanstack-query/useQuerys/useSelectQueries";
+import { useSuspenseQuery } from "@tanstack/react-query";
 
 export default function SermonList() {
   const { data: { list, count } = { list: [], count: 0 }, isLoading } = useSelectList("sermons", 9);
 
-  if (list.length <= 0 && []) {
-    return <div>게시물없음</div>;
-  }
-
-  if (isLoading) {
-    return <div>로딩중</div>;
-  }
-
   return (
     <div className="inner">
-      <PhotoBoard list={list} variant="sermon" />
+      <div>게시물 없음</div>
+      {/* {list.length < 0 && [] ? (
+        <div>게시물 없음</div>
+      ) : isLoading ? (
+        <div>로딩중</div>
+      ) : (
+        <PhotoBoard list={list} variant="sermon" />
+      )} */}
     </div>
   );
 }

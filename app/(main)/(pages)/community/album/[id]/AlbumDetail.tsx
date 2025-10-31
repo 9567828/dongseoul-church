@@ -1,14 +1,13 @@
 "use client";
 
 import BoardDetail from "@/components/layouts/board/detail/BoardDetail";
-import { AlbumRow } from "@/components/layouts/board/photo-board/PhotoBoard";
-import { useSelectOne } from "@/hooks/react-query/useQuerys/useSelectQueries";
+import { useSelectOne } from "@/tanstack-query/useQuerys/useSelectQueries";
 import { useParams } from "next/navigation";
 
-export default function AlbumDetail() {
-  const { id } = useParams();
-  const idStr = String(id);
-  const { data, error, isLoading } = useSelectOne("albums", idStr);
+export default function AlbumDetail({ id }: { id: string }) {
+  // const { id } = useParams();
+  // const idStr = String(id);
+  const { data, error, isLoading } = useSelectOne("albums", id);
 
   console.log(error);
 

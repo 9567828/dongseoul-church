@@ -2,15 +2,8 @@ import PhotoBoard from "@/components/layouts/board/photo-board/PhotoBoard";
 import { v4 as uuidv4 } from "uuid";
 import SermonList from "./(list)/SermonList";
 
-const getYoutube = async () => {
-  const data = await fetch("http://localhost:3000/api/getYoutube", {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-
-  return await data.json();
+export const metadata = {
+  title: "말씀영상",
 };
 
 interface YoutubeApiItem {
@@ -32,6 +25,17 @@ interface YoutubeVideo {
   published_date: string;
   thumbnail: string;
 }
+
+const getYoutube = async () => {
+  const data = await fetch("http://localhost:3000/api/getYoutube", {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  return await data.json();
+};
 
 const insertDB = async () => {
   const {
@@ -62,6 +66,6 @@ const insertDB = async () => {
   });
 };
 
-export default function Page() {
+export default async function Page() {
   return <SermonList />;
 }

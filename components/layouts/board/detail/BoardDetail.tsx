@@ -6,6 +6,7 @@ import BackBtn from "@/components/ui/back-btn/BackBtn";
 import MoveBtn from "@/components/ui/move-btn/MoveBtn";
 import { useHooks } from "@/hooks/useHooks";
 import { AlbumRow } from "../photo-board/PhotoBoard";
+import { formatDate } from "@/utils/formatDate";
 
 export interface IPhotoDetail {
   id: string | number;
@@ -48,7 +49,7 @@ export default function BoardDetail({ detail, variant }: IDetail) {
       <div className={style["board-wrap"]}>
         <div className={style.head}>
           <p className="bodyMd-m">{detail.title!}</p>
-          <p>{detail.created_at}</p>
+          <p>{formatDate(detail.created_at!)}</p>
         </div>
         <div className={style.content}>
           {detail.src ? (
