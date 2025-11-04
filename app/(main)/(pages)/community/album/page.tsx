@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import ListPage from "../(list)/ListPage";
 
 export const metadata = {
@@ -5,5 +6,9 @@ export const metadata = {
 };
 
 export default function Page() {
-  return <ListPage />;
+  return (
+    <Suspense>
+      <ListPage />
+    </Suspense>
+  );
 }
