@@ -6,20 +6,20 @@ const { selectPageList, selectList, selectOne } = select();
 
 const supabase = createBrowClient();
 
-export const useSelectPageList = (name: tablesName, limit: number, page: number) => {
+export const useSelectPageList = <T>(name: tablesName, limit: number, page: number) => {
   return useQuery({
     queryKey: [name, limit, page],
     queryFn: async () => {
-      return await selectPageList({ name, limit, page, supabase });
+      return await selectPageList<T>({ name, limit, page, supabase });
     },
   });
 };
 
-export const useSelectList = (name: tablesName, limit: number) => {
+export const useSelectList = <T>(name: tablesName, limit: number) => {
   return useQuery({
     queryKey: [name, limit],
     queryFn: async () => {
-      return await selectList({ name, limit, supabase });
+      return await selectList<T>({ name, limit, supabase });
     },
   });
 };

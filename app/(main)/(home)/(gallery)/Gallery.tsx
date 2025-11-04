@@ -5,13 +5,11 @@ import style from "./gallery.module.scss";
 import { useSelectList } from "@/tanstack-query/useQuerys/useSelectQueries";
 import { useHooks } from "@/hooks/useHooks";
 import Link from "next/link";
+import { Tables } from "@/database.types";
 
 export default function Gallery() {
   const { useRoute } = useHooks();
-  const { data: { list } = { list: [] }, isLoading } = useSelectList("albums", 6) as {
-    data: { list: IPhotoList[] };
-    isLoading: boolean;
-  };
+  const { data: { list } = { list: [] }, isLoading } = useSelectList<Tables<"albums">>("albums", 6);
 
   return (
     <section className={style.section}>

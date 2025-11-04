@@ -10,7 +10,7 @@ interface ISelect {
 }
 
 export const select = () => {
-  const selectPageList = async ({ name, limit, page, supabase }: ISelect) => {
+  const selectPageList = async <T>({ name, limit, page, supabase }: ISelect): Promise<{ count: number; list: T[] }> => {
     const from = (page! - 1) * limit!;
     const to = from + limit! - 1;
 
@@ -24,10 +24,10 @@ export const select = () => {
 
     if (error) throw error;
 
-    return { count: count ?? 0, list: data ?? [] };
+    return { count: count ?? 0, list: (data as T[]) ?? [] };
   };
 
-  const selectList = async ({ name, limit, supabase }: ISelect) => {
+  const selectList = async <T>({ name, limit, supabase }: ISelect): Promise<{ list: T[] }> => {
     const { data, error } = await supabase
       .from(name)
       .select("*")
@@ -36,7 +36,7 @@ export const select = () => {
 
     if (error) throw error;
 
-    return { list: data ?? [] };
+    return { list: (data as T[]) ?? [] };
   };
 
   const selectOne = async ({ name, id, supabase }: ISelect) => {
