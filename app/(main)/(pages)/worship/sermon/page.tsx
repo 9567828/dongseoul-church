@@ -1,6 +1,7 @@
 import PhotoBoard from "@/components/layouts/board/photo-board/PhotoBoard";
 import { v4 as uuidv4 } from "uuid";
 import SermonList from "./(list)/SermonList";
+import { Suspense } from "react";
 
 export const metadata = {
   title: "말씀영상",
@@ -67,5 +68,9 @@ const insertDB = async () => {
 };
 
 export default async function Page() {
-  return <SermonList />;
+  return (
+    <Suspense>
+      <SermonList />
+    </Suspense>
+  );
 }
