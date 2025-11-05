@@ -4,11 +4,10 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import Link from "next/link";
 import { useSelectList } from "@/tanstack-query/useQuerys/useSelectQueries";
-import { IPhotoList } from "@/components/layouts/board/photo-board/PhotoBoard";
-import { Tables } from "@/database.types";
+import { SermonRow } from "@/components/layouts/board/photo-board/PhotoBoard";
 
 export default function Youtube() {
-  const { data: { list } = { list: [] }, isLoading } = useSelectList<Tables<"sermons">>("sermons", 3);
+  const { data: { list } = { list: [] }, isLoading } = useSelectList<SermonRow>("sermons", 3);
 
   return (
     <section id="youtubeSection" className={style.section}>

@@ -1,5 +1,5 @@
 import createBrowClient from "@/utils/supabase/services/browerClinet";
-import { tablesName } from "@/utils/supabase/sql";
+import { tables, tablesName } from "@/utils/supabase/sql";
 import { select } from "@/utils/supabase/sql/select";
 import { useQuery } from "@tanstack/react-query";
 const { selectPageList, selectList, selectOne } = select();
@@ -24,11 +24,11 @@ export const useSelectList = <T>(name: tablesName, limit: number) => {
   });
 };
 
-export const useSelectOne = (name: tablesName, id: number | string) => {
+export const useSelectOne = <T extends tables>(name: tablesName, id: number | string) => {
   return useQuery({
     queryKey: [name, id],
     queryFn: async () => {
-      return await selectOne({ name, id, supabase });
+      return await selectOne<T>({ name, id, supabase, defaultValue: {} as T });
     },
   });
 };

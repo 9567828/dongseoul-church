@@ -1,15 +1,14 @@
 "use client";
 
-import { IPhotoList } from "@/components/layouts/board/photo-board/PhotoBoard";
 import style from "./gallery.module.scss";
 import { useSelectList } from "@/tanstack-query/useQuerys/useSelectQueries";
 import { useHooks } from "@/hooks/useHooks";
 import Link from "next/link";
-import { Tables } from "@/database.types";
+import { AlbumRow } from "@/components/layouts/board/photo-board/PhotoBoard";
 
 export default function Gallery() {
   const { useRoute } = useHooks();
-  const { data: { list } = { list: [] }, isLoading } = useSelectList<Tables<"albums">>("albums", 6);
+  const { data: { list } = { list: [] }, isLoading } = useSelectList<AlbumRow>("albums", 6);
 
   return (
     <section className={style.section}>

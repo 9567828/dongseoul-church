@@ -1,11 +1,11 @@
 .wrapper {
-  @include flex(false, center, center, 20px);
-  margin-top: 50px;
+  @include flex(false, center, center, 30px);
+  margin-top: 80px;
 }
 
 .nav-btn {
-  width: 30px;
-  height: 30px;
+  width: 40px;
+  height: 40px;
   background-color: white;
   border: 1px solid $gray-100;
   border-radius: 5px;
@@ -21,7 +21,7 @@
 }
 
 .page-btn {
-  @include flex($align: center, $gap: 10px);
+  @include flex($align: center, $gap: 20px);
 }
 
 .num {
@@ -29,7 +29,7 @@
   background-color: unset;
   box-shadow: none;
   border: none;
-  @include font-theme($bodyMd, $b);
+  @include font-theme($bodyLg, $b);
   color: $gray-700;
   &.active {
     color: white;
@@ -37,4 +37,8 @@
     border-radius: 5px;
     box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.25);
   }
+}
+
+.btn-wrap {
+  @include flex($align: center, $gap: 10px);
 }

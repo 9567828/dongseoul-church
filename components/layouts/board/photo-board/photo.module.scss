@@ -1,5 +1,5 @@
 .wrapper {
-  @include grid-col(1fr 1fr 1fr, $gap: 20px);
+  @include grid-col(1fr 1fr 1fr, $gap: 35px);
 }
 
 .img {

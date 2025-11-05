@@ -4,12 +4,20 @@
   background-color: $bg-color-100;
 }
 
-.btn {
-  @include flex($align: center, $gap: 10px);
+.nav-wrap {
+  @include flex($align: center, $gap: 30px);
   color: $gray-700;
+}
+
+.nav {
+  @include flex($align: center, $gap: 10px);
+}
+
+.btn {
   &:hover {
     p {
       text-decoration: underline;
+      font-weight: $b;
     }
   }
 }

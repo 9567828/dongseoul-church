@@ -1,38 +1,26 @@
 "use client";
 
-import { useParams, usePathname } from "next/navigation";
+import { usePathname } from "next/navigation";
 import style from "./board-detail.module.scss";
 import BackBtn from "@/components/ui/back-btn/BackBtn";
 import MoveBtn from "@/components/ui/move-btn/MoveBtn";
 import { useHooks } from "@/hooks/useHooks";
-import { AlbumRow } from "../photo-board/PhotoBoard";
 import { formatDate } from "@/utils/formatDate";
+import { AlbumRow, tables } from "@/utils/supabase/sql";
 
-export interface IPhotoDetail {
-  id: string | number;
-  created_at: string | null;
-  updated_at?: string | null;
-  title?: string | null;
-  thumbnail?: string | null;
-  writer?: string | null;
-  /**
-   * @param album table 필드
-   */
-  src?: string | null;
-  /**
-   * @param sermon table 필드
-   */
-  youtube_URL?: string | null;
-  prev_id?: string | number | null;
-  next_id?: string | number | null;
+interface IPrevNext {
+  id: string | number | null;
+  title: string;
 }
 
 interface IDetail {
-  detail: IPhotoDetail;
+  detail: tables;
   variant: "album" | "nomal";
+  prev?: IPrevNext;
+  next?: IPrevNext;
 }
 
-export default function BoardDetail({ detail, variant }: IDetail) {
+export default function BoardDetail({ detail, variant, prev, next }: IDetail) {
   const { useRoute } = useHooks();
   const path = usePathname();
 
@@ -40,8 +28,7 @@ export default function BoardDetail({ detail, variant }: IDetail) {
   const segments = path.split("/").filter(Boolean);
   // [id] path제외하고 path 합침
   const basePath = "/" + segments.slice(0, -1).join("/");
-
-  console.log("basePath? ", basePath, path);
+  const isAlbum = variant === "album";
 
   return (
     <div className="inner">
@@ -52,17 +39,27 @@ export default function BoardDetail({ detail, variant }: IDetail) {
           <p>{formatDate(detail.created_at!)}</p>
         </div>
         <div className={style.content}>
-          {detail.src ? (
+          {isAlbum ? (
             <div className={style["content-img"]}>
-              <img src={detail.src} alt={detail.title!} />
+              <img src={(detail as AlbumRow).src!} alt={detail.title!} />
             </div>
           ) : (
             <p>{""}</p>
           )}
         </div>
         <div>
-          <MoveBtn variant="prev" isNull={detail.prev_id === null} onClick={() => useRoute(`${basePath}/${detail.prev_id}`)} />
-          <MoveBtn variant="next" isNull={detail.prev_id === null} onClick={() => useRoute(`${basePath}/${detail.prev_id}`)} />
+          <MoveBtn
+            variant="prev"
+            title={prev === null ? "" : prev?.title!}
+            isNull={prev === null}
+            onClick={() => useRoute(`${basePath}/${prev?.id}`)}
+          />
+          <MoveBtn
+            variant="next"
+            title={next === null ? "" : next?.title!}
+            isNull={next === null}
+            onClick={() => useRoute(`${basePath}/${next?.id}`)}
+          />
         </div>
       </div>
     </div>

@@ -9,18 +9,26 @@ interface ISelect {
   supabase: SupabaseClient;
 }
 
+interface PrevNext {
+  id: number | string;
+  title: string;
+}
+
+type WithPrevNext<T> = T & {
+  prev: PrevNext | null;
+  next: PrevNext | null;
+};
+
 export const select = () => {
   const selectPageList = async <T>({ name, limit, page, supabase }: ISelect): Promise<{ count: number; list: T[] }> => {
     const from = (page! - 1) * limit!;
     const to = from + limit! - 1;
 
-    const { data, error } = await supabase
+    const { data, count, error } = await supabase
       .from(name)
-      .select("*")
+      .select("*", { count: "exact" })
       .range(from, to)
-      .order(name === "sermons" ? "published_date" : "created_at", { ascending: false })
-      .limit(limit!);
-    const { count } = await supabase.from(name).select("*", { count: "exact", head: true });
+      .order("id", { ascending: true });
 
     if (error) throw error;
 
@@ -28,29 +36,30 @@ export const select = () => {
   };
 
   const selectList = async <T>({ name, limit, supabase }: ISelect): Promise<{ list: T[] }> => {
-    const { data, error } = await supabase
-      .from(name)
-      .select("*")
-      .order(name === "sermons" ? "published_date" : "created_at", { ascending: false })
-      .limit(limit!);
+    const { data, error } = await supabase.from(name).select("*").order("id", { ascending: true }).limit(limit!);
 
     if (error) throw error;
 
     return { list: (data as T[]) ?? [] };
   };
 
-  const selectOne = async ({ name, id, supabase }: ISelect) => {
+  const selectOne = async <T>({
+    name,
+    id,
+    supabase,
+    defaultValue,
+  }: ISelect & { defaultValue: T }): Promise<{ data: WithPrevNext<T> }> => {
     const { data: table, error } = await supabase.from(name).select("*").eq("id", id).single();
     const { data: prev } = await supabase
       .from(name)
-      .select("id")
+      .select("id, title")
       .lt("id", id)
       .order("id", { ascending: false })
       .limit(1)
       .single();
     const { data: next } = await supabase
       .from(name)
-      .select("id")
+      .select("id, title")
       .gt("id", id)
       .order("id", {
         ascending: true,
@@ -61,11 +70,11 @@ export const select = () => {
 
     const data = {
       ...table,
-      prev_id: prev?.id ? prev.id : null,
-      next_id: next?.id ? next.id : null,
+      prev,
+      next,
     };
 
-    return { data: data ?? "" };
+    return { data: (data as WithPrevNext<T>) ?? defaultValue };
   };
 
   return { selectPageList, selectList, selectOne };

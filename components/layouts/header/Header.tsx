@@ -10,13 +10,12 @@ export default function Header() {
   return (
     <header>
       <nav>
-        <h1>
-          <Link href={"/"}>
-            <h1 className="logo-wrap">
-              <img src="/imgs/logo.png" alt="로고" />
-            </h1>
-          </Link>
-        </h1>
+        <Link href={"/"} className="logo-wrap">
+          <h1>
+            <img src="/imgs/logo.png" alt="로고" />
+          </h1>
+        </Link>
+
         <ul className="main-menu-list">
           {headerMenuList.map((m, i) => (
             <li key={i} className="main-menu">

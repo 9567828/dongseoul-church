@@ -3,13 +3,13 @@
 import BoardDetail from "@/components/layouts/board/detail/BoardDetail";
 import StateView from "@/components/ui/state-view/StateView";
 import { useSelectOne } from "@/tanstack-query/useQuerys/useSelectQueries";
+import { AlbumRow } from "@/utils/supabase/sql";
 
 export default function AlbumDetail({ id }: { id: string }) {
-  const { data, error, isLoading } = useSelectOne("albums", id);
-
-  console.log(error);
+  const { data, error, isLoading } = useSelectOne<AlbumRow>("albums", id);
 
   if (error) {
+    console.error(error);
     return <StateView text="문제가 지속될 경우 관리자에게 문의해 주세요" />;
   }
 
@@ -21,5 +21,5 @@ export default function AlbumDetail({ id }: { id: string }) {
     return <StateView text="조회된 데이터가 없습니다" />;
   }
 
-  return <BoardDetail detail={data?.data} variant="album" />;
+  return <BoardDetail detail={data?.data} variant="album" prev={data.data.prev!} next={data.data.next!} />;
 }
