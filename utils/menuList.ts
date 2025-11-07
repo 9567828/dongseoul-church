@@ -6,6 +6,7 @@ export const headerMenuList = [
       { submenu: "담임목사 인사", href: "/pastor" },
       { submenu: "5대 비전", href: "/vision" },
       { submenu: "예배안내", href: "/worship-info" },
+      { submenu: "오시는길", href: "/location" },
       { submenu: "섬기는이", href: "/servants" },
     ],
   },

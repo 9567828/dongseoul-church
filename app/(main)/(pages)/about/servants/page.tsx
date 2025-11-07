@@ -1,4 +1,4 @@
-import Servants from "./(page-ui)/Servants";
+import Servants from "./(screen)/Servants";
 import style from "./(page-ui)/servants.module.scss";
 
 export const metadata = {

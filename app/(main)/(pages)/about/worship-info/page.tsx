@@ -1,4 +1,4 @@
-import WorshipInfo from "./(page-ui)/WorshipInfo";
+import WorshipInfo from "./(screen)/WorshipInfo";
 
 export const metadata = {
   title: "예배안내",

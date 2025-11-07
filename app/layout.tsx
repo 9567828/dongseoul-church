@@ -24,6 +24,10 @@ export default function RootLayout({
     <html lang="ko" suppressHydrationWarning>
       <body>
         <QueryProvider>{children}</QueryProvider>
+        <script
+          type="text/javascript"
+          src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.KAKAOMAP_KEY}&libraries=services,clusterer`}
+        ></script>
       </body>
     </html>
   );

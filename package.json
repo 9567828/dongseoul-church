@@ -17,6 +17,7 @@
     "next": "15.4.7",
     "react": "19.1.0",
     "react-dom": "19.1.0",
+    "react-kakao-maps-sdk": "^1.2.0",
     "sass": "^1.90.0",
     "swiper": "^11.2.10",
     "uuid": "^13.0.0"

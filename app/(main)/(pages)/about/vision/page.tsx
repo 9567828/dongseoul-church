@@ -1,4 +1,4 @@
-import Vision from "./(page-ui)/Vision";
+import Vision from "./(screen)/Vision";
 
 export const metadata = {
   title: "5대 비전",
