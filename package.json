@@ -6,6 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "serve": "npm run build && npm run start",
     "lint": "next lint",
     "data": "npx supabase gen types typescript --project-id \"fldwphnjbaiticevnfat\" --schema public > database.types.ts"
   },

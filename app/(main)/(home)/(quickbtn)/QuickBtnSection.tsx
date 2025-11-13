@@ -1,19 +1,17 @@
 "use client";
 
-import { MouseEvent } from "react";
 import style from "./quickbtn.module.scss";
 import QucickBtn from "./QuickBtn";
+import { useHooks } from "@/hooks/useHooks";
 
 const btnList = [
-  { id: "locationBtn", src: "/imgs/icons/ic_Location.svg", alt: "오시는길", label: "오시는길" },
-  { id: "newBtn", src: "/imgs/icons/ic_User.svg", alt: "새가족등록", label: "새가족등록" },
-  { id: "dutyBtn", src: "/imgs/icons/ic_file.svg", alt: "사역등록", label: "사역등록" },
+  { id: "locationBtn", src: "/imgs/icons/ic_Location.svg", alt: "오시는길", label: "오시는길", route: "/about/location" },
+  { id: "newBtn", src: "/imgs/icons/ic_User.svg", alt: "새가족등록", label: "새가족등록", route: "" },
+  { id: "dutyBtn", src: "/imgs/icons/ic_file.svg", alt: "사역등록", label: "사역등록", route: "" },
 ];
 
 export default function QucickBtnSection() {
-  const onClick = (e: MouseEvent<HTMLButtonElement>) => {
-    console.log(e.target);
-  };
+  const { useRoute } = useHooks();
 
   return (
     <section
@@ -24,7 +22,7 @@ export default function QucickBtnSection() {
     >
       <div className={style["btn-wrap"]}>
         {btnList.map((b, i) => (
-          <QucickBtn id={b.id} key={i} label={b.label} src={b.src} alt={b.alt} onClick={onClick} />
+          <QucickBtn id={b.id} key={i} label={b.label} src={b.src} alt={b.alt} onClick={() => useRoute(`${b.route}`)} />
         ))}
       </div>
     </section>

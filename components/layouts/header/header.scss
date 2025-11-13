@@ -24,16 +24,25 @@ header {
 }
 
 nav {
-  line-height: 70px;
+  height: 100%;
   @include flex($justi: space-between, $align: center, $gap: null);
 }
 
 .main-menu-list {
   @include flex($justi: center, $align: center, $gap: 30px);
   .main-menu {
+    width: 80px;
     position: relative;
-    padding: 21px 4px;
     @include font-theme($bodyMd, $m);
+    & > a {
+      display: block;
+      width: 100%;
+      text-align: center;
+      padding: 21px 4px;
+    }
+    &:hover > a {
+      border-bottom: 1px solidC;
+    }
     & a.active {
       color: $match-color200;
       font-weight: $b;
@@ -45,8 +54,8 @@ nav {
   display: none;
   width: max-content;
   position: absolute;
-  top: 65px;
-  left: -10px;
+  top: 67px;
+  left: -5px;
   background-color: $white; 
   padding: 20px;
   border-radius: 10px;

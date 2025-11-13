@@ -1,10 +1,11 @@
 "use client";
 
-import PhotoBoard, { SermonRow } from "@/components/layouts/board/photo-board/PhotoBoard";
+import PhotoBoard from "@/components/layouts/board/photo-board/PhotoBoard";
 import Pagenation from "@/components/ui/pagenation/Pagenation";
 import { useSelectPageList } from "@/tanstack-query/useQuerys/useSelectQueries";
 import { useSearchParams } from "next/navigation";
 import StateView from "@/components/ui/state-view/StateView";
+import { SermonRow } from "@/utils/supabase/sql";
 
 export default function SermonList() {
   const searchParams = useSearchParams();

@@ -4,12 +4,11 @@ export default function Footer() {
   return (
     <footer>
       <div className="footer-left">
-        <h1>로고이미지</h1>
+        <h1>
+          <img src="/imgs/logo-white.png" alt="로고" />
+        </h1>
         <div className="meta">
           <p>©2025 dongseoul-Church. All Rights reserved.</p>
-          <p>
-            design By <span>double U studio</span>
-          </p>
         </div>
       </div>
       <ul className="footer-right">

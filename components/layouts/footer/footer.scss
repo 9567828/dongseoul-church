@@ -9,8 +9,12 @@ footer {
     @include font-theme($bodyMd, $m);
     @include flex(true, center, null, 10px);
     h1 {
-      color: $white;
-      @include font-theme($head3Xl, $m);
+      width: 121px;
+      height: 25px;
+      img {
+        width: 100%;
+        height: 100%;
+      }
     }
     span {
       color: $gray-400;

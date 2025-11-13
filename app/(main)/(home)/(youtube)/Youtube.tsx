@@ -4,7 +4,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import Link from "next/link";
 import { useSelectList } from "@/tanstack-query/useQuerys/useSelectQueries";
-import { SermonRow } from "@/components/layouts/board/photo-board/PhotoBoard";
+import { SermonRow } from "@/utils/supabase/sql";
 
 export default function Youtube() {
   const { data: { list } = { list: [] }, isLoading } = useSelectList<SermonRow>("sermons", 3);

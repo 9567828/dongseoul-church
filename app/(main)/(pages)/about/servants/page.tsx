@@ -1,5 +1,5 @@
 import Servants from "./(screen)/Servants";
-import style from "./(page-ui)/servants.module.scss";
+import style from "./(screen)/servants.module.scss";
 
 export const metadata = {
   title: "섬기는이",

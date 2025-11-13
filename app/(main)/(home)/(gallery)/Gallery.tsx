@@ -4,7 +4,7 @@ import style from "./gallery.module.scss";
 import { useSelectList } from "@/tanstack-query/useQuerys/useSelectQueries";
 import { useHooks } from "@/hooks/useHooks";
 import Link from "next/link";
-import { AlbumRow } from "@/components/layouts/board/photo-board/PhotoBoard";
+import { AlbumRow } from "@/utils/supabase/sql";
 
 export default function Gallery() {
   const { useRoute } = useHooks();
