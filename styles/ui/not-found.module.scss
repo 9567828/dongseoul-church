@@ -17,3 +17,15 @@
     @include font-theme($head3Xl-plus, $m);
   }
 }
+
+.btn {
+  width: 160px;
+  padding: 15px 0;
+  border-radius: 10px;
+  @include font-theme($bodyMd, $m);
+  background-color: $main-color;
+  color: white;
+  &:hover {
+    background-color: $main-hover;
+  }
+}

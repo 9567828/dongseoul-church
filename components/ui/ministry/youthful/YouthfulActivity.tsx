@@ -53,7 +53,7 @@ export default function YouthfulActivity() {
         <div className={style.txt}>
           <h5>YOUTHFUL Active</h5>
           <Title
-            variant="nomal"
+            variant="left"
             title="유스풀 청년부 주요사역"
             content={`예수님의 사랑으로 하나 되어\n함께 배우고 섬기며 세상을 변화시키는 청년 공동체입니다.`}
           />

@@ -19,30 +19,32 @@
   }
 }
 
-.imgWrap {
+.img-wrap {
   position: relative;
   width: 100%;
   height: auto;
-  &.active {
-    transform: scale(1.2);
-    img {
-      width: 100%;
-      height: 100%;
-    }
-  }
-  img {
-    width: 100%;
-    height: 100%;
+  &:hover .dim {
+    opacity: 1;
   }
 }
 
-.logo {
+
+.dim {
+  opacity: 0;
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 10;
-  width: 50px;
-  height: 50px;
-  @include bgImg("/imgs/logo_youtube.svg", $size: 50px);
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.427);
+  @include flex(column, center, center, 10px);
+  .logo {
+    width: 50px;
+    height: 50px;
+    @include bgImg("/imgs/logo_youtube.svg", $size: 50px);
+  }
+  .text {
+    color: white;
+    @include font-theme($bodyLg, $m);
+  }
 }

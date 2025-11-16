@@ -6,7 +6,7 @@ import { useSelectOne } from "@/tanstack-query/useQuerys/useSelectQueries";
 import { AlbumRow } from "@/utils/supabase/sql";
 
 export default function AlbumDetail({ id }: { id: string }) {
-  const { data, error, isLoading } = useSelectOne<AlbumRow>("albums", id);
+  const { data, error, isLoading } = useSelectOne<AlbumRow>("albums", id, true);
 
   if (error) {
     console.error(error);

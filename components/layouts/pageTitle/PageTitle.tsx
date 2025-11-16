@@ -11,8 +11,8 @@ export default function PageTitle() {
   return (
     <div className={style["bg-img"]}>
       <div className={style["name-wrap"]}>
-        <p>{title}</p>
-        <h1>{sub}</h1>
+        {sub === undefined ? null : <p>{title}</p>}
+        <h1>{sub === undefined ? title : sub}</h1>
       </div>
     </div>
   );

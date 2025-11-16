@@ -20,6 +20,6 @@
   @include flex(column, center, null, 2px);
   span {
     margin-left: 10px;
-    @include font-theme($bodySm, $r);
+    @include font-theme($bodyMd, $r);
   }
 }

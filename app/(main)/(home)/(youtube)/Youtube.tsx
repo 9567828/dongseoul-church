@@ -20,8 +20,11 @@ export default function Youtube() {
         ) : (
           list.map((v, i) => (
             <Link key={i} href={v.youtube_URL!} target="_blank">
-              <div className={`${style.imgWrap}`.trim()}>
-                <div className={style.logo}></div>
+              <div className={`${style["img-wrap"]}`.trim()}>
+                <div className={style.dim}>
+                  <div className={style.logo}></div>
+                  <p className={style.text}>{v.title}</p>
+                </div>
                 <img src={v.thumbnail!} alt={v.title!} />
               </div>
             </Link>

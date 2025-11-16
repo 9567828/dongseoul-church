@@ -12,6 +12,7 @@ export type Database = {
         Row: {
           created_at: string;
           id: number;
+          is_show: boolean | null;
           src: string | null;
           thumbnail: string | null;
           title: string | null;
@@ -21,6 +22,7 @@ export type Database = {
         Insert: {
           created_at?: string;
           id?: number;
+          is_show?: boolean | null;
           src?: string | null;
           thumbnail?: string | null;
           title?: string | null;
@@ -30,6 +32,7 @@ export type Database = {
         Update: {
           created_at?: string;
           id?: number;
+          is_show?: boolean | null;
           src?: string | null;
           thumbnail?: string | null;
           title?: string | null;

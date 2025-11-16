@@ -6,8 +6,8 @@ import { useHooks } from "@/hooks/useHooks";
 
 const btnList = [
   { id: "locationBtn", src: "/imgs/icons/ic_Location.svg", alt: "오시는길", label: "오시는길", route: "/about/location" },
-  { id: "newBtn", src: "/imgs/icons/ic_User.svg", alt: "새가족등록", label: "새가족등록", route: "" },
-  { id: "dutyBtn", src: "/imgs/icons/ic_file.svg", alt: "사역등록", label: "사역등록", route: "" },
+  { id: "newBtn", src: "/imgs/icons/ic_User.svg", alt: "새가족등록", label: "새가족등록", route: "/visit" },
+  { id: "dutyBtn", src: "/imgs/icons/ic_file.svg", alt: "사역등록", label: "사역등록", route: "/ministry/resgister" },
 ];
 
 export default function QucickBtnSection() {

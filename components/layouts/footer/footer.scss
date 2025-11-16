@@ -22,6 +22,15 @@ footer {
     }
   }
 
+  .footer-link {
+    width: fit-content;
+    @include flex(null, null, center, 8px);
+    img {
+      width: 18px;
+      height: 18px;
+    }
+  }
+
   .footer-right {
     @include flex($justi: center, $align: center, $gap: 30px);
     li {

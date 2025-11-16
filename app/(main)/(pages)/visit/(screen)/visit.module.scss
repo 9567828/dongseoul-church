@@ -1,0 +1,83 @@
+.container {
+  margin: 80px 0 10px;
+  @include flex(column, $align: center);
+}
+
+.wrapper {
+  @include flex(column);
+  width: 100%;
+  height: 268px;
+  position: relative;
+}
+
+.number-wrap {
+  // @include flex($align: center);
+  @include grid-col(68px 1fr, $align: center);
+}
+
+.number {
+  width: 68px;
+  height: 68px;
+  background-color: white;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  @include font-theme($head2Xl, $b);
+  color: $gray-700;
+  border-radius: 100px;
+  padding: 4px;
+  p {
+    width: 60px;
+    height: 60px;
+    border-radius: 100px;
+    padding: 10px;
+    text-align: center;
+    border: 1px solid $gray-300;
+  }
+}
+
+.dashed {
+  position: relative;
+  width: 100%;
+  height: 1px;
+  border: 1px dashed $gray-400;
+  &::after {
+    position: absolute;
+    content: "";
+    width: 5px;
+    height: 5px;
+    background-color: $gray-400;
+    border-radius: 10px;
+    top: 50%;
+    right: -7px;
+    transform: translateY(-50%);
+  }
+}
+
+.content-wrap {
+  width: 100%;
+  height: 200px;
+  @include flex(null, null, center, 30px);
+  position: absolute;
+  top: 68px;
+  margin-left: 24px;
+  z-index: -1;
+}
+
+.line-box {
+  width: 20px;
+  height: 110%;
+  background-color: $main-100;
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
+}
+
+.text-wrap {
+  h4 {
+    @include font-theme($head3Xl, $b);
+    color: $main-100;
+    margin-bottom: 10px;
+  }
+  p {
+    @include font-theme($bodyLg, $m);
+    color: $gray-600;
+  }
+}

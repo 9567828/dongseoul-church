@@ -1,11 +1,16 @@
 .info-wrap {
-  width: 100%;
   @include flex($align: center, $gap: 10px);
-  @include font-theme($bodyLg, $m);
+  @include font-theme($title2Xl, $b);
+  img {
+    width: 30px;
+    height: 30px;
+  }
 }
 
 .container {
+  width: 100%;
   margin-top: 50px;
   padding: 0 30px;
+  justify-content: space-evenly;
   @extend .info-wrap;
 }

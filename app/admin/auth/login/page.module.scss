@@ -1,0 +1,81 @@
+.ul {
+  width: 200px;
+  padding: 20px;
+  background-color: white;
+  border: 1px solid;
+}
+
+.li {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  a {
+    display: block;
+    width: 100%;
+    padding: 10px;
+  }
+  .span {
+    overflow: hidden;
+    pointer-events: none;
+    position: absolute;
+    z-index: 0;
+    inset: 0px;
+    border-radius: inherit;
+    > span {
+      position: absolute;
+      display: block;
+      width: 200px;
+      height: 200px;
+      top: -75px;
+      left: -25px;
+    }
+    .visible {
+      opacity: 0.3;
+      transform: scale(1);
+      animation-name: animation-1taevns;
+      animation-duration: 550ms;
+      animation-timing-function: 
+      cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .leave {
+      opacity: 0;
+      animation-name: animation-5ich1p;
+      animation-duration: 550ms;
+      animation-timing-function: 
+      cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .child {
+      display: block;
+      opacity: 1;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background-color: currentcolor;
+      transform-origin: center;
+    }
+  }
+  &:hover {
+    background-color: $gray-200;
+  }
+}
+
+@keyframes animation-1taevns {
+  0% {
+    transform: scale(0);
+    opacity: 0.1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0.3;
+  }
+  
+}
+
+@keyframes animation-5ich1p {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
