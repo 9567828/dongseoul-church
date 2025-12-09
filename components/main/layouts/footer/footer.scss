@@ -4,7 +4,7 @@ footer {
   @include flex($justi: space-between, $align: center, $gap: null);
   padding: 40px 80px;
   background-color: m.$gray-700;
-  color: $white;
+  color: white;
 
   .footer-left {
     color: m.$gray-500;

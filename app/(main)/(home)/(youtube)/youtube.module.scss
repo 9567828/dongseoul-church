@@ -17,7 +17,7 @@
   @include flex(column, center, center, 8px);
   padding-bottom: 80px;
   p {
-    @include m.font-theme($head3Xl, $b);
+    @include m.font-theme($headLg, $b);
   }
 }
 

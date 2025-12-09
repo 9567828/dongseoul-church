@@ -1,6 +1,7 @@
 @use "../base/reset" as *;
 @use "./abstract/font" as *;
-@use "./abstract/mixin" as *;
+@use "../base/abstract/index.scss" as *;
+@use "./abstract/variables" as *;
 
 // 공통설정
 main {
@@ -17,19 +18,19 @@ main {
   padding: 80px 40px;
 }
 
-@include gen-font-class($display6Xl);
-@include gen-font-class($display5Xl);
-@include gen-font-class($display4Xl);
-@include gen-font-class($displayXl);
-@include gen-font-class($head3Xl);
-@include gen-font-class($titleXl);
-@include gen-font-class($titleXl-plus);
-@include gen-font-class($bodyLg);
-@include gen-font-class($bodyMd);
-@include gen-font-class($bodySm);
-@include gen-font-class($captionXs);
-@include gen-font-class($captionXxs-plus);
-@include gen-font-class($captionXxs);
+@include gen-font-class(false, $font-map, $display6Xl);
+@include gen-font-class(false, $font-map, $display5Xl);
+@include gen-font-class(false, $font-map, $display4Xl);
+@include gen-font-class(false, $font-map, $headXl);
+@include gen-font-class(false, $font-map, $headLg);
+@include gen-font-class(false, $font-map, $titleXl);
+@include gen-font-class(false, $font-map, $titleXl-plus);
+@include gen-font-class(false, $font-map, $bodyLg);
+@include gen-font-class(false, $font-map, $bodyMd);
+@include gen-font-class(false, $font-map, $bodySm);
+@include gen-font-class(false, $font-map, $captionXs);
+@include gen-font-class(false, $font-map, $captionXxs-plus);
+@include gen-font-class(false, $font-map, $captionXxs);
 
 input:focus {
   outline: none;

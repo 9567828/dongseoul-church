@@ -38,7 +38,7 @@
     @include position-center();
   }
   .number {
-    @include font-theme($displayXl, $b);
+    @include font-theme($headXl, $b);
     font-weight: 900;
     color: white;
   }

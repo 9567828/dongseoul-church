@@ -16,7 +16,7 @@
     color: m.$main-color;
   }
   p {
-    @include m.font-theme($displayXl, $m);
+    @include m.font-theme($headXl, $m);
   }
 }
 

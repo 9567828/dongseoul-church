@@ -1,27 +1,6 @@
-@use "sass:map";
-@use "sass:math";
-@use "../../base/abstract/mixin" as *;
+@use "../../base/abstract/index" as *;
 @use "./variables" as *;
-@use "../../base/abstract/variables" as *;
 
 @mixin font-theme($name, $weight) {
-  $f: map.get($font-map, $name);
-  @include font-style(
-    $size: map.get($f, size),
-    $weight: $weight,
-    $line: map.get($f, line),
-    $letter: map.get($f, letter)
-  );
-}
-
-@mixin gen-font-class ($basename) {
-  .#{$basename}-b {
-    @include font-theme($basename, $b);
-  }
-  .#{$basename}-m {
-    @include font-theme($basename, $m);
-  }
-  .#{$basename}-r {
-    @include font-theme($basename, $r);
-  }
+  @include make-font-theme($font-map, $name, $weight);
 }

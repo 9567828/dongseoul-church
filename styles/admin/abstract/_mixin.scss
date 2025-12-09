@@ -1,0 +1,6 @@
+@use "../../base/abstract/index" as *;
+@use "./variables" as *;
+
+@mixin font-theme($name, $weight) {
+  @include make-font-theme($font-map, $name, $weight);
+}

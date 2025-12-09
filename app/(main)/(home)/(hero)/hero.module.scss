@@ -10,7 +10,7 @@
   width: 100%;
   height: 100%;
   @include flex(column, center, center, 10px);
-  color: $white;
+  color: white;
   p:first-child {
     @include m.font-theme($display5Xl, $b)
   }

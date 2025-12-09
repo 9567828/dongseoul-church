@@ -13,7 +13,7 @@
   color: m.$bright-bg;
   padding: 10px 30px;
   h1 {
-    @include m.font-theme($head3Xl, $b);
+    @include m.font-theme($headLg, $b);
   }
   p {
     @include m.font-theme($bodyMd, $m)

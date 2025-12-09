@@ -46,6 +46,13 @@
   }
 }
 
+@mixin position-center () {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
 @mixin font-style($size, $line, $weight, $letter: null) {
   font-size: $size;
   font-weight: $weight;
@@ -55,9 +62,36 @@
   }
 }
 
-@mixin position-center () {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+@mixin make-font-theme($map-name, $name, $weight) {
+  $f: map.get($map-name, $name);
+  @include font-style(
+    $size: map.get($f, size),
+    $weight: $weight,
+    $line: map.get($f, line),
+    $letter: map.get($f, letter)
+  );
+}
+
+@mixin gen-font-class ($isAdmin: false, $map-name, $basename, $l: null) {
+  $final-name: null;
+  @if ($isAdmin) {
+    $final-name: admin-#{$basename}
+  } @else {
+    $final-name: $basename
+  }
+
+  .#{$final-name}-b {
+    @include make-font-theme($map-name, $basename, $b);
+  }
+  .#{$final-name}-m {
+    @include make-font-theme($map-name, $basename, $m);
+  }
+  .#{$final-name}-r {
+    @include make-font-theme($map-name, $basename, $r);
+  }
+  @if ($l) {
+    .#{$final-name}-l {
+      @include make-font-theme($map-name, $basename, $l);
+    }
+  }
 }
