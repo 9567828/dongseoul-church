@@ -1,0 +1,53 @@
+@use "../../../../styles/admin/abstract/index.scss" as *;
+
+.select-wrap {
+  position: relative;
+  width: fit-content;
+  height: 100%;
+  cursor: pointer;
+}
+
+.number {
+  position: relative;
+  width: 68px;
+  padding: 8px 12px;
+  border: 1px solid $cms-gray-300;
+  border-radius: 8px;
+  @include font-theme($bodySm, $b);
+  cursor: pointer;
+  &::after {
+    display: block;
+    content: "";
+    position: absolute;
+    top: 50%;
+    right: 12px;
+    transform: translateY(-50%);
+    width: 16px;
+    height: 16px;
+    @include bgImg("/imgs/admin/icons/ic_chevron-down.svg");
+  }
+  &.active {
+    border: 1px solid $cms-dark;
+    &::after {
+      top: 30%;
+      transform: rotate(180deg);
+    }
+  }
+}
+
+.option {
+  position: absolute;
+  top: 40px;
+  width: 100%;
+  padding: 4px 0;
+  border: 1px solid $cms-gray-300;
+  border-radius: 8px;
+  @include font-theme($bodySm, $b);
+  background-color: white;
+  li {
+    padding: 4px 12px;
+    &:hover {
+      background-color: $cms-gray-100;
+    }
+  }
+}

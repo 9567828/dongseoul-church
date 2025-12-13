@@ -9,7 +9,7 @@ interface IAvatar {
 export default function AvatarWrap({ variant, size = "sm", src }: IAvatar) {
   return (
     <div className={`${style.default} ${style[variant]} ${style[size]}`}>
-      <img src={src ? src : "/imgs/admin/icons/ic_user-dark.svg"} alt="user-image" />
+      <img src={src !== "" && src ? src : "/imgs/admin/icons/ic_user-dark.svg"} alt="user-image" />
     </div>
   );
 }

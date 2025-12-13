@@ -3,7 +3,7 @@ import style from "./checkbox.module.scss";
 
 interface ICheck extends InputHTMLAttributes<HTMLInputElement> {
   variants: "login" | "main";
-  children: React.ReactNode;
+  children?: React.ReactNode;
 }
 
 export default function CheckBox({ variants, children, ...props }: ICheck) {

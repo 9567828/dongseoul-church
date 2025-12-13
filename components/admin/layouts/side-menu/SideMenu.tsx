@@ -3,36 +3,15 @@
 import Link from "next/link";
 import style from "./side-menu.module.scss";
 import { usePathname } from "next/navigation";
-import { useSideMenuOpenStore } from "@/hooks/store/useSideMenuOpenStore";
+import { useSideMenuSubOpenStore } from "@/hooks/store/useSideMenuSubOpenStore";
 import { useSideBarStateStore } from "@/hooks/store/useSideBarStateStore";
+import { adminMenuList } from "@/utils/menuList";
 
 const defaultImgSrc = "/imgs/admin/icons/menus/";
 
-const menuList = [
-  {
-    menu: "관리자계정",
-    href: "/admin/users",
-    whiteIcon: "ic_Users-white.svg",
-    darkIcon: "ic_Users-dark.svg",
-    mainIocn: "ic_Users-main.svg",
-    sub: [],
-  },
-  {
-    menu: "게시물관리",
-    href: "",
-    whiteIcon: "ic_Document-white.svg",
-    darkIcon: "ic_Document-dark.svg",
-    mainIocn: "",
-    sub: [
-      { submenu: "앨범목록", href: "/admin/boards/albums" },
-      { submenu: "유튜브목록", href: "/admin/boards/youtube" },
-    ],
-  },
-];
-
 export default function SideMenu() {
   const path = usePathname();
-  const { isOpen, toggleSideMenu } = useSideMenuOpenStore();
+  const { isSubOpen, toggleSideMenu } = useSideMenuSubOpenStore();
   const { isClose } = useSideBarStateStore();
 
   return (
@@ -51,41 +30,49 @@ export default function SideMenu() {
         </div>
 
         <ul className={style["menu-wrap"]}>
-          {menuList.map((m, i) => (
-            <li key={i}>
-              <Link
-                href={m.href}
-                onClick={m.sub.length > 0 ? () => toggleSideMenu() : undefined}
-                className={`${style["main-menu"]} ${m.href === path ? style.active : ""}`.trim()}
-              >
-                {!isClose ? (
-                  <>
-                    <div>
-                      <img src={`${defaultImgSrc}${m.href === path ? m.mainIocn : m.darkIcon}`} alt="" />
-                      <span>{m.menu}</span>
-                    </div>
-                    {m.sub.length > 0 ? (
-                      <img src={`${defaultImgSrc}ic_chevron-${isOpen ? "up" : "down"}.svg`} alt="메뉴열림/닫힘" />
-                    ) : null}
-                  </>
-                ) : (
-                  <img src={`${defaultImgSrc}${m.href === path ? m.mainIocn : m.darkIcon}`} alt="" />
-                )}
-              </Link>
+          {adminMenuList.map((m, i) => {
+            const isSub = m.sub.length > 0;
 
-              {m.sub.length > 0 && isOpen && !isClose ? (
-                <ul className={style["sub-wrap"]}>
-                  {m.sub.map((s, idx) => (
-                    <li key={idx}>
-                      <Link href={s.href} className={`${style["sub-menu"]} ${s.href === path ? style.active : ""}`.trim()}>
-                        {s.submenu}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              ) : null}
-            </li>
-          ))}
+            return (
+              <li key={i}>
+                <Link
+                  href={m.href}
+                  onClick={isSub && !isClose ? () => toggleSideMenu() : undefined}
+                  className={`${style["main-menu"]} ${m.href === path ? style.active : ""}`.trim()}
+                >
+                  <div>
+                    <img
+                      src={`${defaultImgSrc}${
+                        m.href === path || (isClose && path.startsWith(m.rootHref!)) ? m.mainIocn : m.darkIcon
+                      }`}
+                      alt=""
+                    />
+                    {!isClose && <span>{m.menu}</span>}
+                  </div>
+                  {isSub && !isClose ? (
+                    <img src={`${defaultImgSrc}ic_chevron-${isSubOpen ? "up" : "down"}.svg`} alt="메뉴열림/닫힘" />
+                  ) : null}
+                </Link>
+
+                {isSub && (isSubOpen || isClose) ? (
+                  <ul className={`${style["sub-wrap"]} ${isClose ? style["menu-hover"] : ""}`}>
+                    {m.sub.map((s, idx) => (
+                      <li key={idx}>
+                        <Link
+                          href={`${m.rootHref}${s.href}`}
+                          className={`${style["sub-menu"]} ${
+                            path.startsWith(`${m.rootHref!}${s.href}`) ? style.active : ""
+                          }`.trim()}
+                        >
+                          {s.submenu}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                ) : null}
+              </li>
+            );
+          })}
         </ul>
       </nav>
     </aside>

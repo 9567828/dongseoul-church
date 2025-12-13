@@ -1,0 +1,113 @@
+@use "../../../../styles/admin/abstract/index.scss" as *;
+
+.tab-wrap {
+  width: 100%;
+  position: relative;
+  &::after {
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    content: "";
+    width: 100%;
+    height: 1px;
+    background-color: $cms-gray-100;
+  }
+}
+
+.tab-btn {
+  padding: 12px 24px;
+  color: $cms-gray-600;
+  @include font-theme($captionXs, $b);
+  &.active {
+    color: $cms-main-color;
+    border-bottom: 2px solid $cms-main-color;
+  }
+}
+
+// table style
+.table {
+  width: 100%;
+  height: 100%;
+  border-top: 1px solid $cms-gray-100;
+  border-bottom: 1px solid $cms-gray-100;
+}
+.table-head {
+  width: 100%;
+  height: 72px;
+  @include grid-col(72px repeat(2, 1fr) repeat(3, auto));
+  .filed-name {
+    width: 100%;
+    min-width: 130px;
+    @include flex(null, null, center, null);
+    @include font-theme($bodyMd, $m);
+    color: $cms-gray-600;
+    padding: 12px;
+    &.add-sort-icon {
+      cursor: pointer;
+      -webkit-user-select:none;
+      -moz-user-select:none;
+      -ms-user-select:none;
+      user-select:none;
+      gap: 8px;
+    }
+  }
+}
+
+.text-field-wrap {
+  width: 100%;
+  @include flex(null, null, center, 8px);
+  padding: 8px 12px;
+  .text-box {
+    width: 100%;
+    min-width: 100px;
+    p:first-child {
+      @include font-theme($bodyMd, $b);
+    }
+    a {
+      display: block;
+      @include font-theme($bodyMd, $b);
+    }
+    p:last-child {
+      margin-top: 4px;
+      @include font-theme($bodyMd, $m);
+      color: $cms-gray-600;
+    }
+  }
+  &:hover a {
+    text-decoration: underline;
+  }
+}
+
+.label-wrap {
+  width: 100%;
+  @include flex(null, null, center, 8px);
+  padding: 8px 12px;
+  pointer-events: none;
+  &.cursor {
+    pointer-events: auto;
+    cursor: pointer;
+  }
+  .edit-btn {
+    display: none;
+    width: 16px;
+    height: 16px;
+    img {
+      width: 100%;
+      height: 100%;
+    }
+  }
+  &:hover {
+    .edit-btn {
+      display: block;
+    }
+  }
+}
+
+// 검색창 부분
+.action-field {
+  @include flex(null, null, center, 20px);
+  padding: 0 20px;
+  .btn-wrap {
+    @include flex(null, null, center, 10px);
+  }
+}

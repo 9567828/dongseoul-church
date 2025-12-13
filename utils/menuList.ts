@@ -25,3 +25,38 @@ export const headerMenuList = [
   },
   { menu: "새가족등록", href: "/visit" },
 ];
+
+export const adminMenuList = [
+  {
+    menu: "관리자계정",
+    href: "/admin/users",
+    whiteIcon: "ic_Users-white.svg",
+    darkIcon: "ic_Users-dark.svg",
+    mainIocn: "ic_Users-main.svg",
+    sub: [],
+  },
+  {
+    menu: "게시물관리",
+    href: "",
+    rootHref: "/admin/boards",
+    whiteIcon: "ic_Document-white.svg",
+    darkIcon: "ic_Document-dark.svg",
+    mainIocn: "ic_Document-main.svg",
+    sub: [
+      { submenu: "앨범목록", href: "/albums" },
+      { submenu: "유튜브목록", href: "/youtube" },
+    ],
+  },
+];
+
+export interface ITab {
+  id: string;
+  name: string;
+  active: boolean;
+}
+
+export const boardTapList = [
+  { id: "all", name: "전체", active: true },
+  { id: "show", name: "노출", active: false },
+  { id: "noShow", name: "비노출", active: false },
+];

@@ -12,5 +12,5 @@ const adminMinSans = localFont({
 });
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
-  return <main className={adminMinSans.className}>{children}</main>;
+  return <div className={adminMinSans.className}>{children}</div>;
 }

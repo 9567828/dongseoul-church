@@ -1,4 +1,11 @@
 @use "./base/reset" as *;
+@use "./base/abstract/index.scss" as *;
+
+.loading {
+  width: 100%;
+  height: 100vh;
+  @include flex(null, center, center, null);
+}
 
 button {
   cursor: pointer;
@@ -7,6 +14,18 @@ button {
   }
 }
 
-input:focus {
+input:focus,
+select:focus {
   outline: none;
+}
+
+select::-ms-expand { 
+	display: none;
+}
+select {
+  -o-appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  cursor: pointer;
 }

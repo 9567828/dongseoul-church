@@ -1,0 +1,19 @@
+.wrap {
+  width: 100%;
+  padding: 0 8px;
+  margin-bottom: 12px;
+  @include flex($justi: space-between, $align: center);
+}
+
+.white-panel {
+  width: 100%;
+  border-radius: 16px;
+  background-color: white;
+  &.board {
+    padding: 20px 0;
+    @include flex(column, center, null, 20px);
+  }
+  &.profile {
+    padding: 28px;
+  }
+}
