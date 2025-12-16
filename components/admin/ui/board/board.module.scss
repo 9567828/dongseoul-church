@@ -80,6 +80,7 @@
 .label-wrap {
   width: 100%;
   min-width: 130px;
+  height: 100%;
   @include flex(null, null, center, 8px);
   padding: 8px 12px;
   pointer-events: none;

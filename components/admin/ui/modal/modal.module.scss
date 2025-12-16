@@ -1,0 +1,36 @@
+@use "../../../../styles/admin/abstract/index.scss" as *;
+
+.modal-continer {
+  position: absolute;
+  border-radius: 12px;
+  background-color: white;
+  border: 1px solid $cms-gray-50;
+  box-shadow: 1px 3px 3px 1px rgba(0, 0, 0, 0.25);
+  z-index: 1;
+  overflow: hidden;
+  &.edit {
+    top: 100%;
+    left: -100px;
+    &.change {
+      top: unset;
+      bottom: 100%;
+    }
+  }
+}
+
+.modal-title {
+  @include flex(null, space-between, center, null);
+  @include font-theme($bodySm, $b);
+  background-color: white;
+  padding: 8px 20px;
+  border-bottom: 1px solid $cms-gray-100;
+  &.edit {
+    font-weight: $r;
+  }
+}
+
+.modal-content {
+  width: 100%;
+  padding: 8px 20px 20px;
+  background-color: white;
+}
