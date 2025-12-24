@@ -16,7 +16,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       <SideMenu />
       <div>
         <Header />
-        <main className="inner">{children}</main>
+        <>{children}</>
       </div>
     </div>
   );

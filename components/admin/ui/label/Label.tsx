@@ -1,7 +1,9 @@
 import style from "./label.module.scss";
 
+export type labelColor = "orange" | "purple" | "green" | "red" | "yellow";
+
 interface ILabel {
-  variant: "orange" | "purple" | "green" | "red";
+  variant: labelColor;
   text: string;
 }
 

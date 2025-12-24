@@ -1,9 +1,9 @@
 import style from "./board.module.scss";
 import { ButtonHTMLAttributes } from "react";
-import Label from "../label/Label";
+import Label, { labelColor } from "../label/Label";
 
 interface IState extends ButtonHTMLAttributes<HTMLButtonElement> {
-  variant: "orange" | "purple" | "green" | "red";
+  variant: labelColor;
   text: string;
   isEdit?: boolean;
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import InnerLayout from "@/components/admin/layouts/inner-layout/InnerLayout";
+import WhitePanel from "@/components/admin/layouts/white-panel/WhitePanel";
 import ActionField from "@/components/admin/ui/board/ActionField";
 import BoardLayout from "@/components/admin/ui/board/BoardLayout";
 import Pagenation from "@/components/admin/ui/board/Pagenation";
@@ -8,11 +9,12 @@ import SelectPageCnt from "@/components/admin/ui/board/SelectPageCnt";
 import StateLabel from "@/components/admin/ui/board/StateLabel";
 import TableHead from "@/components/admin/ui/board/TableHead";
 import TextField from "@/components/admin/ui/board/TextField";
-import RoleToggle from "@/components/admin/ui/button/RoleToggle";
 import CheckBox from "@/components/admin/ui/check-box/CheckBox";
 import ModalLayout from "@/components/admin/ui/modal/ModalLayout";
 import WarningModal from "@/components/admin/ui/modal/WarningModal";
 import RoleInfo from "@/components/admin/ui/role-info/RoleInfo";
+import ToggleOption from "@/components/admin/ui/toggle-state/ToggleOption";
+import ToggleState from "@/components/admin/ui/toggle-state/ToggleState";
 import { useHooks } from "@/hooks/useHooks";
 import { ChangeEvent, useRef, useState } from "react";
 
@@ -28,7 +30,7 @@ const userList = [
   { id: 1, name: "홍길동", src: "", email: "123@naver.com", position: "부목사", duty: "청년부", role: "super" },
   { id: 2, name: "홍길동", src: "", email: "123@naver.com", position: "부목사", duty: "청년부", role: "admin" },
   { id: 3, name: "홍길동", src: "", email: "123@naver.com", position: "부목사", duty: "청년부", role: "admin" },
-  { id: 4, name: "홍길동", src: "", email: "123@naver.com", position: "부목사", duty: "청년부", role: "admin" },
+  { id: 4, name: "홍길동", src: "", email: "123@naver.com", position: "부목사", duty: "청년부", role: "nomal" },
   { id: 5, name: "홍길동", src: "", email: "123@naver.com", position: "부목사", duty: "청년부", role: "super" },
   { id: 6, name: "홍길동", src: "", email: "123@naver.com", position: "부목사", duty: "청년부", role: "admin" },
   { id: 7, name: "홍길동", src: "", email: "123@naver.com", position: "부목사", duty: "청년부", role: "admin" },
@@ -67,12 +69,12 @@ export default function UserList() {
   const [users, setUsers] = useState(userList);
   const [selected, setSelected] = useState("6");
   const [checkedRow, setCheckedRow] = useState<string[]>([]);
-  const [selectRole, setSelectRole] = useState<"super" | "admin" | null>(null);
+  const [selectRole, setSelectRole] = useState<"super" | "admin" | "nomal" | null>(null);
   const [openEdit, setOpenEdit] = useState("");
   const [openModal, setOpenModal] = useState<changeAction | null>(null);
 
   const modalRef = useRef<HTMLDivElement>(null);
-  useOnClickOutSide(modalRef, () => setOpenEdit(""));
+  useOnClickOutSide(modalRef, () => setOpenEdit(""), openModal !== null);
   useClearBodyScroll(openModal);
 
   const toggleCheckedRow = (id: string) => {
@@ -91,13 +93,15 @@ export default function UserList() {
 
   const handleCheckedRole = (e: ChangeEvent<HTMLInputElement>, id: number) => {
     setOpenModal({ id, action: "state" });
-    const checked = e.target.checked;
-    if (checked) {
+    const checkedId = e.target.id;
+    console.log(checkedId);
+    if (checkedId === "super") {
       setSelectRole("super");
-    } else {
+    } else if (checkedId === "admin") {
       setSelectRole("admin");
+    } else {
+      setSelectRole("nomal");
     }
-    // setUsers((prev) => prev.map((u) => (u.id === id ? { ...u, role: u.role === "super" ? "admin" : "super" } : u)));
   };
 
   const handleChangeRole = (id: number) => {
@@ -105,6 +109,7 @@ export default function UserList() {
       setUsers((prev) => prev.map((u) => (u.id === id ? { ...u, role: selectRole } : u)));
     }
     setOpenModal(null);
+    setOpenEdit("");
   };
 
   const handleUserDelete = () => {
@@ -126,89 +131,106 @@ export default function UserList() {
   return (
     <>
       <InnerLayout
-        variants="board"
+        mode="default"
         title="유저목록"
         needBtn={true}
         btnName="계정등록"
         onClick={() => useRoute(`/admin/users/add`)}
         iconSrc="/imgs/admin/icons/ic_add.svg"
       >
-        <p className="admin-bodyMd-b" style={{ padding: "0 20px" }}>
-          총 {checkedRow.length > 0 ? `${checkedRow.length} 건 선택` : `${users.length} 건`}
-        </p>
-        <ActionField
-          onDelete={() => {
-            if (checkedRow.length < 1) {
-              alert("삭제할 데이터를 선택해 주세요");
-              return;
-            }
-            setOpenModal({ action: "delete" });
-          }}
-        />
-        <BoardLayout>
-          <TableHead
-            checkBtnId="state"
-            headList={headList}
-            onChange={toggleAllChecked}
-            checked={users.length <= 0 ? false : allChecked}
+        <WhitePanel variants="board">
+          <p className="admin-bodyMd-b" style={{ padding: "0 20px" }}>
+            총 {checkedRow.length > 0 ? `${checkedRow.length} 건 선택` : `${users.length} 건`}
+          </p>
+          <ActionField
+            onDelete={() => {
+              if (checkedRow.length < 1) {
+                alert("삭제할 데이터를 선택해 주세요");
+                return;
+              }
+              setOpenModal({ action: "delete" });
+            }}
           />
-          <div>
-            {users.map((t, i) => {
-              const idStr = String(t.id);
-              const isChecked = checkedRow.includes(idStr);
-              const isSuper = t.role === "super";
+          <BoardLayout>
+            <TableHead
+              checkBtnId="state"
+              headList={headList}
+              onChange={toggleAllChecked}
+              checked={users.length <= 0 ? false : allChecked}
+            />
+            <div>
+              {users.map((t, i) => {
+                const idStr = String(t.id);
+                const isChecked = checkedRow.includes(idStr);
+                const isSuper = t.role === "super";
+                const isAdmin = t.role === "admin";
 
-              return (
-                <div key={t.id} className={`table-content ${allChecked || isChecked ? "active" : ""}`.trim()}>
-                  <label htmlFor={idStr} className="check-box">
-                    <CheckBox
-                      id={idStr}
-                      variants="main"
-                      onChange={(e) => {
-                        e.stopPropagation();
-                        toggleCheckedRow(idStr);
-                      }}
-                      checked={allChecked ? allChecked : isChecked}
-                    />
-                  </label>
-                  <TextField text={t.name} link={"https://www.naver.com"} withImg={true} src="" />
-                  <TextField text={t.email} withImg={false} />
-                  <TextField text={t.position} withImg={false} />
-                  <TextField text={t.duty} withImg={false} />
-                  <div className="modal-wrap">
-                    <StateLabel
-                      text={t.role}
-                      variant={isSuper ? "orange" : "purple"}
-                      isEdit={true}
-                      onClick={() => setOpenEdit((prev) => (prev === idStr ? "" : idStr))}
-                    />
-                    {openEdit === idStr ? (
-                      <ModalLayout
-                        modalRef={modalRef}
-                        variant="edit"
-                        changeHeight={i >= 5}
-                        title="상태선택"
-                        onClick={() => setOpenEdit("")}
-                      >
-                        <RoleToggle
-                          id="roleCheck"
-                          checked={t.role === "super" ? true : false}
-                          isSuper={isSuper ? true : false}
-                          onChange={(e) => handleCheckedRole(e, t.id)}
-                        />
-                        <RoleInfo />
-                      </ModalLayout>
-                    ) : null}
+                return (
+                  <div key={t.id} className={`table-content ${allChecked || isChecked ? "active" : ""}`.trim()}>
+                    <label htmlFor={idStr} className="check-box">
+                      <CheckBox
+                        id={idStr}
+                        variants="main"
+                        onChange={(e) => {
+                          e.stopPropagation();
+                          toggleCheckedRow(idStr);
+                        }}
+                        checked={allChecked ? allChecked : isChecked}
+                      />
+                    </label>
+                    <TextField text={t.name} link={"https://www.naver.com"} withImg={true} src="" />
+                    <TextField text={t.email} withImg={false} />
+                    <TextField text={t.position} withImg={false} />
+                    <TextField text={t.duty} withImg={false} />
+                    <div className="modal-wrap">
+                      <StateLabel
+                        text={t.role}
+                        variant={isSuper ? "orange" : isAdmin ? "purple" : "yellow"}
+                        isEdit={true}
+                        onClick={() => setOpenEdit((prev) => (prev === idStr ? "" : idStr))}
+                      />
+                      {openEdit === idStr ? (
+                        <ModalLayout
+                          modalRef={modalRef}
+                          variant="edit"
+                          changeHeight={i >= 5}
+                          title="상태선택"
+                          onClick={() => setOpenEdit("")}
+                        >
+                          <ToggleState>
+                            <ToggleOption
+                              inputName="role"
+                              state="super"
+                              checked={isSuper ? true : false}
+                              onChange={(e) => handleCheckedRole(e, t.id)}
+                            />
+                            <ToggleOption
+                              inputName="role"
+                              state="admin"
+                              checked={isAdmin ? true : false}
+                              onChange={(e) => handleCheckedRole(e, t.id)}
+                            />
+                            <ToggleOption
+                              inputName="role"
+                              state="nomal"
+                              checked={t.role === "nomal" ? true : false}
+                              onChange={(e) => handleCheckedRole(e, t.id)}
+                            />
+                          </ToggleState>
+                          <RoleInfo />
+                        </ModalLayout>
+                      ) : null}
+                    </div>
                   </div>
-                </div>
-              );
-            })}
+                );
+              })}
+            </div>
+          </BoardLayout>
+          <div className="pagenation-wrap">
+            <SelectPageCnt value={selected} onChange={setSelected} />
+            <Pagenation />
           </div>
-        </BoardLayout>
-        <div className="pagenation-wrap">
-          <SelectPageCnt value={selected} onChange={setSelected} />
-          <Pagenation />
-        </div>
+        </WhitePanel>
       </InnerLayout>
       {openModal?.action === "delete" && (
         <WarningModal

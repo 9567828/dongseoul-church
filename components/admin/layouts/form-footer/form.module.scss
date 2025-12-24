@@ -1,0 +1,19 @@
+@use "../../../../styles/admin/abstract/index.scss" as *;
+
+.footer {
+  width: calc(100% - 250px);
+  padding: 12px 45px;
+  position: fixed;
+  left: 250px;
+  bottom: 0;
+  @include flex(null, space-between, center, null);
+  border-top: 1px solid $cms-gray-200;
+  &.close {
+    left: 61px;
+    width: calc(100% - 61px);
+  }
+}
+
+.btn-wrap {
+  @include flex(null, center, center, 12px);
+}

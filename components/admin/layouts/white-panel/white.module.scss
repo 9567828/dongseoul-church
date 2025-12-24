@@ -1,0 +1,21 @@
+@use "../../../../styles/admin/abstract/index.scss" as *;
+
+.white-panel {
+  width: 100%;
+  border-radius: 16px;
+  background-color: white;
+}
+
+.board {
+  padding: 20px 0;
+  @include flex(column, center, null, 20px);
+}
+
+.profile {
+  padding: 28px;
+}
+
+.panel-title {
+  @include font-theme($titleLg, $b);
+  margin-bottom: 24px;
+}

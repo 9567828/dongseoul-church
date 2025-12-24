@@ -75,8 +75,9 @@ export const useHooks = () => {
     return state;
   };
 
-  const useOnClickOutSide = (ref: React.RefObject<HTMLElement | null>, handler: () => void) => {
+  const useOnClickOutSide = (ref: React.RefObject<HTMLElement | null>, handler: () => void, isGlobModalOpen?: boolean) => {
     useEffect(() => {
+      if (isGlobModalOpen) return;
       const listener = (e: MouseEvent) => {
         if (!ref.current || ref.current.contains(e.target as Node)) return;
         handler();
@@ -92,7 +93,7 @@ export const useHooks = () => {
       if (modal) {
         window.document.body.style.overflow = "hidden";
       } else {
-        window.document.body.style.overflow = "auto";
+        window.document.body.removeAttribute("style");
       }
     }, [modal]);
   };

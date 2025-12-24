@@ -8,7 +8,6 @@ import ToggleBtn from "@/components/admin/ui/button/ToggleBtn";
 import CheckBox from "@/components/admin/ui/check-box/CheckBox";
 import ImgContainer from "@/components/admin/ui/img-container/ImgContainer";
 import InputBox from "@/components/admin/ui/input-box/InputBox";
-import PopupHead from "@/components/admin/ui/popup-head/PopupHead";
 import { ChangeEvent, useState } from "react";
 
 export default function Page() {
@@ -98,7 +97,6 @@ export default function Page() {
         addImg={addImg}
         currImg={"/imgs/admin/Frame 35574.png"}
       />
-      <PopupHead title="pagetitle" onClick={() => console.log()} />
     </div>
   );
 }

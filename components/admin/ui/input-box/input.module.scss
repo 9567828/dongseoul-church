@@ -19,6 +19,7 @@
 }
 
 .default {
+  width: 100%;
   padding: 8px 12px;
   @include font-theme($bodyMd, $m);
   &.sm {
@@ -128,5 +129,25 @@
         background-color: white;
       }
     }
+  }
+}
+
+.with-label {
+  width: 100%;
+  label {
+    padding: 0 4px;
+    @include font-theme($bodyMd, $m);
+    color: $cms-gray-700;
+    &.import {
+      &::after {
+        content: "*";
+        padding-left: 3px;
+        color: $cms-red;
+      }
+    }
+  }
+
+  .input-wrap {
+    @include flex(null, $align: center, $gap: 4px);
   }
 }

@@ -10,7 +10,7 @@
   overflow: hidden;
   &.edit {
     top: 100%;
-    left: -105px;
+    left: -185px;
     &.change {
       top: unset;
       bottom: 100%;
@@ -46,7 +46,6 @@
   height: 100vh;
   z-index: 200;
   .modal-content {
-    position: absolute;
     @include position-center();
     width: 275px;
     min-width: 255px;
@@ -88,7 +87,7 @@
     .btn-wrap {
       width: 100%;
       @include flex(null, flex-end, center, 8px);
-      padding: 8px 12px;
+      padding: 12px;
       background-color: $cms-gray-100;
     }
   }
