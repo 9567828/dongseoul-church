@@ -21,19 +21,19 @@ export default function Header() {
           <SearchInput id="headerSearch" variants="header" />
         </div>
         <div className={style["menu-wrap"]}>
-          <Link href={"/"}>
+          <Link href={"/"} title="홈으로 이동">
             <img src="/imgs/admin/icons/ic_home.svg" alt="홈으로이동" />
           </Link>
-          <button>
+          <button type="button">
             {!alret ? (
               <img src="/imgs/admin/icons/ic_alert=off.svg" alt="알림아이콘" />
             ) : (
               <img src="/imgs/admin/icons/ic_alert=on.svg" alt="알림아이콘" />
             )}
           </button>
-          <Link href={"/admin/profile"}>
+          <button type="button">
             <AvatarWrap variant="empty" size="sm" />
-          </Link>
+          </button>
         </div>
       </nav>
     </header>

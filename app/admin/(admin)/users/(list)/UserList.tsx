@@ -7,16 +7,17 @@ import BoardLayout from "@/components/admin/ui/board/BoardLayout";
 import Pagenation from "@/components/admin/ui/board/Pagenation";
 import SelectPageCnt from "@/components/admin/ui/board/SelectPageCnt";
 import StateLabel from "@/components/admin/ui/board/StateLabel";
+import TableContent from "@/components/admin/ui/board/TableContent";
 import TableHead from "@/components/admin/ui/board/TableHead";
 import TextField from "@/components/admin/ui/board/TextField";
 import CheckBox from "@/components/admin/ui/check-box/CheckBox";
 import ModalLayout from "@/components/admin/ui/modal/ModalLayout";
 import WarningModal from "@/components/admin/ui/modal/WarningModal";
-import RoleInfo from "@/components/admin/ui/role-info/RoleInfo";
-import ToggleOption from "@/components/admin/ui/toggle-state/ToggleOption";
-import ToggleState from "@/components/admin/ui/toggle-state/ToggleState";
+import ToggleRole from "@/components/admin/ui/toggle-state/ToggleRole";
 import { useHooks } from "@/hooks/useHooks";
-import { ChangeEvent, useRef, useState } from "react";
+import { handlers } from "@/utils/handlers";
+import { roleType, userListArr } from "@/utils/propType";
+import { useRef, useState } from "react";
 
 const headList = [
   { id: "name", name: "이름", isSort: false },
@@ -26,50 +27,16 @@ const headList = [
   { id: "role", name: "role", isSort: false },
 ];
 
-const userList = [
-  { id: 1, name: "홍길동", src: "", email: "123@naver.com", position: "부목사", duty: "청년부", role: "super" },
-  { id: 2, name: "홍길동", src: "", email: "123@naver.com", position: "부목사", duty: "청년부", role: "admin" },
-  { id: 3, name: "홍길동", src: "", email: "123@naver.com", position: "부목사", duty: "청년부", role: "admin" },
-  { id: 4, name: "홍길동", src: "", email: "123@naver.com", position: "부목사", duty: "청년부", role: "nomal" },
-  { id: 5, name: "홍길동", src: "", email: "123@naver.com", position: "부목사", duty: "청년부", role: "super" },
-  { id: 6, name: "홍길동", src: "", email: "123@naver.com", position: "부목사", duty: "청년부", role: "admin" },
-  { id: 7, name: "홍길동", src: "", email: "123@naver.com", position: "부목사", duty: "청년부", role: "admin" },
-  { id: 8, name: "홍길동", src: "", email: "123@naver.com", position: "부목사", duty: "청년부", role: "admin" },
-  { id: 9, name: "홍길동", src: "", email: "123@naver.com", position: "부목사", duty: "청년부", role: "admin" },
-  // { id: 10, name: "홍길동", src: "", email: "123@naver.com", position: "부목사", duty: "청년부", role: "admin" },
-  // { id: 11, name: "홍길동", src: "", email: "123@naver.com", position: "부목사", duty: "청년부", role: "admin" },
-  // { id: 12, name: "홍길동", src: "", email: "123@naver.com", position: "부목사", duty: "청년부", role: "admin" },
-  // { id: 13, name: "홍길동", src: "", email: "123@naver.com", position: "부목사", duty: "청년부", role: "admin" },
-  // { id: 14, name: "홍길동", src: "", email: "123@naver.com", position: "부목사", duty: "청년부", role: "admin" },
-  // { id: 15, name: "홍길동", src: "", email: "123@naver.com", position: "부목사", duty: "청년부", role: "admin" },
-  // { id: 16, name: "홍길동", src: "", email: "123@naver.com", position: "부목사", duty: "청년부", role: "admin" },
-  // { id: 17, name: "홍길동", src: "", email: "123@naver.com", position: "부목사", duty: "청년부", role: "admin" },
-  // { id: 18, name: "홍길동", src: "", email: "123@naver.com", position: "부목사", duty: "청년부", role: "admin" },
-  // { id: 19, name: "홍길동", src: "", email: "123@naver.com", position: "부목사", duty: "청년부", role: "admin" },
-  // { id: 20, name: "홍길동", src: "", email: "123@naver.com", position: "부목사", duty: "청년부", role: "admin" },
-  // { id: 21, name: "홍길동", src: "", email: "123@naver.com", position: "부목사", duty: "청년부", role: "admin" },
-  // { id: 22, name: "홍길동", src: "", email: "123@naver.com", position: "부목사", duty: "청년부", role: "admin" },
-  // { id: 23, name: "홍길동", src: "", email: "123@naver.com", position: "부목사", duty: "청년부", role: "admin" },
-  // { id: 24, name: "홍길동", src: "", email: "123@naver.com", position: "부목사", duty: "청년부", role: "admin" },
-  // { id: 25, name: "홍길동", src: "", email: "123@naver.com", position: "부목사", duty: "청년부", role: "admin" },
-  // { id: 26, name: "홍길동", src: "", email: "123@naver.com", position: "부목사", duty: "청년부", role: "admin" },
-  // { id: 27, name: "홍길동", src: "", email: "123@naver.com", position: "부목사", duty: "청년부", role: "admin" },
-  // { id: 28, name: "홍길동", src: "", email: "123@naver.com", position: "부목사", duty: "청년부", role: "admin" },
-  // { id: 29, name: "홍길동", src: "", email: "123@naver.com", position: "부목사", duty: "청년부", role: "admin" },
-  // { id: 30, name: "홍길동", src: "", email: "123@naver.com", position: "부목사", duty: "청년부", role: "admin" },
-  // { id: 31, name: "홍길동", src: "", email: "123@naver.com", position: "부목사", duty: "청년부", role: "admin" },
-  // { id: 32, name: "홍길동", src: "", email: "123@naver.com", position: "부목사", duty: "청년부", role: "admin" },
-];
-
 type actionMode = "delete" | "state";
 type changeAction = { id?: number; action: actionMode };
 
 export default function UserList() {
+  const { handleCheckedRole, toggleAllChecked } = handlers();
   const { useOnClickOutSide, useRoute, useClearBodyScroll } = useHooks();
-  const [users, setUsers] = useState(userList);
+  const [users, setUsers] = useState(userListArr);
   const [selected, setSelected] = useState("6");
   const [checkedRow, setCheckedRow] = useState<string[]>([]);
-  const [selectRole, setSelectRole] = useState<"super" | "admin" | "nomal" | null>(null);
+  const [selectRole, setSelectRole] = useState<roleType | null>(null);
   const [openEdit, setOpenEdit] = useState("");
   const [openModal, setOpenModal] = useState<changeAction | null>(null);
 
@@ -83,25 +50,9 @@ export default function UserList() {
 
   const allChecked = checkedRow.length === users.length;
 
-  const toggleAllChecked = () => {
-    if (allChecked) {
-      setCheckedRow([]);
-    } else {
-      setCheckedRow(users.map((v) => String(v.id)));
-    }
-  };
-
-  const handleCheckedRole = (e: ChangeEvent<HTMLInputElement>, id: number) => {
+  const onChangeRole = (id: number, role: roleType) => {
     setOpenModal({ id, action: "state" });
-    const checkedId = e.target.id;
-    console.log(checkedId);
-    if (checkedId === "super") {
-      setSelectRole("super");
-    } else if (checkedId === "admin") {
-      setSelectRole("admin");
-    } else {
-      setSelectRole("nomal");
-    }
+    handleCheckedRole(role, setSelectRole);
   };
 
   const handleChangeRole = (id: number) => {
@@ -155,7 +106,7 @@ export default function UserList() {
             <TableHead
               checkBtnId="state"
               headList={headList}
-              onChange={toggleAllChecked}
+              onChange={() => toggleAllChecked(allChecked, setCheckedRow, users)}
               checked={users.length <= 0 ? false : allChecked}
             />
             <div>
@@ -166,19 +117,15 @@ export default function UserList() {
                 const isAdmin = t.role === "admin";
 
                 return (
-                  <div key={t.id} className={`table-content ${allChecked || isChecked ? "active" : ""}`.trim()}>
-                    <label htmlFor={idStr} className="check-box">
-                      <CheckBox
-                        id={idStr}
-                        variants="main"
-                        onChange={(e) => {
-                          e.stopPropagation();
-                          toggleCheckedRow(idStr);
-                        }}
-                        checked={allChecked ? allChecked : isChecked}
-                      />
-                    </label>
-                    <TextField text={t.name} link={"https://www.naver.com"} withImg={true} src="" />
+                  <TableContent
+                    key={t.id}
+                    allChecked={allChecked}
+                    isChecked={isChecked}
+                    addChecked={true}
+                    id={idStr}
+                    toggle={() => toggleCheckedRow(idStr)}
+                  >
+                    <TextField text={t.name} link={`/admin/users/${t.id}`} withImg={true} src="" />
                     <TextField text={t.email} withImg={false} />
                     <TextField text={t.position} withImg={false} />
                     <TextField text={t.duty} withImg={false} />
@@ -193,35 +140,21 @@ export default function UserList() {
                         <ModalLayout
                           modalRef={modalRef}
                           variant="edit"
+                          // index가 5번째 보다 크면
                           changeHeight={i >= 5}
                           title="상태선택"
                           onClick={() => setOpenEdit("")}
                         >
-                          <ToggleState>
-                            <ToggleOption
-                              inputName="role"
-                              state="super"
-                              checked={isSuper ? true : false}
-                              onChange={(e) => handleCheckedRole(e, t.id)}
-                            />
-                            <ToggleOption
-                              inputName="role"
-                              state="admin"
-                              checked={isAdmin ? true : false}
-                              onChange={(e) => handleCheckedRole(e, t.id)}
-                            />
-                            <ToggleOption
-                              inputName="role"
-                              state="nomal"
-                              checked={t.role === "nomal" ? true : false}
-                              onChange={(e) => handleCheckedRole(e, t.id)}
-                            />
-                          </ToggleState>
-                          <RoleInfo />
+                          <ToggleRole
+                            mode="list"
+                            variant="vertical"
+                            role={t.role as roleType}
+                            onChange={(e) => onChangeRole(t.id, e.target.id as roleType)}
+                          />
                         </ModalLayout>
                       ) : null}
                     </div>
-                  </div>
+                  </TableContent>
                 );
               })}
             </div>

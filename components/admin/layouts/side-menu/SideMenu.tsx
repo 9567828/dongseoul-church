@@ -38,12 +38,12 @@ export default function SideMenu() {
                 <Link
                   href={m.href}
                   onClick={isSub && !isClose ? () => toggleSideMenu() : undefined}
-                  className={`${style["main-menu"]} ${m.href === path ? style.active : ""}`.trim()}
+                  className={`${style["main-menu"]} ${path.startsWith(m.rootHref) ? style.active : ""}`.trim()}
                 >
                   <div>
                     <img
                       src={`${defaultImgSrc}${
-                        m.href === path || (isClose && path.startsWith(m.rootHref!)) ? m.mainIocn : m.darkIcon
+                        path === m.href || (isClose && path.startsWith(m.rootHref)) ? m.mainIocn : m.darkIcon
                       }`}
                       alt=""
                     />

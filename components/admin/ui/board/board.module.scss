@@ -53,10 +53,22 @@
   }
 }
 
+.table-content {
+  width: 100%;
+  height: 80px;
+  @include grid-col(72px repeat(2, 1fr) repeat(3, auto));
+  border-top: 1px solid $cms-gray-100;
+  &:hover {
+    background-color: $cms-gray-100;
+  }
+  &.active {
+    background-color: $cms-gray-50;
+  }
+}
+
 .text-field-wrap {
   width: 100%;
   min-width: 130px;
-  // @include flex(null, null, center, 8px);
   @include grid-col($col: auto 1fr, $align: center, $gap: 8px);
   padding: 8px 12px;
   .text-box {
@@ -67,8 +79,10 @@
       @include textEllipsis;
     }
     a {
+      display: block;
       @include font-theme($bodyMd, $b);
       text-decoration: underline;
+      @include textEllipsis;
     }
     .sub-text {
       margin-top: 4px;
@@ -167,5 +181,17 @@
       @include font-theme($bodySm, $b);
       color: $cms-gray-500;
     }
+  }
+}
+
+// thumbnail
+.thumbnail-wrap {
+  width: 80px;
+  height: 80px;
+  padding: 12px;
+  img {
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
   }
 }

@@ -30,7 +30,7 @@ export default function LabelInput({
   const isError = errMsg !== undefined;
 
   return (
-    <div>
+    <div style={{ width: "100%" }}>
       <div className={style["with-label"]}>
         <label htmlFor={props.id} className={`${isRequired ? style.import : ""}`.trim()}>
           {label}

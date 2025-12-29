@@ -7,9 +7,10 @@ interface ISelect {
   optList: string[];
   value: string;
   onChange: (item: string) => void;
+  onClick?: (item: string) => void;
 }
 
-export default function SelectBox({ variant, optList, value, onChange }: ISelect) {
+export default function SelectBox({ variant, optList, value, onChange, onClick }: ISelect) {
   const [open, setOpen] = useState(false);
   const { useOnClickOutSide } = useHooks();
 
@@ -20,6 +21,9 @@ export default function SelectBox({ variant, optList, value, onChange }: ISelect
   const handleSelect = (item: string) => {
     if (item) {
       onChange(item);
+      if (typeof onClick === "function") {
+        onClick(item);
+      }
       setOpen(false);
     }
   };

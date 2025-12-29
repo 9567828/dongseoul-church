@@ -31,10 +31,6 @@
 @include gen-font-class(false, $font-map, $captionXxs-plus);
 @include gen-font-class(false, $font-map, $captionXxs);
 
-input:focus {
-  border: 1px solid black !important;
-}
-
 #youtubeSection {
   .swiper-wrapper {
     width: 555px;

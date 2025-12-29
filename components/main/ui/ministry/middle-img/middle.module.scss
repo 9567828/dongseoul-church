@@ -4,7 +4,7 @@
   position: relative;
   width: 100%;
   height: 430px;
-  @include bgImg("");
+  @include bgImg("/imgs/ministry/kids/kids-main.jpg");
   &.youthful-txt,
   &.text {
     @include flex(column, center, center);

@@ -3,7 +3,7 @@ import CheckBox from "../check-box/CheckBox";
 import { useSortState } from "@/hooks/store/useSortState";
 import { ChangeEvent } from "react";
 
-type headType = {
+export type tableHeadType = {
   id: string;
   name: string;
   isSort: boolean;
@@ -11,7 +11,7 @@ type headType = {
 };
 
 type tableHead = {
-  headList: headType[];
+  headList: tableHeadType[];
   checkBtnId: string;
   gridCol?: string;
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;

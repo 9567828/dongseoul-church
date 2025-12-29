@@ -13,23 +13,20 @@
   padding: 10px 20px;
   border: 1px solid transparent;
   background:
-    linear-gradient(white) padding-box,
-    linear-gradient($cms-gray-500) border-box;
+  linear-gradient(white) padding-box,
+  linear-gradient($cms-gray-500) border-box;
   border-radius: 8px;
   @include font-theme($bodyMd, $m);
   &:focus-within {
     border: 2px solid transparent;
     background:
-      linear-gradient(#fff) padding-box, 
-      linear-gradient(175deg, #6366f1, #06b6d4);
+    linear-gradient(#fff) padding-box, 
+    linear-gradient(175deg, #6366f1, #06b6d4);
     box-shadow: 2px 6px 10px rgba(6, 182, 212, 0.2);
   }
-  // &:-webkit-autofill { -webkit-box-shadow: 0 0 0 30px white inset; -webkit-text-fill-color: #000; border: 1px solid $cms-gray-500; }
-  // &:-webkit-autofill:focus { 
-  //   -webkit-box-shadow: 0 0 0 30px white inset; 
-  //   // -webkit-text-fill-color: #000; 
-  //   // -webkit-box-shadow: none
-  // }
+  &.error {
+    border: 2px solid $cms-red;
+  }
 }
 
 .default {
@@ -152,7 +149,7 @@
 .with-label {
   width: 100%;
   label {
-    padding: 0 4px;
+    padding: 0 4px 4px;
     @include font-theme($bodyMd, $m);
     color: $cms-gray-700;
     &.import {
@@ -166,5 +163,28 @@
 
   .input-wrap {
     @include flex(null, $align: center, $gap: 4px);
+  }
+}
+
+.addr-wrap {
+  width: 100%;
+  @include flex(column, null, null, 12px);
+  .addr-label {
+    padding: 0 4px 4px;
+    @include font-theme($bodyMd, $m);
+    color: $cms-gray-700;
+  }
+  .flex {
+    @include flex(null, null, center, 12px);
+
+    .addr {
+      height: 48px;
+      background-color: $cms-gray-100;
+      border-radius: 12px;
+      color: $cms-gray-700;
+      p {
+        line-height: 32px;
+      }
+    }
   }
 }

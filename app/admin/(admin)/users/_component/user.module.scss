@@ -1,0 +1,7 @@
+.flex-column {
+  @include flex(column, null, null, 18px);
+}
+
+.flex {
+  @include flex(null, space-between, center, 24px);
+}

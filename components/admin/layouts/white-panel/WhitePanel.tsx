@@ -10,7 +10,11 @@ export default function WhitePanel({ title, variants, children }: IPanel) {
   return (
     <section className={`${style["white-panel"]} ${style[variants]}`.trim()}>
       {title && <h4 className={style["panel-title"]}>{title}</h4>}
-      {children}
+      {variants === "profile" ? (
+        <div className={`${variants === "profile" ? style.flex : ""}`.trim()}>{children}</div>
+      ) : (
+        <>{children}</>
+      )}
     </section>
   );
 }

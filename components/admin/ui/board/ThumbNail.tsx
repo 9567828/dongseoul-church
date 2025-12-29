@@ -1,9 +1,14 @@
 import style from "./board.module.scss";
 
-export default function ThumbNail() {
+interface IThumbnail {
+  src: string;
+  alt: string;
+}
+
+export default function ThumbNail({ src, alt }: IThumbnail) {
   return (
-    <div>
-      <img src="" alt="" />
+    <div className={style["thumbnail-wrap"]}>
+      <img src={src} alt={alt} />
     </div>
   );
 }

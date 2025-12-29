@@ -10,7 +10,7 @@ export default function ToggleOption({ inputName, state, ...props }: IState) {
   return (
     <label htmlFor={state}>
       <input type="radio" name={inputName} id={state} {...props} />
-      <p className={style["role-text"]}>{state}</p>
+      <p className={style["opt-text"]}>{state}</p>
     </label>
   );
 }

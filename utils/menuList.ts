@@ -30,6 +30,7 @@ export const adminMenuList = [
   {
     menu: "신도관리",
     href: "/admin/users",
+    rootHref: "/admin/users",
     whiteIcon: "ic_Users-white.svg",
     darkIcon: "ic_Users-dark.svg",
     mainIocn: "ic_Users-main.svg",

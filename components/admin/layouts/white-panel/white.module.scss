@@ -13,6 +13,9 @@
 
 .profile {
   padding: 28px;
+  .flex {
+    @include flex(column, null, null, 28px);
+  }
 }
 
 .panel-title {

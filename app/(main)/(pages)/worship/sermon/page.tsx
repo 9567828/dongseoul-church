@@ -1,10 +1,7 @@
-import PhotoBoard from "@/components/main/layouts/board/photo-board/PhotoBoard";
-import { v4 as uuidv4 } from "uuid";
 import SermonList from "./(list)/SermonList";
 import { Suspense } from "react";
 import { ISearchParams } from "@/utils/propType";
 import { getSearchQuerys } from "@/utils/pagenation";
-import { SermonRow } from "@/utils/supabase/sql";
 
 export const metadata = {
   title: "말씀영상",

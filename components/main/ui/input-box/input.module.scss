@@ -14,6 +14,9 @@
     padding: 10px;
     background-color: white;
     @include m.font-theme($bodySm, $m);
+    &:focus {
+      border: 1px solid black !important;
+    }
   }
 }
 

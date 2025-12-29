@@ -49,8 +49,15 @@
     color: $cms-gray-500;
   }
   .set-password {
+    @include font-theme($bodyMd, $m);
     color: $cms-linear-1;
   }
+}
+
+.set-password {
+  @include flex(null, flex-end, center, null);
+  @include font-theme($bodyMd, $m);
+  color: $cms-linear-1;
 }
 
 .info-wrap {

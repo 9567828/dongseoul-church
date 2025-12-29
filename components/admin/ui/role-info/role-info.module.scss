@@ -1,7 +1,6 @@
 @use "../../../../styles/admin/abstract/index.scss" as *;
 
 .info-wrap {
-  margin-top: 12px;
   padding: 0 8px;
   .info-head {
     @include flex(null, null, center, 4px);
