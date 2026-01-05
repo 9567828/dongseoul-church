@@ -8,16 +8,16 @@ interface tabState {
 export const useTabStore = create<tabState>((set) => ({
   isActive: {
     all: true,
-    show: false,
-    noShow: false,
+    active: false,
+    inActive: false,
   },
 
   toggleTab: (id: string) =>
     set(() => ({
       isActive: {
         all: false,
-        show: false,
-        noShow: false,
+        active: false,
+        inActive: false,
         [id]: true,
       },
     })),

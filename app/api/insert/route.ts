@@ -10,12 +10,11 @@ export const POST = async (req: Request) => {
     const { data, error } = await supabase.from("sermons").upsert(videos).select();
 
     if (error) {
-      console.log(error);
+      return NextResponse.json({ result: false });
     }
 
     return NextResponse.json({ result: true });
   } catch (err) {
-    console.error(err);
-    return NextResponse.json({ result: false });
+    throw err;
   }
 };

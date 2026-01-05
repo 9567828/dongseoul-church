@@ -32,13 +32,13 @@ export async function updateSession(request: NextRequest) {
   const { data } = await supabase.auth.getClaims();
   const user = data?.claims;
 
-  if (!user && !pathname.startsWith("/admin/auth/login") && !pathname.startsWith("/admin/auth") && !pathname.startsWith("/api")) {
+  if (!user && !pathname.startsWith("/auth/login") && !pathname.startsWith("/auth") && !pathname.startsWith("/api")) {
     // no user, potentially respond by redirecting the user to the login page
-    url.pathname = "/admin/auth/login";
+    url.pathname = "/auth/login";
     return NextResponse.redirect(url);
   }
 
-  if (user && pathname.startsWith("/admin/auth/login")) {
+  if (user && pathname.startsWith("/auth/login")) {
     url.pathname = "/admin/users";
     return NextResponse.redirect(url);
   }

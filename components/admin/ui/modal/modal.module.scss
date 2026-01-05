@@ -10,7 +10,7 @@
   overflow: hidden;
   &.edit {
     top: 100%;
-    left: -185px;
+    left: -95px;
     &.change {
       top: unset;
       bottom: 100%;
@@ -47,7 +47,7 @@
   z-index: 200;
   .modal-content {
     @include position-center();
-    width: 275px;
+    width: 370px;
     min-width: 255px;
     height: fit-content;
     border-radius: 8px;

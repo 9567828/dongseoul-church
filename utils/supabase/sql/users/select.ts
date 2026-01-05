@@ -1,23 +1,38 @@
-import createBrowClient from "../../services/browerClinet";
-import { createServClient } from "../../services/serverClinet";
+import { SupabaseClient } from "@supabase/supabase-js";
 import { getUserId } from "./auth";
+import { roleEum, RoleWithMember } from "..";
+import { tabStatusType } from "@/components/admin/ui/board/BoardTab";
+import { sortMapType, sortTypes } from "@/hooks/store/useSortState";
 
-export const selectUsers = () => {
-  const selectUser = async () => {
-    const supabase = createBrowClient();
+export type filterSortType = { filter: string; sort: sortTypes };
 
+interface ISelect {
+  id?: string;
+  page?: number;
+  limit?: number;
+  tabStatus?: tabStatusType;
+  filter?: filterSortType;
+  supabase: SupabaseClient;
+}
+
+export const selectAccounts = () => {
+  const selectLoginUser = async ({ supabase }: ISelect) => {
     const id = await getUserId();
 
-    const { data, error } = await supabase.from("members").select("*").eq("admin_user", id!).single();
+    const { data, error } = await supabase.from("members").select(`*, admin:users(role)`).eq("admin_user", id!).single();
 
     if (error) throw error;
-
     return data;
   };
 
-  const selectUserRole = async () => {
-    const supabase = createBrowClient();
+  const selectUserById = async ({ id, supabase }: ISelect): Promise<RoleWithMember> => {
+    const { data, error } = await supabase.from("members").select(`*, admin:users(role)`).eq("id", id).single();
 
+    if (error) throw error;
+    return data as RoleWithMember;
+  };
+
+  const selectUserRole = async ({ supabase }: ISelect) => {
     const id = await getUserId();
 
     const { data, error } = await supabase.from("users").select("role").eq("id", id!).single();
@@ -26,28 +41,27 @@ export const selectUsers = () => {
     return data.role;
   };
 
-  const selectAllUsers = async (page: number, limit: number) => {
-    const supabase = createBrowClient();
-
+  const selectAllUsers = async ({ supabase, limit, page, tabStatus, filter }: ISelect) => {
     const from = (page! - 1) * limit!;
     const to = from + limit! - 1;
 
-    const { data, count, error } = await supabase
-      .from("members")
-      .select(
-        `*,
-        admin:users (
-          role
-        )
-        `,
-        { count: "exact" }
-      )
-      .order("created_at", { ascending: true })
-      .range(from, to);
+    const filterName = filter?.filter || "created_at";
+    const isAscending = filter?.sort === "asc";
+
+    let query = supabase.from("members").select("*, admin:users(role)", { count: "exact" });
+
+    if (tabStatus === "active") {
+      query = supabase.from("members").select("*, admin:users!inner(role)", { count: "exact" });
+    } else if (tabStatus === "inActive") {
+      query = supabase.from("members").select("*", { count: "exact" }).is("admin_user", null);
+    }
+
+    const { data, count, error } = await query?.order(filterName, { ascending: isAscending }).range(from, to);
+
     if (error) throw error;
 
     return { list: data ?? [], count: count ?? 0 };
   };
 
-  return { selectUser, selectUserRole, selectAllUsers };
+  return { selectLoginUser, selectUserById, selectUserRole, selectAllUsers };
 };

@@ -1,0 +1,213 @@
+"use client";
+
+import style from "./user.module.scss";
+import FormLayout from "@/components/admin/layouts/form-layout/FormLayout";
+import InnerLayout from "@/components/admin/layouts/inner-layout/InnerLayout";
+import WhitePanel from "@/components/admin/layouts/white-panel/WhitePanel";
+import ImgContainer from "@/components/admin/ui/img-container/ImgContainer";
+import LabelInput from "@/components/admin/ui/input-box/LabelInput";
+import { formRuls, FormValues } from "@/hooks/FormRules";
+import { formatPhone } from "@/utils/formatPhone";
+import { Controller, SubmitHandler, useForm, useFormContext, useWatch } from "react-hook-form";
+import { UserFormType } from "@/utils/propType";
+import Button from "@/components/admin/ui/button/Button";
+import ToggleRole from "@/components/admin/ui/toggle-state/ToggleRole";
+import { useState } from "react";
+import InputAddr from "@/components/admin/ui/input-box/InputAddr";
+import { useHooks } from "@/hooks/useHooks";
+import { handlers } from "@/utils/handlers";
+import { MemberPaylod, MemberRow, roleEum } from "@/utils/supabase/sql";
+import Loading from "@/app/Loading";
+import { useSelectUserById } from "@/tanstack-query/useQuerys/users/useSelectUser";
+import RoleInfo from "@/components/admin/ui/role-info/RoleInfo";
+import { useAddUser } from "@/tanstack-query/useMutation/users/useMutationUser";
+import WarningModal from "@/components/admin/ui/modal/WarningModal";
+
+interface IUserForm {
+  mode: UserFormType;
+  userId: string;
+}
+
+export default function UserForm({ mode, userId }: IUserForm) {
+  const { data, isLoading } = useSelectUserById(userId!);
+  const { mutate } = useAddUser();
+
+  if ((mode === "edit" || mode === "readOnly") && isLoading) {
+    return <Loading />;
+  }
+
+  const { useMoveBack, useRoute } = useHooks();
+  const { handleCheckedRole, handleAdminInvite } = handlers();
+  const { usernameRule, phoneRule, emailRule } = formRuls();
+  const {
+    handleSubmit,
+    register,
+    formState: { errors },
+    reset,
+    control,
+  } = useForm<FormValues>();
+
+  const [selectRole, setSelectRole] = useState<roleEum | null>(data?.admin?.role || null);
+  const [openModal, setOpenModal] = useState(false);
+
+  const onSubmit: SubmitHandler<FormValues> = (data) => {
+    const { username, phone, email, duty, position } = data;
+    if (mode === "add") {
+      const newObj: MemberPaylod = {
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        name: username,
+        email,
+        phone,
+        duty: duty === "" ? "없음" : duty,
+        position: position === "" ? "없음" : position,
+        avatar: null,
+        addr: null,
+        addr_detail: null,
+      };
+
+      mutate(newObj, {
+        onSuccess: () => {
+          reset();
+          useRoute("/admin/users");
+        },
+        onError: (error) => {
+          if (error.message.startsWith("duplicate key value")) {
+            alert("중복이메일 입니다.");
+          }
+        },
+      });
+    } else if (mode === "edit") {
+      console.log("edit 일 때 동작");
+    }
+  };
+
+  return (
+    <>
+      <InnerLayout mode="withFooter" title={mode === "add" ? "신도등록" : mode === "edit" ? "신도수정" : "신도상세"}>
+        <FormLayout
+          mode={mode}
+          variants="grid"
+          id="userAdd"
+          userId={userId}
+          onSubmit={handleSubmit(onSubmit)}
+          onDelete={() => console.log("삭제")}
+          onBack={useMoveBack}
+        >
+          <div className={style["flex-column"]}>
+            <WhitePanel variants="profile" title="기본정보">
+              <div className={style.flex}>
+                <LabelInput
+                  id="username"
+                  {...register("username", usernameRule)}
+                  errMsg={errors.username?.message}
+                  mode={mode}
+                  type="text"
+                  label="이름"
+                  defaultValue={mode === "readOnly" || mode === "edit" ? data?.name : ""}
+                  isRequired={mode !== "readOnly"}
+                  placeholder="이름을 입력하세요"
+                />
+                <Controller
+                  name="phone"
+                  control={control}
+                  defaultValue={mode === "readOnly" || mode === "edit" ? data?.phone : ""}
+                  rules={phoneRule}
+                  render={({ field }) => (
+                    <LabelInput
+                      id="phone"
+                      {...field}
+                      onChange={(e) => {
+                        const formatted = formatPhone(e.target.value);
+                        field.onChange(formatted);
+                      }}
+                      errMsg={errors.phone?.message}
+                      mode={mode}
+                      type="text"
+                      label="휴대전화"
+                      isRequired={mode !== "readOnly"}
+                      maxLength={13}
+                      placeholder="전화번호를 입력하세요"
+                    />
+                  )}
+                />
+              </div>
+              <div className={style.flex} style={{ gap: "8px", alignItems: "flex-end" }}>
+                <LabelInput
+                  mode={mode}
+                  type="email"
+                  label="이메일"
+                  {...register("email", emailRule)}
+                  errMsg={errors.email?.message}
+                  defaultValue={mode === "readOnly" || mode === "edit" ? data?.email : ""}
+                  isRequired={mode !== "readOnly"}
+                  placeholder="이메일을 입력해 주세요"
+                />
+              </div>
+              <div className={style.flex}>
+                <LabelInput
+                  mode={mode}
+                  type="text"
+                  label="직책"
+                  {...register("position")}
+                  defaultValue={mode === "readOnly" || mode === "edit" ? data?.position! : ""}
+                  placeholder="직책을 입력해 주세요"
+                />
+                <LabelInput
+                  mode={mode}
+                  type="text"
+                  label="담당사역"
+                  {...register("duty")}
+                  defaultValue={mode === "readOnly" || mode === "edit" ? data?.duty! : ""}
+                  placeholder="담당사역을 입력해 주세요"
+                />
+              </div>
+            </WhitePanel>
+            <WhitePanel variants="profile" title="주소">
+              <InputAddr mode={mode} />
+            </WhitePanel>
+          </div>
+          <div className={style["flex-column"]}>
+            <WhitePanel variants="profile" title="이미지">
+              <ImgContainer mode="default" variant="profile" />
+            </WhitePanel>
+
+            {selectRole !== null ? (
+              <WhitePanel variants="profile" title="관리자 권한 설정">
+                <ToggleRole
+                  mode={mode}
+                  variant={mode !== "list" ? "horizontal" : "vertical"}
+                  role={selectRole!}
+                  onChange={(e) => handleCheckedRole(e.target.id as roleEum, setSelectRole)}
+                />
+              </WhitePanel>
+            ) : mode !== "add" ? (
+              <WhitePanel variants="profile" title="관리자 권한 등록">
+                <div className={style.flex}>
+                  <Button
+                    type="button"
+                    height="48px"
+                    variants="primary"
+                    visual="outline"
+                    btnName="관리자초대"
+                    onClick={() => setOpenModal(true)}
+                  />
+                  <RoleInfo variant="horizontal" />
+                </div>
+              </WhitePanel>
+            ) : null}
+          </div>
+        </FormLayout>
+      </InnerLayout>
+      {openModal && (
+        <WarningModal
+          title="관리자계정 초대"
+          infoText="해당 유저를 관리자로 초대하시겠습니까?"
+          addText="관리자 계정이 되면 관리자페이지로 로그인 됩니다."
+          onConfirm={() => handleAdminInvite(data?.email!, () => setOpenModal(false))}
+          onCancel={() => setOpenModal(false)}
+        />
+      )}
+    </>
+  );
+}

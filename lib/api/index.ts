@@ -1,4 +1,4 @@
-const DOMAIN = "http://localhost:3000";
+const DOMAIN = process.env.NEXT_PUBLIC_SITE_URL ?? "";
 
 interface IReq {
   method: string;
@@ -13,22 +13,27 @@ export const request = async ({ method, url, data }: IReq) => {
     headers: {
       "Content-Type": "application/json",
     },
+    credentials: "include",
+    cache: "no-store",
   };
 
   if (data) {
     options.body = JSON.stringify(data);
   }
 
-  try {
-    const response = await fetch(`${DOMAIN}/api/${url}`, options);
-    if (response.status === 200) {
-      const result = await response.json();
+  const response = await fetch(`${DOMAIN}/api/${url}`, options);
 
-      return result;
-    } else {
-      console.error("전송오류");
-    }
-  } catch (err) {
-    console.error(err);
+  if (response.ok) {
+    const result = await response.json();
+
+    return result;
+  } else {
+    console.error("오류", response.status);
   }
+  // const result = await response.json();
+  // if (!response.ok) {
+  //   console.error("error?: ", result);
+  // }
+
+  // return result;
 };

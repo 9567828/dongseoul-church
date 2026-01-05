@@ -2,6 +2,9 @@
 
 .info-wrap {
   padding: 0 8px;
+  &.horizontal {
+    padding: 0;
+  }
   .info-head {
     @include flex(null, null, center, 4px);
     p {

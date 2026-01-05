@@ -1,5 +1,9 @@
+import { UseFormGetValues } from "react-hook-form";
+
 export type FormValues = {
   username: string;
+  password: string;
+  confirmPw: string;
   phone: string;
   email: string;
   position: string;
@@ -32,9 +36,18 @@ export const formRuls = () => {
     },
   };
 
+  const passwordRule = {
+    required: { value: true, message: "비밀번호를 입력해 주세요" },
+  };
+
+  const passwordConfirmRule = (getValues: UseFormGetValues<any>) => ({
+    required: "비밀번호를 입력해 주세요",
+    validate: (value: string) => value === getValues("password") || "비밀번호가 일치하지 않습니다.",
+  });
+
   const emptyRule = {
     required: { value: true, message: "공란 입니다" },
   };
 
-  return { usernameRule, phoneRule, emailRule, emptyRule };
+  return { usernameRule, phoneRule, emailRule, emptyRule, passwordRule, passwordConfirmRule };
 };

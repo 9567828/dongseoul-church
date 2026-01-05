@@ -1,3 +1,5 @@
+import { ITab } from "@/components/admin/ui/board/BoardTab";
+
 export const headerMenuList = [
   {
     menu: "교회소개",
@@ -50,14 +52,14 @@ export const adminMenuList = [
   },
 ];
 
-export interface ITab {
-  id: string;
-  name: string;
-  active: boolean;
-}
+export const boardTapList: ITab[] = [
+  { id: "all", name: "전체" },
+  { id: "active", name: "노출" },
+  { id: "inActive", name: "비노출" },
+];
 
-export const boardTapList = [
-  { id: "all", name: "전체", active: true },
-  { id: "show", name: "노출", active: false },
-  { id: "noShow", name: "비노출", active: false },
+export const userTapList: ITab[] = [
+  { id: "all", name: "전체" },
+  { id: "active", name: "관리자" },
+  { id: "inActive", name: "일반신도" },
 ];

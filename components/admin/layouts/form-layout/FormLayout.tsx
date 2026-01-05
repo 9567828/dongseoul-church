@@ -35,16 +35,18 @@ export default function FormLayout({ mode, variants, onDelete, onBack, userId, c
       <footer className={`${style.footer} ${isClose ? style.close : ""}`.trim()}>
         <Button type="button" btnName="돌아가기" variants="back" visual="none" onClick={onBack} />
         <div className={style["btn-wrap"]}>
-          <Button
-            type="button"
-            onMouseEnter={() => setHover(true)}
-            onMouseLeave={() => setHover(false)}
-            onClick={onDelete}
-            btnName="삭제"
-            variants="delete"
-            visual="outline"
-            src={`/imgs/admin/icons/ic_trash${hover ? `-hover` : ""}.svg`}
-          />
+          {mode !== "add" && (
+            <Button
+              type="button"
+              onMouseEnter={() => setHover(true)}
+              onMouseLeave={() => setHover(false)}
+              onClick={onDelete}
+              btnName="삭제"
+              variants="delete"
+              visual="outline"
+              src={`/imgs/admin/icons/ic_trash${hover ? `-hover` : ""}.svg`}
+            />
+          )}
           <Button
             type={mode === "readOnly" ? "button" : "submit"}
             form={props.id}

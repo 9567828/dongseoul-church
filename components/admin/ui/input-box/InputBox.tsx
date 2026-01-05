@@ -1,5 +1,6 @@
 import { InputHTMLAttributes } from "react";
 import style from "./input.module.scss";
+import InfoMessage from "../info-message/InfoMessage";
 
 interface Iinput extends InputHTMLAttributes<HTMLInputElement> {
   variants: "login" | "solid" | "outline";

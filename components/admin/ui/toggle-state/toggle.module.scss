@@ -23,7 +23,6 @@
     @include font-theme($bodySm, $m);
   }
   input[type="radio"]:checked + p {
-        // display: block;
     background-color: white;
     color: $cms-dark;
     font-weight: $b;

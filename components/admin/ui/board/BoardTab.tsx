@@ -1,6 +1,12 @@
-import { boardTapList, ITab } from "@/utils/menuList";
 import style from "./board.module.scss";
 import { useTabStore } from "@/hooks/store/useTabStore";
+
+export type tabStatusType = "all" | "active" | "inActive";
+
+export interface ITab {
+  id: tabStatusType;
+  name: string;
+}
 
 interface ITabProps {
   list: ITab[];

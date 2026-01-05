@@ -8,10 +8,9 @@ export type UserRow = Tables<"users">;
 export type MemberRow = Tables<"members">;
 export type roleEum = Enums<"user_role">;
 
-type adminRole = { admin?: roleEum };
 // export type RoleWithMember = MemberRow | adminRole;
 export type RoleWithMember = MemberRow & {
-  admin?: {
+  admin: {
     role: roleEum;
   } | null;
 };
@@ -20,3 +19,16 @@ export type RoleWithMember = MemberRow & {
  * boardTables
  */
 export type boardTables = AlbumRow | SermonRow;
+
+export type MemberPaylod = {
+  created_at: string;
+  updated_at: string;
+  addr: string | null;
+  addr_detail: string | null;
+  avatar: string | null;
+  duty: string | null;
+  email: string;
+  name: string;
+  phone: string;
+  position: string | null;
+};

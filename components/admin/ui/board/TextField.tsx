@@ -1,6 +1,7 @@
 import Link from "next/link";
 import AvatarWrap from "../avatar-wrap/AvatarWrap";
 import style from "./board.module.scss";
+import FieldLayout from "./FieldLayout";
 
 interface IText {
   withImg: boolean;
@@ -13,7 +14,7 @@ interface IText {
 
 export default function TextField({ text, link, isBlank, description, withImg, src = null }: IText) {
   return (
-    <div className={style["text-field-wrap"]}>
+    <FieldLayout>
       {withImg && <AvatarWrap size="md" src={src !== null ? src : null} />}
       <div className={style["text-box"]}>
         {!link ? (
@@ -25,6 +26,6 @@ export default function TextField({ text, link, isBlank, description, withImg, s
         )}
         {description && <p className={style["sub-text"]}>{description}</p>}
       </div>
-    </div>
+    </FieldLayout>
   );
 }

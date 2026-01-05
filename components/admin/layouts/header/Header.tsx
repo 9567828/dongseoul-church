@@ -6,12 +6,13 @@ import SearchInput from "../../ui/input-box/SearchInput";
 import style from "./header.module.scss";
 import { useSideBarStateStore } from "@/hooks/store/useSideBarStateStore";
 import Link from "next/link";
-import { useSelectUser } from "@/tanstack-query/useQuerys/auth/useAuthQueries";
+import { useQuery } from "@tanstack/react-query";
 
-export default function Header() {
+export default function Header({ avatarSrc }: { avatarSrc: string }) {
+  // export default function Header() {
   const [alret, setAlert] = useState(false);
   const { isClose, toggleSideBar } = useSideBarStateStore();
-  const { data } = useSelectUser();
+  // const { data } = useQuery({ queryKey: ["member", "own"], queryFn: () => useSelectLogginUser() });
 
   return (
     <header className={`${style.header} ${isClose ? style.close : ""}`.trim()}>
@@ -34,7 +35,7 @@ export default function Header() {
             )}
           </button>
           <button type="button">
-            <AvatarWrap size="sm" src={data?.avatar!} />
+            <AvatarWrap size="sm" src={avatarSrc} />
           </button>
         </div>
       </nav>

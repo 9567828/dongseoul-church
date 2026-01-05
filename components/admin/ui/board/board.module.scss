@@ -24,6 +24,11 @@
   }
 }
 
+.count {
+  @include font-theme($bodyMd, $b);
+  padding: 0 20px;
+}
+
 // table style
 .table {
   width: 100%;
@@ -73,7 +78,7 @@
   padding: 8px 12px;
   .text-box {
     width: 100%;
-    min-width: 100px;
+    min-width: 80px;
     .text {
       @include font-theme($bodyMd, $b);
       @include textEllipsis;

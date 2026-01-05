@@ -23,11 +23,13 @@ export default function TableHead({ checkBtnId, headList, gridCol, onChange, che
 
   return (
     <div className={style["table-head"]} style={gridCol ? { gridTemplateColumns: `${gridCol}` } : undefined}>
-      <div className="check-box">
+      <label htmlFor={checkBtnId} className="check-box">
         <CheckBox id={checkBtnId} variants="main" checked={checked} onChange={onChange} />
-      </div>
+      </label>
       {headList.map((h, i) => {
-        const state = sortMap[h.id] ?? "none";
+        const state = sortMap[h.id] || "none";
+        // const state = sortMap.sort;
+
         return (
           <div
             key={i}
