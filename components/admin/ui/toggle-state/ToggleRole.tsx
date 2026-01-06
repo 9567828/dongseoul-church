@@ -17,7 +17,7 @@ interface IRoleProps {
 export default function ToggleRole({ mode, variant, role, onChange }: IRoleProps) {
   return (
     <div className={`${style["role-wrap"]} ${style[variant]}`}>
-      {mode !== "readOnly" || role === null ? (
+      {mode !== "readOnly" ? (
         <ToggleState>
           {roleList.map((r, i) => (
             <ToggleOption key={i} inputName="role" state={r} checked={role === r} onChange={onChange} />

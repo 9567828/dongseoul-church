@@ -3,23 +3,20 @@
 import { useHooks } from "@/hooks/useHooks";
 import SelectBox from "../select-box/SelectBox";
 import style from "./board.module.scss";
+import { handlers } from "@/utils/handlers";
+import { tabStatusType } from "./BoardTab";
 
 const pageCnt = ["6", "12", "24", "48", "100"];
 
 interface ISelectPage {
   value: string;
   onChange: (item: string) => void;
+  tab: tabStatusType;
 }
 
-export default function SelectPageCnt({ value, onChange }: ISelectPage) {
+export default function SelectPageCnt({ value, onChange, tab }: ISelectPage) {
   const { useRoute } = useHooks();
-
-  const handleChangeSize = (size: number) => {
-    const params = new URLSearchParams();
-    params.set("page", "1");
-    params.set("size", String(size));
-    useRoute(`?${params.toString()}`);
-  };
+  const { handlePageSizeQuery } = handlers();
 
   return (
     <div className={style["page-cnt-wrap"]}>
@@ -29,7 +26,10 @@ export default function SelectPageCnt({ value, onChange }: ISelectPage) {
         optList={pageCnt}
         value={value ? value : pageCnt[0]}
         onChange={onChange}
-        onClick={(value) => handleChangeSize(Number(value))}
+        onClick={(value) => {
+          const query = handlePageSizeQuery("1", value, tab);
+          useRoute(query);
+        }}
       />
     </div>
   );

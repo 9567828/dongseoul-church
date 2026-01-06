@@ -1,23 +1,40 @@
 import { createServClient } from "@/utils/supabase/services/serverClinet";
+import { EmailOtpType } from "@supabase/supabase-js";
 import { NextResponse } from "next/server";
 
-export const POST = async (req: Request) => {
-  const password = await req.json();
-  const supabase = await createServClient();
+export const GET = async (req: Request) => {
+  const searchParams = new URLSearchParams(window.location.search);
+  const code = searchParams.get("code");
 
-  // const {
-  //   data: { session },
-  // } = await supabase.auth.getSession();
+  const token_hash = searchParams.get("token_hash");
+  const type = searchParams.get("type") as EmailOtpType | null;
 
-  // if (!session) {
-  //   return NextResponse.json({ result: false, message: "session 없음" });
+  // if (code) {
+  //   const supabase = await createServClient();
+  //   await supabase.auth.exchangeCodeForSession(code);
   // }
 
-  const { data, error } = await supabase.auth.updateUser({
-    password,
-  });
+  if (token_hash && type) {
+    const supabase = await createServClient();
 
-  if (error) return NextResponse.json({ result: false, message: error });
+    const {
+      data: { session },
+      error,
+    } = await supabase.auth.verifyOtp({
+      type,
+      token_hash,
+    });
 
-  return NextResponse.json({ result: true, message: data });
+    if (!session) {
+      return NextResponse.json({ result: false, message: "session 없음" });
+    }
+
+    // console.log(session);
+
+    // if (!error) {
+    //   return NextResponse.redirect(next);
+    // }
+  }
+
+  // return NextResponse.redirect(new URL("/auth/set-password", req.url));
 };

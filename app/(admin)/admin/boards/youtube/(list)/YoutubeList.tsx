@@ -31,11 +31,8 @@ const headList: tableHeadType[] = [
   { id: "date", name: "업로드날짜", isSort: true },
 ];
 
-export default function YoutubeList({ currPage, listNum }: ISearchParamsInfo) {
+export default function YoutubeList({ currPage, listNum, tab }: ISearchParamsInfo) {
   const { toggleAllChecked } = handlers();
-  const {
-    isActive: { all, active },
-  } = useTabStore();
 
   const [checkedRow, setCheckedRow] = useState<string[]>([]);
   const [pageSize, setPageSize] = useState(String(listNum));
@@ -44,7 +41,7 @@ export default function YoutubeList({ currPage, listNum }: ISearchParamsInfo) {
     "sermons",
     Number(pageSize),
     currPage,
-    all ? "all" : active ? "show" : "noShow"
+    tab === "all" ? "all" : tab === "active" ? "show" : "noShow"
   );
 
   const toggleCheckedRow = (id: string) => {
@@ -71,7 +68,7 @@ export default function YoutubeList({ currPage, listNum }: ISearchParamsInfo) {
       ) : (
         <WhitePanel variants="board">
           <ListCount checkedLength={checkedRow.length} count={count} />
-          <BoardTap list={boardTapList} />
+          <BoardTap list={boardTapList} size={listNum} tab={tab} />
           <ActionField onDelete={() => console.log("삭제 클릭")} />
           <BoardLayout>
             <TableHead
@@ -104,8 +101,14 @@ export default function YoutubeList({ currPage, listNum }: ISearchParamsInfo) {
             })}
           </BoardLayout>
           <div className="pagenation-wrap">
-            <SelectPageCnt value={pageSize} onChange={setPageSize} />
-            <Pagenation currPage={currPage} listNum={Number(pageSize)} pagesPerBlock={pagesPerBlock} totalPage={totalPage} />
+            <SelectPageCnt value={pageSize} onChange={setPageSize} tab={tab} />
+            <Pagenation
+              currPage={currPage}
+              listNum={Number(pageSize)}
+              pagesPerBlock={pagesPerBlock}
+              totalPage={totalPage}
+              tab={tab}
+            />
           </div>
         </WhitePanel>
       )}

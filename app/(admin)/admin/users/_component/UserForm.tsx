@@ -8,7 +8,7 @@ import ImgContainer from "@/components/admin/ui/img-container/ImgContainer";
 import LabelInput from "@/components/admin/ui/input-box/LabelInput";
 import { formRuls, FormValues } from "@/hooks/FormRules";
 import { formatPhone } from "@/utils/formatPhone";
-import { Controller, SubmitHandler, useForm, useFormContext, useWatch } from "react-hook-form";
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { UserFormType } from "@/utils/propType";
 import Button from "@/components/admin/ui/button/Button";
 import ToggleRole from "@/components/admin/ui/toggle-state/ToggleRole";
@@ -16,12 +16,14 @@ import { useState } from "react";
 import InputAddr from "@/components/admin/ui/input-box/InputAddr";
 import { useHooks } from "@/hooks/useHooks";
 import { handlers } from "@/utils/handlers";
-import { MemberPaylod, MemberRow, roleEum } from "@/utils/supabase/sql";
+import { MemberAddPaylod, MemberEditPaylod, roleEum } from "@/utils/supabase/sql";
 import Loading from "@/app/Loading";
 import { useSelectUserById } from "@/tanstack-query/useQuerys/users/useSelectUser";
 import RoleInfo from "@/components/admin/ui/role-info/RoleInfo";
-import { useAddUser } from "@/tanstack-query/useMutation/users/useMutationUser";
+import { useAddUser, useEditUser } from "@/tanstack-query/useMutation/users/useMutationUser";
 import WarningModal from "@/components/admin/ui/modal/WarningModal";
+import Label from "@/components/admin/ui/label/Label";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface IUserForm {
   mode: UserFormType;
@@ -30,7 +32,10 @@ interface IUserForm {
 
 export default function UserForm({ mode, userId }: IUserForm) {
   const { data, isLoading } = useSelectUserById(userId!);
-  const { mutate } = useAddUser();
+  const { mutate: addMutate } = useAddUser();
+  const { mutate: editMutate } = useEditUser();
+
+  const queryClient = useQueryClient();
 
   if ((mode === "edit" || mode === "readOnly") && isLoading) {
     return <Loading />;
@@ -50,10 +55,9 @@ export default function UserForm({ mode, userId }: IUserForm) {
   const [selectRole, setSelectRole] = useState<roleEum | null>(data?.admin?.role || null);
   const [openModal, setOpenModal] = useState(false);
 
-  const onSubmit: SubmitHandler<FormValues> = (data) => {
-    const { username, phone, email, duty, position } = data;
+  const onSubmit: SubmitHandler<FormValues> = ({ username, phone, email, duty, position }) => {
     if (mode === "add") {
-      const newObj: MemberPaylod = {
+      const newObj: MemberAddPaylod = {
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
         name: username,
@@ -66,7 +70,7 @@ export default function UserForm({ mode, userId }: IUserForm) {
         addr_detail: null,
       };
 
-      mutate(newObj, {
+      addMutate(newObj, {
         onSuccess: () => {
           reset();
           useRoute("/admin/users");
@@ -78,7 +82,35 @@ export default function UserForm({ mode, userId }: IUserForm) {
         },
       });
     } else if (mode === "edit") {
-      console.log("edit 일 때 동작");
+      if (!data?.name) return;
+      const newObj = {
+        payload: {
+          updated_at: new Date().toISOString(),
+          name: username || data?.name,
+          phone: phone || data?.phone,
+          duty: duty || data?.duty,
+          position: position || data?.position,
+        },
+        role: selectRole || data?.admin?.role,
+        uid: userId,
+      };
+
+      editMutate(newObj, {
+        onSuccess: (data) => {
+          const user = data.find((v) => v.id);
+          reset();
+          queryClient.invalidateQueries({
+            queryKey: ["members", user?.id],
+          });
+          queryClient.invalidateQueries({
+            queryKey: ["members"],
+          });
+          useRoute(`/admin/users/${user?.id}`);
+        },
+        onError: (error) => {
+          console.log(error);
+        },
+      });
     }
   };
 
@@ -93,6 +125,7 @@ export default function UserForm({ mode, userId }: IUserForm) {
           onSubmit={handleSubmit(onSubmit)}
           onDelete={() => console.log("삭제")}
           onBack={useMoveBack}
+          onMoveEdit={() => useRoute(`/admin/users/edit/${userId}`)}
         >
           <div className={style["flex-column"]}>
             <WhitePanel variants="profile" title="기본정보">
@@ -136,11 +169,12 @@ export default function UserForm({ mode, userId }: IUserForm) {
                 <LabelInput
                   mode={mode}
                   type="email"
-                  label="이메일"
+                  label={`이메일 ${data?.admin_user !== null && data?.admin !== undefined ? `수정불가` : ""}`.trim()}
+                  isAdmin={data?.admin_user !== null && data?.admin !== undefined}
                   {...register("email", emailRule)}
                   errMsg={errors.email?.message}
                   defaultValue={mode === "readOnly" || mode === "edit" ? data?.email : ""}
-                  isRequired={mode !== "readOnly"}
+                  isRequired={(mode !== "readOnly" && data?.admin_user === null) || data?.admin === undefined}
                   placeholder="이메일을 입력해 주세요"
                 />
               </div>
@@ -172,7 +206,7 @@ export default function UserForm({ mode, userId }: IUserForm) {
               <ImgContainer mode="default" variant="profile" />
             </WhitePanel>
 
-            {selectRole !== null ? (
+            {selectRole === "super" || selectRole === "admin" ? (
               <WhitePanel variants="profile" title="관리자 권한 설정">
                 <ToggleRole
                   mode={mode}
@@ -180,6 +214,10 @@ export default function UserForm({ mode, userId }: IUserForm) {
                   role={selectRole!}
                   onChange={(e) => handleCheckedRole(e.target.id as roleEum, setSelectRole)}
                 />
+              </WhitePanel>
+            ) : selectRole === "pending" ? (
+              <WhitePanel title="괸리자 권한" variants="profile">
+                <Label variant="green" text="초대대기중" />
               </WhitePanel>
             ) : mode !== "add" ? (
               <WhitePanel variants="profile" title="관리자 권한 등록">

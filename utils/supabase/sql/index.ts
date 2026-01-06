@@ -20,15 +20,27 @@ export type RoleWithMember = MemberRow & {
  */
 export type boardTables = AlbumRow | SermonRow;
 
-export type MemberPaylod = {
+export type MemberAddPaylod = {
   created_at: string;
   updated_at: string;
-  addr: string | null;
-  addr_detail: string | null;
-  avatar: string | null;
-  duty: string | null;
+  addr?: string | null;
+  addr_detail?: string | null;
+  avatar?: string | null;
+  duty?: string | null;
   email: string;
   name: string;
   phone: string;
-  position: string | null;
+  position?: string | null;
+};
+
+export type MemberEditPaylod = {
+  updated_at: string;
+  addr?: string | null;
+  addr_detail?: string | null;
+  avatar?: string | null;
+  duty?: string | null;
+  email?: string;
+  name: string;
+  phone: string;
+  position?: string | null;
 };

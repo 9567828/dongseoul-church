@@ -7,8 +7,6 @@ import { getQueryClient } from "@/tanstack-query/getQueryClient";
 export default async function Page({ params }: IParams) {
   const { id } = await params;
 
-  // const user = userListArr.find((u) => u.id === Number(id));
-
   const { fetchUserById } = await fetchServer();
   const queryClient = getQueryClient();
 
@@ -18,6 +16,5 @@ export default async function Page({ params }: IParams) {
     <HydrationBoundary state={dehydrate(queryClient)}>
       <UserForm mode="edit" userId={id} />
     </HydrationBoundary>
-    // <UserForm mode="edit" userId={id} />
   );
 }

@@ -6,18 +6,18 @@ import { useState } from "react";
 import { useHooks } from "@/hooks/useHooks";
 import PageBtn from "./PageBtn";
 import { useSearchParams } from "next/navigation";
+import { handlers } from "@/utils/handlers";
 
-export default function Pagenation({ totalPage, currPage, pagesPerBlock, listNum }: IPagenation) {
+export default function Pagenation({ totalPage, currPage, pagesPerBlock, listNum, tab }: IPagenation) {
   const { useRoute } = useHooks();
+  const { handlePageSizeQuery } = handlers();
   const [hover, setHover] = useState<string | null>(null);
 
   const { startPage, endPage, pageNumbers } = pageCalculate(totalPage, currPage, pagesPerBlock);
 
   const handleChangePage = (page: number) => {
-    const params = new URLSearchParams();
-    params.set("page", String(page));
-    params.set("size", String(listNum));
-    useRoute(`?${params.toString()}`);
+    const query = handlePageSizeQuery(String(page), String(listNum), tab!);
+    useRoute(query);
   };
 
   return (

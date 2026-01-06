@@ -10,8 +10,13 @@ import { request } from "@/lib/api";
 import Link from "next/link";
 import AuthLayout from "../../_components/AuthLayout";
 import AuthWrapper from "../../_components/AuthWrapper";
+import createBrowClient from "@/utils/supabase/services/browerClinet";
+import { selectAccounts } from "@/utils/supabase/sql/users/select";
+import { redirect } from "next/navigation";
+import { checkAcceptAdmin } from "@/utils/supabase/sql/users/auth";
 
 export default function LoginContainer() {
+  const { selectUserRole } = selectAccounts();
   const [open, setOpen] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -45,10 +50,16 @@ export default function LoginContainer() {
     const req = await request({ method: "POST", url: "/auth/login", data: { email, password } });
     const { result } = await req;
 
+    console.log(result);
+
     if (!result) {
       setErr("아이디 또는 비밀번호를 확인해 주세요");
     } else {
-      useRoute("/admin/users");
+      const { result } = await checkAcceptAdmin();
+
+      if (result) {
+        useRoute("/admin/boards");
+      }
     }
   };
 

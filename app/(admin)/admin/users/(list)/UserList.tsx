@@ -4,7 +4,7 @@ import InnerLayout from "@/components/admin/layouts/inner-layout/InnerLayout";
 import WhitePanel from "@/components/admin/layouts/white-panel/WhitePanel";
 import ActionField from "@/components/admin/ui/board/ActionField";
 import BoardLayout from "@/components/admin/ui/board/BoardLayout";
-import BoardTap from "@/components/admin/ui/board/BoardTab";
+import BoardTap, { tabStatusType } from "@/components/admin/ui/board/BoardTab";
 import FieldLayout from "@/components/admin/ui/board/FieldLayout";
 import ListCount from "@/components/admin/ui/board/ListCount";
 import Pagenation from "@/components/admin/ui/board/Pagenation";
@@ -14,8 +14,11 @@ import TableContent from "@/components/admin/ui/board/TableContent";
 import TableHead from "@/components/admin/ui/board/TableHead";
 import TextField from "@/components/admin/ui/board/TextField";
 import Button from "@/components/admin/ui/button/Button";
+import Label from "@/components/admin/ui/label/Label";
+import ChangeRoleModal from "@/components/admin/ui/modal/ChangeRoleModal";
+import DeleteUserModal from "@/components/admin/ui/modal/DeleteUserModal";
+import InviteModal from "@/components/admin/ui/modal/InviteModal";
 import ModalLayout from "@/components/admin/ui/modal/ModalLayout";
-import WarningModal from "@/components/admin/ui/modal/WarningModal";
 import ToggleRole from "@/components/admin/ui/toggle-state/ToggleRole";
 import { useSortState } from "@/hooks/store/useSortState";
 import { useTabStore } from "@/hooks/store/useTabStore";
@@ -23,8 +26,9 @@ import { useHooks } from "@/hooks/useHooks";
 import { useSelectAllUsers } from "@/tanstack-query/useQuerys/users/useSelectUser";
 import { handlers } from "@/utils/handlers";
 import { userTapList } from "@/utils/menuList";
+import { modalActType } from "@/utils/propType";
 import { roleEum } from "@/utils/supabase/sql";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const headList = [
   { id: "name", name: "이름", isSort: false },
@@ -34,23 +38,18 @@ const headList = [
   { id: "role", name: "role", isSort: false },
 ];
 
-type actionMode = "delete" | "state" | "invite";
-type changeAction = { key?: string; action: actionMode };
-
 interface IUserList {
   currPage: number;
   listNum: number;
+  tab: tabStatusType;
 }
 
-export default function UserList({ currPage, listNum }: IUserList) {
-  const {
-    isActive: { all, active },
-  } = useTabStore();
-  const { handleCheckedRole, toggleAllChecked, handleAdminInvite } = handlers();
+export default function UserList({ currPage, listNum, tab }: IUserList) {
+  const { handleCheckedRole, toggleAllChecked, handleAdminInvite, handleChangeRole, handlePageSizeQuery } = handlers();
   const { useOnClickOutSide, useRoute, useClearBodyScroll } = useHooks();
   const { sortMap, filterName } = useSortState();
 
-  const { data } = useSelectAllUsers(currPage, listNum, all ? "all" : active ? "active" : "inActive", {
+  const { data } = useSelectAllUsers(currPage, listNum, tab, {
     filter: filterName,
     sort: sortMap[filterName],
   });
@@ -62,7 +61,7 @@ export default function UserList({ currPage, listNum }: IUserList) {
   const [checkedRow, setCheckedRow] = useState<string[]>([]);
   const [selectRole, setSelectRole] = useState<roleEum | null>(null);
   const [openEdit, setOpenEdit] = useState("");
-  const [openModal, setOpenModal] = useState<changeAction | null>(null);
+  const [openModal, setOpenModal] = useState<modalActType | null>(null);
 
   const totalPage = Math.ceil(count / listNum);
   const pagesPerBlock = currPage >= 3 ? 3 : 4;
@@ -80,14 +79,6 @@ export default function UserList({ currPage, listNum }: IUserList) {
   const onChangeRole = (id: string, role: roleEum) => {
     setOpenModal({ key: id, action: "state" });
     handleCheckedRole(role, setSelectRole);
-  };
-
-  const handleChangeRole = (id: string) => {
-    if (selectRole) {
-      // setUsers((prev) => prev.map((u) => (u.id === id ? { ...u, role: selectRole } : u)));
-    }
-    setOpenModal(null);
-    setOpenEdit("");
   };
 
   const handleUserDelete = () => {
@@ -118,7 +109,7 @@ export default function UserList({ currPage, listNum }: IUserList) {
       >
         <WhitePanel variants="board">
           <ListCount checkedLength={checkedRow.length} count={count} />
-          <BoardTap list={userTapList} />
+          <BoardTap list={userTapList} size={listNum} tab={tab} />
           <ActionField
             onDelete={() => {
               if (checkedRow.length < 1) {
@@ -144,8 +135,10 @@ export default function UserList({ currPage, listNum }: IUserList) {
                   role = "empty";
                 } else if (m.admin.role === "super") {
                   role = "super";
-                } else {
+                } else if (m.admin.role === "admin") {
                   role = "admin";
+                } else {
+                  role = "pending";
                 }
 
                 return (
@@ -169,6 +162,10 @@ export default function UserList({ currPage, listNum }: IUserList) {
                           visual="outline"
                           onClick={() => setOpenModal({ key: m.email, action: "invite" })}
                         />
+                      </FieldLayout>
+                    ) : role === "pending" ? (
+                      <FieldLayout>
+                        <Label variant="green" text="초대대기중" />
                       </FieldLayout>
                     ) : (
                       <div className="modal-wrap">
@@ -203,33 +200,33 @@ export default function UserList({ currPage, listNum }: IUserList) {
             </div>
           </BoardLayout>
           <div className="pagenation-wrap">
-            <SelectPageCnt value={selected} onChange={setSelected} />
-            <Pagenation currPage={currPage} listNum={listNum} pagesPerBlock={pagesPerBlock} totalPage={totalPage} />
+            <SelectPageCnt value={selected} onChange={setSelected} tab={tab} />
+            <Pagenation currPage={currPage} listNum={listNum} pagesPerBlock={pagesPerBlock} totalPage={totalPage} tab={tab} />
           </div>
         </WhitePanel>
       </InnerLayout>
       {openModal?.action === "delete" && (
-        <WarningModal
-          title={`유저 ${checkedRow.length}건 삭제`}
-          infoText="정말 삭제하시겠습니까?"
-          addText="삭제 후 복구가 불가능 합니다."
+        <DeleteUserModal
+          variant="list"
+          nums={checkedRow.length}
           onConfirm={() => handleUserDelete()}
           onCancel={() => setOpenModal(null)}
         />
       )}
       {openModal?.action === "state" && (
-        <WarningModal
-          title="유저 role 변경"
-          infoText={`해당 유저를 ${selectRole}${selectRole === "super" ? "로" : "으로"} 변경 하시겠습니까?`}
-          onConfirm={() => handleChangeRole(openModal.key!)}
+        <ChangeRoleModal
+          role={selectRole!}
+          onConfirm={() =>
+            handleChangeRole(openModal.key!, selectRole!, () => {
+              setOpenModal(null);
+              setOpenEdit("");
+            })
+          }
           onCancel={() => setOpenModal(null)}
         />
       )}
       {openModal?.action === "invite" && (
-        <WarningModal
-          title="관리자계정 초대"
-          infoText="해당 유저를 관리자로 초대하시겠습니까?"
-          addText="관리자 계정이 되면 관리자페이지로 로그인 가능합니다."
+        <InviteModal
           onConfirm={() => handleAdminInvite(openModal.key!, () => setOpenModal(null))}
           onCancel={() => setOpenModal(null)}
         />

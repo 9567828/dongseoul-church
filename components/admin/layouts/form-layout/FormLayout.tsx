@@ -10,11 +10,12 @@ interface IForm extends FormHTMLAttributes<HTMLFormElement> {
   variants: "grid" | "";
   onDelete: () => void;
   onBack: () => void;
+  onMoveEdit: () => void;
   userId?: string;
   children: React.ReactNode;
 }
 
-export default function FormLayout({ mode, variants, onDelete, onBack, userId, children, ...props }: IForm) {
+export default function FormLayout({ mode, variants, onDelete, onBack, onMoveEdit, userId, children, ...props }: IForm) {
   const [hover, setHover] = useState(false);
   const { isClose } = useSideBarStateStore();
   const { useRoute } = useHooks();
@@ -53,7 +54,7 @@ export default function FormLayout({ mode, variants, onDelete, onBack, userId, c
             btnName={btnName(mode)}
             variants="primary"
             visual="solid"
-            onClick={mode === "readOnly" ? () => useRoute(`/admin/users/edit/${userId}`) : undefined}
+            onClick={mode === "readOnly" ? onMoveEdit : undefined}
           />
         </div>
       </footer>

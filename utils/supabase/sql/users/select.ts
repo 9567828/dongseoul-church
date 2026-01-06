@@ -1,8 +1,8 @@
 import { SupabaseClient } from "@supabase/supabase-js";
 import { getUserId } from "./auth";
-import { roleEum, RoleWithMember } from "..";
+import { RoleWithMember } from "..";
 import { tabStatusType } from "@/components/admin/ui/board/BoardTab";
-import { sortMapType, sortTypes } from "@/hooks/store/useSortState";
+import { sortTypes } from "@/hooks/store/useSortState";
 
 export type filterSortType = { filter: string; sort: sortTypes };
 
@@ -17,7 +17,7 @@ interface ISelect {
 
 export const selectAccounts = () => {
   const selectLoginUser = async ({ supabase }: ISelect) => {
-    const id = await getUserId();
+    const id = await getUserId(supabase);
 
     const { data, error } = await supabase.from("members").select(`*, admin:users(role)`).eq("admin_user", id!).single();
 
@@ -33,7 +33,7 @@ export const selectAccounts = () => {
   };
 
   const selectUserRole = async ({ supabase }: ISelect) => {
-    const id = await getUserId();
+    const id = await getUserId(supabase);
 
     const { data, error } = await supabase.from("users").select("role").eq("id", id!).single();
     if (error) throw error;

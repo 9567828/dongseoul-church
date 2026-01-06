@@ -9,6 +9,7 @@ import { UserFormType } from "@/utils/propType";
 interface IInput extends InputHTMLAttributes<HTMLInputElement> {
   mode: UserFormType;
   label: string;
+  isAdmin?: boolean;
   isRequired?: boolean;
   withBtn?: boolean;
   btnName?: string;
@@ -20,6 +21,7 @@ export default function LabelInput({
   mode,
   type,
   label,
+  isAdmin,
   isRequired = false,
   withBtn = false,
   btnName,
@@ -36,7 +38,7 @@ export default function LabelInput({
           {label}
         </label>
         <div className={style["input-wrap"]}>
-          <InputBox {...props} variants="solid" height="md" disabled={mode === "readOnly"} error={isError} />
+          <InputBox {...props} variants="solid" height="md" disabled={mode === "readOnly" || isAdmin} error={isError} />
           {withBtn && <Button btnName={btnName!} variants="primary" visual="outline" onClick={onClick} />}
         </div>
       </div>
