@@ -29,7 +29,7 @@ export interface ISearchParamsInfo {
 
 export type filterSortType = { filter: string; sort: sortTypes };
 
-export type UserFormType = "add" | "edit" | "readOnly" | "list";
+export type FormType = "add" | "edit" | "readOnly" | "list";
 
 export const roleList = ["super", "admin"];
 

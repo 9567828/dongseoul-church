@@ -1,6 +1,7 @@
 import { SupabaseClient } from "@supabase/supabase-js";
 import createBrowClient from "../../services/browerClinet";
 import { getExtFromMime } from "@/utils/propType";
+import { formatTwoDigit } from "@/utils/formatDate";
 
 export const saveAvatarImg = async (id: string, file: File) => {
   const supabase = createBrowClient();
@@ -56,4 +57,35 @@ export const deleteUserImg = async (id: string, supabase: SupabaseClient) => {
       return update;
     }
   }
+};
+
+export const saveAlbumImg = async (file: File) => {
+  const supabase = createBrowClient();
+  const ext = getExtFromMime(file);
+  const month = formatTwoDigit(new Date().getMonth() + 1);
+  const path = `/albums/${new Date().getFullYear()}/${month}/${Date.now()}.${ext}`;
+
+  // const removeTargets = files?.filter((f) => f.name !== `image.${ext}`) ?? [];
+
+  // if (removeTargets.length) {
+  //   await supabase.storage.from("avatar").remove(removeTargets.map((f) => `/albums/${id}/${f.name}`));
+  // }
+
+  const { data: url, error } = await supabase.storage.from("photos").upload(path, file, {
+    upsert: true,
+    contentType: file.type,
+  });
+  if (error) throw error;
+
+  return url;
+};
+
+export const getAlbumImgURL = (path: string) => {
+  const supabase = createBrowClient();
+
+  const {
+    data: { publicUrl },
+  } = supabase.storage.from("photos").getPublicUrl(path);
+
+  return publicUrl;
 };

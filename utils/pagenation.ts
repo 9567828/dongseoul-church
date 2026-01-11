@@ -2,12 +2,10 @@ import { tabStatusType } from "@/components/admin/ui/board/BoardTab";
 import { filterSortType, pageQueryProps } from "./propType";
 
 export interface IPagenation {
-  totalPage: number;
-  pagesPerBlock: number;
+  count: number;
   currPage: number;
   listNum: number;
   tab?: tabStatusType;
-  filter?: filterSortType;
 }
 
 export const pageCalculate = (totalPage: number, currPage: number, pagesPerBlock: number) => {

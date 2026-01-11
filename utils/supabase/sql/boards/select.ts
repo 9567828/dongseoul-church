@@ -1,6 +1,7 @@
 import { SupabaseClient } from "@supabase/supabase-js";
-import { tablesName } from "..";
+import { AlbumWithName, tablesName } from "..";
 import { filterSortType } from "@/utils/propType";
+import { getAlbumImgURL } from "../storage/storage";
 
 export type showStateType = "all" | "show" | "noShow";
 
@@ -41,21 +42,25 @@ export const select = () => {
     hasIsShow = "all",
     supabase,
   }: ISelect): Promise<{ count: number; list: T[] }> => {
-    // const filterName = filter?.filter || "published_date";
-    let filterName = filter?.filter || "published_date";
-
-    let isAscending = filter?.sort === "desc" ? false : true;
-
     const from = (page! - 1) * limit!;
     const to = from + limit! - 1;
 
-    let query = supabase.from(name).select("*", { count: "exact" }).range(from, to);
+    let filterName = filter?.filter!;
+    let isAscending = filter?.sort === "desc" ? false : true;
+
+    let query;
+
+    if (name === "albums") {
+      query = supabase.from(name).select("*, displayName:members(name)", { count: "exact" }).range(from, to);
+    } else {
+      query = supabase.from(name).select("*", { count: "exact" }).range(from, to);
+    }
 
     handleHasShow(hasIsShow, query);
 
     const { data, count, error } = await query.order(filterName, { ascending: isAscending }).order("id", { ascending: false });
-
     if (error) throw error;
+
     return { count: count ?? 0, list: (data as T[]) ?? [] };
   };
 
@@ -78,12 +83,18 @@ export const select = () => {
     name,
     id,
     supabase,
-    hasIsShow = "all",
+    hasIsShow = "show",
     defaultValue,
   }: ISelect & { defaultValue: T }): Promise<{ data: WithPrevNext<T> }> => {
-    let baseQuery = supabase.from(name).select("*");
+    let baseQuery;
 
-    if (hasIsShow) {
+    if (name === "albums") {
+      baseQuery = supabase.from(name).select("*, displayName:members(name)");
+    } else {
+      baseQuery = supabase.from(name).select("*");
+    }
+
+    if (hasIsShow === "show") {
       baseQuery = baseQuery.eq("is_show", true);
     }
 
@@ -93,7 +104,7 @@ export const select = () => {
     let prevQuery = supabase.from(name).select("id, title").lt("id", id);
     let nextQuery = supabase.from(name).select("id, title").gt("id", id);
 
-    if (hasIsShow) {
+    if (hasIsShow === "show") {
       prevQuery = prevQuery.eq("is_show", true);
       nextQuery = nextQuery.eq("is_show", true);
     }

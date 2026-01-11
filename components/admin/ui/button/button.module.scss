@@ -123,6 +123,11 @@
 }
 
 .radio-btn {
+  @include flex(null, null, center, 8px);
+  label {
+    cursor: pointer;
+    @include font-theme($bodySm, $m);
+  }
   input[type='radio'] {
     -webkit-appearance: none;
     -moz-appearance: none;

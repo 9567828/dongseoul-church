@@ -48,7 +48,15 @@ export type Database = {
           updated_at?: string | null
           writer?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "albums_writer_fkey"
+            columns: ["writer"]
+            isOneToOne: false
+            referencedRelation: "members"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       members: {
         Row: {

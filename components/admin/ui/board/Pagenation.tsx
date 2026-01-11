@@ -7,10 +7,13 @@ import { useHooks } from "@/hooks/useHooks";
 import PageBtn from "./PageBtn";
 import { handlers } from "@/utils/handlers";
 
-export default function Pagenation({ totalPage, currPage, pagesPerBlock, listNum, tab }: IPagenation) {
+export default function Pagenation({ currPage, count, listNum, tab }: IPagenation) {
   const { useRoute } = useHooks();
   const { handlePageSizeQuery } = handlers();
   const [hover, setHover] = useState<string | null>(null);
+
+  const totalPage = Math.ceil(count / listNum);
+  const pagesPerBlock = totalPage <= 4 ? 4 : currPage <= 3 ? 4 : 3;
 
   const { startPage, endPage, pageNumbers } = pageCalculate(totalPage, currPage, pagesPerBlock);
 

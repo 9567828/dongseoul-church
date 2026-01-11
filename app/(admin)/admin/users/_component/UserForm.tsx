@@ -9,10 +9,10 @@ import LabelInput from "@/components/admin/ui/input-box/LabelInput";
 import { formRuls, FormValues } from "@/hooks/FormRules";
 import { formatPhone } from "@/utils/formatPhone";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
-import { modalActType, UserFormType } from "@/utils/propType";
+import { modalActType, FormType } from "@/utils/propType";
 import Button from "@/components/admin/ui/button/Button";
 import ToggleRole from "@/components/admin/ui/toggle-state/ToggleRole";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import InputAddr from "@/components/admin/ui/input-box/InputAddr";
 import { useHooks } from "@/hooks/useHooks";
 import { handlers } from "@/utils/handlers";
@@ -28,7 +28,7 @@ import InviteModal from "@/components/admin/ui/modal/InviteModal";
 import ChangeRoleModal from "@/components/admin/ui/modal/ChangeRoleModal";
 
 interface IUserForm {
-  mode: UserFormType;
+  mode: FormType;
   userId: string;
 }
 
@@ -166,7 +166,7 @@ export default function UserForm({ mode, userId }: IUserForm) {
     }
   };
 
-  const moveBack = (mode: UserFormType) => {
+  const moveBack = (mode: FormType) => {
     const target = mode === "edit" ? `/admin/users/${userId}` : "/admin/users";
 
     if (mode === "readOnly") return useRoute(target);

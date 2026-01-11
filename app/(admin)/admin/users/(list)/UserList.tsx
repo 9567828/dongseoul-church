@@ -61,9 +61,6 @@ export default function UserList({ currPage, listNum, tab }: ISearchParamsInfo) 
   const [openEdit, setOpenEdit] = useState("");
   const [openModal, setOpenModal] = useState<modalActType | null>(null);
 
-  const totalPage = Math.ceil(count / listNum);
-  const pagesPerBlock = totalPage <= 4 ? 4 : currPage <= 3 ? 4 : 3;
-
   const modalRef = useRef<HTMLDivElement>(null);
   // useOnClickOutSide(modalRef, () => setOpenEdit(""), openModal !== null);
   useClearBodyScroll(openModal);
@@ -205,7 +202,7 @@ export default function UserList({ currPage, listNum, tab }: ISearchParamsInfo) 
           </BoardLayout>
           <div className="pagenation-wrap">
             <SelectPageCnt value={selected} onChange={setSelected} tab={tab!} />
-            <Pagenation currPage={currPage} listNum={listNum} pagesPerBlock={pagesPerBlock} totalPage={totalPage} tab={tab} />
+            <Pagenation currPage={currPage} listNum={listNum} count={count} tab={tab} />
           </div>
         </WhitePanel>
       </InnerLayout>

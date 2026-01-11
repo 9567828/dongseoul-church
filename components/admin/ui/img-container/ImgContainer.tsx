@@ -37,7 +37,7 @@ export default function ImgContainer({
         {variant === "profile" && <AvatarWrap src={addImg! ? addImg : currImg ? currImg : null} size="xl" />}
         {mode === "default" && (
           <>
-            <input type="file" id="upload" style={{ display: "none" }} {...props} accept="image/*" />
+            <input {...props} type="file" id="upload" style={{ display: "none" }} accept="image/*" />
             <label htmlFor="upload" className={style.label}>
               <Button type="button" variants="small" visual="outline" btnName="사진선택" />
             </label>

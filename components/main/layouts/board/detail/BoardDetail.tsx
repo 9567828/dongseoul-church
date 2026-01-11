@@ -7,6 +7,7 @@ import MoveBtn from "@/components/main/ui/move-btn/MoveBtn";
 import { useHooks } from "@/hooks/useHooks";
 import { formatDate } from "@/utils/formatDate";
 import { AlbumRow, boardTables } from "@/utils/supabase/sql";
+import { getAlbumImgURL } from "@/utils/supabase/sql/storage/storage";
 
 interface IPrevNext {
   id: string | number | null;
@@ -29,6 +30,15 @@ export default function BoardDetail({ detail, variant, prev, next }: IDetail) {
   // [id] path제외하고 path 합침
   const basePath = "/" + segments.slice(0, -1).join("/");
   const isAlbum = variant === "album";
+  let albumUrl;
+
+  if (isAlbum) {
+    if ((detail as AlbumRow).src!) {
+      const url = getAlbumImgURL((detail as AlbumRow).src!);
+
+      albumUrl = url;
+    }
+  }
 
   return (
     <div className="inner">
@@ -41,7 +51,7 @@ export default function BoardDetail({ detail, variant, prev, next }: IDetail) {
         <div className={style.content}>
           {isAlbum ? (
             <div className={style["content-img"]}>
-              <img src={(detail as AlbumRow).src!} alt={detail.title!} />
+              <img src={albumUrl} alt={detail.title!} />
             </div>
           ) : (
             <p>{""}</p>

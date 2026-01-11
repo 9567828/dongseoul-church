@@ -9,3 +9,9 @@ export const formatDate = (isoString: string) => {
     .replace(/\s/g, "")
     .replace(/\.$/, "");
 };
+
+export const formatTwoDigit = (date: number) => {
+  const two = String(date).padStart(2, "0");
+
+  return two;
+};

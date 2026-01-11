@@ -14,6 +14,10 @@ export const handlers = () => {
     }
   };
 
+  const toggleCheckedRow = (id: string, setState: Dispatch<SetStateAction<string[]>>) => {
+    setState((prev) => (prev.includes(id) ? prev.filter((v) => v !== id) : [...prev, id]));
+  };
+
   const toggleAllChecked = (allChecked: boolean, setState: Dispatch<SetStateAction<string[]>>, list: any[]) => {
     if (allChecked) {
       setState([]);
@@ -45,6 +49,10 @@ export const handlers = () => {
       console.log(id, role);
     }
     fn;
+  };
+
+  const handleCheckedIsShow = (isShow: boolean, setState: Dispatch<SetStateAction<boolean>>) => {
+    isShow ? setState(true) : setState(false);
   };
 
   const handlePageSizeQuery = (page: string, size: string, tab: tabStatusType) => {
@@ -83,6 +91,8 @@ export const handlers = () => {
   return {
     handleCheckedRole,
     toggleAllChecked,
+    toggleCheckedRow,
+    handleCheckedIsShow,
     handleAdminInvite,
     handleChangeRole,
     handlePageSizeQuery,

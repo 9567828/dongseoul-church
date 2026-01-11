@@ -46,3 +46,4 @@ export const createSortStore = ({ key, sort }: { key: string; sort: sortTypes })
 
 export const useUserSortStore = createSortStore({ key: "created_at", sort: "desc" });
 export const useSermonSortStore = createSortStore({ key: "published_date", sort: "desc" });
+export const useAlbumSortStore = createSortStore({ key: "created_at", sort: "desc" });

@@ -5,6 +5,7 @@ import style from "./photo.module.scss";
 import { usePathname } from "next/navigation";
 import { formatDate } from "@/utils/formatDate";
 import { SermonRow, boardTables } from "@/utils/supabase/sql";
+import { getAlbumImgURL } from "@/utils/supabase/sql/storage/storage";
 
 interface IPhotoBoard {
   list: boardTables[];
@@ -29,12 +30,20 @@ export default function PhotoBoard({ list = [], variant }: IPhotoBoard) {
           target = "";
         }
 
+        const isAlbum = variant === "album";
+        let albumUrl;
+        if (isAlbum) {
+          console.log(m.thumbnail);
+          const url = getAlbumImgURL(m.thumbnail!);
+          albumUrl = url;
+        }
+
         return (
           <li key={m.id}>
             <Link href={href} className={style.content} target={target}>
               <div className={style.img}>
                 {isSermon && <div className={style.logo}></div>}
-                <img src={m.thumbnail!} alt={m.title!} />
+                <img src={isAlbum ? albumUrl : m.thumbnail!} alt={m.title!} />
               </div>
               <div className={style["text-wrap"]}>
                 <p className="bodyMd-m">{m.title}</p>

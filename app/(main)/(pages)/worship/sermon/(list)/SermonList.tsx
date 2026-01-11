@@ -11,11 +11,10 @@ export default function SermonList({ currPage, listNum }: ISearchParamsInfo) {
   const { data: { list, count } = { list: [], count: 0 }, isLoading } = useSelectPageList<SermonRow>(
     "sermons",
     listNum,
-    currPage
+    currPage,
+    "show",
+    { filter: "published_date", sort: "desc" }
   );
-
-  const totalPage = Math.ceil(count / listNum);
-  const pagesPerBlock = 5;
 
   return (
     <div className="inner">
@@ -26,9 +25,7 @@ export default function SermonList({ currPage, listNum }: ISearchParamsInfo) {
       ) : (
         <PhotoBoard list={list} variant="sermon" />
       )}
-      {list.length > 0 && (
-        <Pagenation currPage={currPage} pagesPerBlock={pagesPerBlock} totalPage={totalPage} listNum={listNum} />
-      )}
+      {list.length > 0 && <Pagenation currPage={currPage} count={count} listNum={listNum} />}
     </div>
   );
 }

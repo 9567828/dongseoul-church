@@ -1,4 +1,4 @@
-import { roleList, UserFormType } from "@/utils/propType";
+import { roleList, FormType } from "@/utils/propType";
 import ToggleOption from "./ToggleOption";
 import ToggleState from "./ToggleState";
 import RoleInfo from "../role-info/RoleInfo";
@@ -8,7 +8,7 @@ import Label from "../label/Label";
 import { roleEum } from "@/utils/supabase/sql";
 
 interface IRoleProps {
-  mode: UserFormType;
+  mode: FormType;
   variant: "horizontal" | "vertical";
   role?: roleEum;
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;

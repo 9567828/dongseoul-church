@@ -2,11 +2,11 @@ import { FormHTMLAttributes, useState } from "react";
 import style from "./form.module.scss";
 import Button from "../../ui/button/Button";
 import { useSideBarStateStore } from "@/hooks/store/useSideBarStateStore";
-import { UserFormType } from "@/utils/propType";
+import { FormType } from "@/utils/propType";
 
 interface IForm extends FormHTMLAttributes<HTMLFormElement> {
-  mode: UserFormType;
-  variants: "grid" | "";
+  mode: FormType;
+  variants: "grid" | "column";
   onDelete: () => void;
   onBack: () => void;
   onMoveEdit: () => void;
@@ -18,7 +18,7 @@ export default function FormLayout({ mode, variants, onDelete, onBack, onReset, 
   const [hover, setHover] = useState(false);
   const { isClose } = useSideBarStateStore();
 
-  const btnName = (mode: UserFormType) => {
+  const btnName = (mode: FormType) => {
     if (mode === "add") {
       return "등록";
     } else if (mode === "edit") {

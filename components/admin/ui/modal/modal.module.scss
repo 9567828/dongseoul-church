@@ -1,12 +1,12 @@
 @use "../../../../styles/admin/abstract/index.scss" as *;
 
 .modal-continer {
-  position: absolute;
+  @include position-center();
   border-radius: 12px;
   background-color: white;
   border: 1px solid $cms-gray-50;
   box-shadow: 1px 3px 3px 1px rgba(0, 0, 0, 0.25);
-  z-index: 1;
+  z-index: 300;
   overflow: hidden;
   &.edit {
     top: 100%;
@@ -15,6 +15,9 @@
       top: unset;
       bottom: 100%;
     }
+  }
+  &.add {
+    width: 320px;
   }
   .modal-title {
     @include flex(null, space-between, center, null);
@@ -25,12 +28,18 @@
     &.edit {
       font-weight: $r;
     }
+    &.add {
+      padding: 16px 20px;
+    }
   }
   
   .modal-content {
     width: 100%;
     padding: 8px 20px 20px;
     background-color: white;
+    &.add {
+      padding: 20px;
+    }
   }
 }
 

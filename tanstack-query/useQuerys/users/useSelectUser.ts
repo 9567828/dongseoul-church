@@ -13,16 +13,18 @@ export const useSelectLogginUser = () => {
     queryFn: async () => {
       return await selectLoginUser({ supabase });
     },
+    staleTime: 1000 * 60 * 5,
   });
 };
 
 export const useSelectUserById = (id: string) => {
   return useQuery({
-    queryKey: ["members", id],
+    queryKey: ["member", id],
     queryFn: async () => {
       return await selectUserById({ id, supabase });
     },
     enabled: !!id,
+    staleTime: 1000 * 60 * 5,
   });
 };
 
@@ -32,6 +34,7 @@ export const useSelectAllUsers = (page: number, limit: number, tabStatus: tabSta
     queryFn: async () => {
       return await selectAllUsers({ supabase, page, limit, tabStatus, filter });
     },
+    staleTime: 1000 * 60 * 5,
   });
 };
 

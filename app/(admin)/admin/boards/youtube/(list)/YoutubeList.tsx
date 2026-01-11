@@ -7,6 +7,7 @@ import BoardLayout from "@/components/admin/ui/board/BoardLayout";
 import BoardTap from "@/components/admin/ui/board/BoardTab";
 import ListCount from "@/components/admin/ui/board/ListCount";
 import Pagenation from "@/components/admin/ui/board/Pagenation";
+import PagenationWrapper from "@/components/admin/ui/board/PageNationWrapper";
 import SelectPageCnt from "@/components/admin/ui/board/SelectPageCnt";
 import StateLabel from "@/components/admin/ui/board/StateLabel";
 import TableContent from "@/components/admin/ui/board/TableContent";
@@ -14,9 +15,9 @@ import TableHead, { tableHeadType } from "@/components/admin/ui/board/TableHead"
 import TextField from "@/components/admin/ui/board/TextField";
 import ThumbNail from "@/components/admin/ui/board/ThumbNail";
 import StateView from "@/components/main/ui/state-view/StateView";
-import { createSortStore, useSermonSortStore } from "@/hooks/store/useSortState";
+import { useSermonSortStore } from "@/hooks/store/useSortState";
 import { request } from "@/lib/api";
-import { useAddYoutubeMutation } from "@/tanstack-query/useMutation/useMutationBoard";
+import { useAddYoutubeMutation } from "@/tanstack-query/useMutation/boards/youtube/useMutationBoard";
 import { useSelectPageList } from "@/tanstack-query/useQuerys/useSelectQueries";
 import { formatDate } from "@/utils/formatDate";
 import { handlers } from "@/utils/handlers";
@@ -42,8 +43,8 @@ export default function YoutubeList({ currPage, listNum, tab }: ISearchParamsInf
     "sermons",
     listNum,
     currPage,
-    { filter: filterName, sort: sortMap[filterName] },
-    tab === "all" ? "all" : tab === "active" ? "show" : "noShow"
+    tab === "all" ? "all" : tab === "active" ? "show" : "noShow",
+    { filter: filterName, sort: sortMap[filterName] }
   );
 
   const [checkedRow, setCheckedRow] = useState<string[]>([]);
@@ -54,9 +55,6 @@ export default function YoutubeList({ currPage, listNum, tab }: ISearchParamsInf
   };
 
   const allChecked = checkedRow.length === list.length;
-
-  const totalPage = Math.ceil(count / listNum);
-  const pagesPerBlock = totalPage <= 4 ? 4 : currPage <= 3 ? 4 : 3;
 
   const getYoutube = async () => {
     const req = await request({ method: "GET", url: "/getYoutube" });
@@ -141,16 +139,10 @@ export default function YoutubeList({ currPage, listNum, tab }: ISearchParamsInf
               );
             })}
           </BoardLayout>
-          <div className="pagenation-wrap">
+          <PagenationWrapper>
             <SelectPageCnt value={pageSize} onChange={setPageSize} tab={tab!} />
-            <Pagenation
-              currPage={currPage}
-              listNum={Number(pageSize)}
-              pagesPerBlock={pagesPerBlock}
-              totalPage={totalPage}
-              tab={tab}
-            />
-          </div>
+            <Pagenation currPage={currPage} listNum={Number(pageSize)} count={count} tab={tab} />
+          </PagenationWrapper>
         </WhitePanel>
       )}
     </InnerLayout>

@@ -18,6 +18,10 @@
   }
 }
 
+.detail {
+  padding: 28px;
+}
+
 .panel-title {
   @include font-theme($titleLg, $b);
   margin-bottom: 24px;

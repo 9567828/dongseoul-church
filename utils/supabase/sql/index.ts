@@ -15,6 +15,13 @@ export type RoleWithMember = MemberRow & {
   avatar_url: string | null;
 };
 
+export type AlbumWithName = AlbumRow & {
+  displayName: {
+    name: string | null;
+  };
+  imgUrl: string | null;
+};
+
 /**
  * boardTables
  */
@@ -63,4 +70,14 @@ export type AddYoutubePayload = {
   published_date: string;
   thumbnail: string;
   description: string;
+};
+
+export type AddAlbumPayload = {
+  payload: {
+    created_at: string;
+    updated_at: string | null;
+    title: string | null;
+    writer: string | null;
+  };
+  imgFile: File | null;
 };

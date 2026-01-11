@@ -4,10 +4,10 @@ import style from "./input.module.scss";
 import InputBox from "./InputBox";
 import { RefCallBack } from "react-hook-form";
 import InfoMessage from "../info-message/InfoMessage";
-import { UserFormType } from "@/utils/propType";
+import { FormType } from "@/utils/propType";
 
 interface IInput extends InputHTMLAttributes<HTMLInputElement> {
-  mode: UserFormType;
+  mode: FormType;
   label: string;
   isAdmin?: boolean;
   isRequired?: boolean;

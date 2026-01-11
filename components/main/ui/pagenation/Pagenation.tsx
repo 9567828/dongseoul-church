@@ -4,8 +4,12 @@ import { useHooks } from "@/hooks/useHooks";
 import style from "./page.module.scss";
 import { IPagenation } from "@/utils/pagenation";
 
-export default function Pagenation({ totalPage, currPage, pagesPerBlock, listNum }: IPagenation) {
+export default function Pagenation({ count, currPage, listNum }: IPagenation) {
   const { useRoute } = useHooks();
+
+  const totalPage = Math.ceil(count / listNum);
+  const pagesPerBlock = 5;
+
   const currBlock = Math.ceil(currPage / pagesPerBlock);
   const startPage = (currBlock - 1) * pagesPerBlock + 1;
   const endPage = Math.min(startPage + pagesPerBlock - 1, totalPage);
