@@ -1,5 +1,5 @@
 import createBrowClient from "@/utils/supabase/services/browerClinet";
-import { AddYoutubePayload, SermonRow } from "@/utils/supabase/sql";
+import { AddYoutubePayload } from "@/utils/supabase/sql";
 import { getUserId } from "@/utils/supabase/sql/users/auth";
 import { useMutation } from "@tanstack/react-query";
 
@@ -12,7 +12,7 @@ export const useAddYoutubeMutation = () => {
 
       const rows = payload.map((video) => ({
         ...video,
-        writer: id,
+        origin_writer: id,
       }));
 
       const { data, error } = await supabase.from("sermons").upsert(rows, { onConflict: "video_id" }).select();

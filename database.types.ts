@@ -18,40 +18,50 @@ export type Database = {
         Row: {
           created_at: string
           description: string | null
+          edit_writer: string | null
           id: number
           is_show: boolean | null
+          origin_writer: string | null
           src: string | null
           thumbnail: string | null
           title: string | null
           updated_at: string | null
-          writer: string | null
         }
         Insert: {
           created_at?: string
           description?: string | null
+          edit_writer?: string | null
           id?: number
           is_show?: boolean | null
+          origin_writer?: string | null
           src?: string | null
           thumbnail?: string | null
           title?: string | null
           updated_at?: string | null
-          writer?: string | null
         }
         Update: {
           created_at?: string
           description?: string | null
+          edit_writer?: string | null
           id?: number
           is_show?: boolean | null
+          origin_writer?: string | null
           src?: string | null
           thumbnail?: string | null
           title?: string | null
           updated_at?: string | null
-          writer?: string | null
         }
         Relationships: [
           {
-            foreignKeyName: "albums_writer_fkey"
-            columns: ["writer"]
+            foreignKeyName: "albums_edit_writer_fkey"
+            columns: ["edit_writer"]
+            isOneToOne: false
+            referencedRelation: "members"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "albums_origin_writer_fkey"
+            columns: ["origin_writer"]
             isOneToOne: false
             referencedRelation: "members"
             referencedColumns: ["id"]
@@ -121,40 +131,43 @@ export type Database = {
         Row: {
           created_at: string
           description: string | null
+          edit_writer: string | null
           id: number
           is_show: boolean | null
+          origin_writer: string | null
           published_date: string | null
           thumbnail: string | null
           title: string | null
           updated_at: string | null
           video_id: string
-          writer: string | null
           youtube_URL: string | null
         }
         Insert: {
           created_at?: string
           description?: string | null
+          edit_writer?: string | null
           id?: number
           is_show?: boolean | null
+          origin_writer?: string | null
           published_date?: string | null
           thumbnail?: string | null
           title?: string | null
           updated_at?: string | null
           video_id: string
-          writer?: string | null
           youtube_URL?: string | null
         }
         Update: {
           created_at?: string
           description?: string | null
+          edit_writer?: string | null
           id?: number
           is_show?: boolean | null
+          origin_writer?: string | null
           published_date?: string | null
           thumbnail?: string | null
           title?: string | null
           updated_at?: string | null
           video_id?: string
-          writer?: string | null
           youtube_URL?: string | null
         }
         Relationships: []

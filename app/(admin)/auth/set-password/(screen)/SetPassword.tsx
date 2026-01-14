@@ -4,7 +4,7 @@ import InputBox from "@/components/admin/ui/input-box/InputBox";
 import style from "../../_components/login.module.scss";
 import InfoMessage from "@/components/admin/ui/info-message/InfoMessage";
 import Button from "@/components/admin/ui/button/Button";
-import { formRuls, PasswordValues } from "@/hooks/FormRules";
+import { formRuls, PasswordValues } from "@/hooks/useForm/userFormRules";
 import { useHooks } from "@/hooks/useHooks";
 import { SubmitHandler, useForm } from "react-hook-form";
 import AuthLayout from "../../_components/AuthLayout";

@@ -3,7 +3,7 @@
 .container {
   position: fixed;
   @include position-center();
-  z-index: 200;
+  z-index: 500;
 }
 
 .toast-wrap {
@@ -11,7 +11,12 @@
   @include flex(null, center, center, 18px);
   padding: 8px 20px;
   border-radius: 20px;
-  background-color: $cms-main-90P;
+  &.success {
+    background-color: $cms-main-90P;
+  }
+  &.error {
+    background-color: rgba(12, 175, 96, 0.9);
+  }
   p {
     color: white;
   }

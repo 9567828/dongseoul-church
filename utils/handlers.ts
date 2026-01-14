@@ -2,6 +2,7 @@ import { ChangeEvent, Dispatch, SetStateAction } from "react";
 import { roleEum } from "./supabase/sql";
 import { request } from "@/lib/api";
 import { tabStatusType } from "@/components/admin/ui/board/BoardTab";
+import { showStateType } from "./supabase/sql/boards/select";
 
 export const handlers = () => {
   const handleCheckedRole = (role: roleEum, setState: Dispatch<SetStateAction<roleEum | null>>) => {
@@ -44,15 +45,13 @@ export const handlers = () => {
     }
   };
 
-  const handleChangeRole = (id: string, role: roleEum, fn?: () => void) => {
-    if (role) {
-      console.log(id, role);
+  const handleCheckedIsShow = (state: string, setState: Dispatch<SetStateAction<showStateType | null>>, fn: () => void) => {
+    if (state === "show") {
+      setState("noShow");
+    } else {
+      setState("show");
     }
-    fn;
-  };
-
-  const handleCheckedIsShow = (isShow: boolean, setState: Dispatch<SetStateAction<boolean>>) => {
-    isShow ? setState(true) : setState(false);
+    fn();
   };
 
   const handlePageSizeQuery = (page: string, size: string, tab: tabStatusType) => {
@@ -94,7 +93,6 @@ export const handlers = () => {
     toggleCheckedRow,
     handleCheckedIsShow,
     handleAdminInvite,
-    handleChangeRole,
     handlePageSizeQuery,
     handleImgFile,
     handleResetPassword,

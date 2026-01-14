@@ -29,31 +29,36 @@ export default function FormFooter({ mode, formId, onClick, onDelete, onBack, on
 
   return (
     <footer className={`${style.footer} ${isClose ? style.close : ""}`.trim()}>
-      <Button type="button" btnName="돌아가기" variants="back" visual="none" onClick={onBack} />
-      <div className={style["btn-wrap"]}>
-        <Button
-          type="button"
-          onMouseEnter={() => setHover(true)}
-          onMouseLeave={() => setHover(false)}
-          onClick={onDelete}
-          btnName="삭제"
-          variants="delete"
-          visual="outline"
-          src={`/imgs/admin/icons/ic_trash${hover ? `-hover` : ""}.svg`}
-        />
-        {mode === "add" && (
-          <button type="button" className="admin-bodyMd-m" onClick={onReset}>
-            초기화
-          </button>
-        )}
-        <Button
-          type={mode === "readOnly" ? "button" : "submit"}
-          form={formId}
-          btnName={btnName(mode)}
-          variants="primary"
-          visual="solid"
-          onClick={mode === "readOnly" ? onClick : undefined}
-        />
+      <div className={style.inner}>
+        <Button type="button" btnName="돌아가기" variants="back" visual="none" onClick={onBack} />
+        <div className={style["btn-wrap"]}>
+          {mode === "add" ||
+            (mode === "edit" && (
+              <button type="button" className="admin-bodyMd-m" onClick={onReset}>
+                초기화
+              </button>
+            ))}
+          {mode !== "add" && (
+            <Button
+              type="button"
+              onMouseEnter={() => setHover(true)}
+              onMouseLeave={() => setHover(false)}
+              onClick={onDelete}
+              btnName="삭제"
+              variants="delete"
+              visual="outline"
+              src={`/imgs/admin/icons/ic_trash${hover ? `-hover` : ""}.svg`}
+            />
+          )}
+          <Button
+            type={mode === "readOnly" ? "button" : "submit"}
+            form={formId}
+            btnName={btnName(mode)}
+            variants="primary"
+            visual="solid"
+            onClick={mode === "readOnly" ? onClick : undefined}
+          />
+        </div>
       </div>
     </footer>
   );

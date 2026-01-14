@@ -1,6 +1,6 @@
 import { SupabaseClient } from "@supabase/supabase-js";
 import { getUserId } from "./auth";
-import { RoleWithMember } from "..";
+import { MemberRow, RoleWithMember } from "..";
 import { tabStatusType } from "@/components/admin/ui/board/BoardTab";
 import { getUserImgUrl } from "../storage/storage";
 import { filterSortType } from "@/utils/propType";
@@ -113,5 +113,14 @@ export const selectAccounts = () => {
     return { list, count: count ?? 0 };
   };
 
-  return { selectLoginUser, selectUserById, selectUserRole, selectAllUsers, selectDeletedUser };
+  const selectHasAdminUsers = async (ids: string[], supabase: SupabaseClient) => {
+    const { data, error } = await supabase.from("members").select("*").in("id", ids).select();
+    if (error) throw error;
+
+    const row = data.map((user) => user.admin_user !== null);
+
+    return row.some(Boolean);
+  };
+
+  return { selectLoginUser, selectUserById, selectUserRole, selectAllUsers, selectDeletedUser, selectHasAdminUsers };
 };

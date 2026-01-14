@@ -3,14 +3,16 @@
 import Button from "../../ui/button/Button";
 import style from "./inner-layout.module.scss";
 
+type SubType = { date: string; name: string };
+
 interface ILayout {
   mode: "default" | "withFooter";
   title: string;
   needBtn?: boolean;
   btnName?: string;
   iconSrc?: string;
-  sub1?: string;
-  sub2?: string;
+  sub1?: SubType;
+  sub2?: SubType;
   onClick?: () => void;
   children: React.ReactNode;
 }
@@ -36,10 +38,16 @@ export default function InnerLayout({
           )}
         </section>
         {(sub1 || sub2) && (
-          <section className={style["sub-wrap"]}>
-            <p>{sub1}</p>
-            <p>{sub2}</p>
-          </section>
+          <div className={style["sub-wrap"]}>
+            <section>
+              <p>{sub1?.date}</p>
+              <p>{sub1?.name}</p>
+            </section>
+            <section>
+              <p>{sub2?.date}</p>
+              <p>{sub2?.name}</p>
+            </section>
+          </div>
         )}
         {children}
       </div>

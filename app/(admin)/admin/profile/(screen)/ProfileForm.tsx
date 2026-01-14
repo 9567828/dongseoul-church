@@ -11,18 +11,17 @@ import { useHooks } from "@/hooks/useHooks";
 import { useState } from "react";
 import { useSelectLogginUser } from "@/tanstack-query/useQuerys/users/useSelectUser";
 import Loading from "@/app/Loading";
-import { formRuls, FormValues } from "@/hooks/FormRules";
+import { formRuls, userFormValues } from "@/hooks/useForm/userFormRules";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { formatPhone } from "@/utils/formatPhone";
-import { useEditUser, useEditUserRole } from "@/tanstack-query/useMutation/users/useMutationUser";
+import { useEditUser } from "@/tanstack-query/useMutation/users/useMutationUser";
 import { handlers } from "@/utils/handlers";
 import InfoMessage from "@/components/admin/ui/info-message/InfoMessage";
-import { MemberEditPaylod } from "@/utils/supabase/sql";
-import { deleteUserImg, saveAvatarImg, updateAvatarImg } from "@/utils/supabase/sql/storage/storage";
+import { MemberEditPayload } from "@/utils/supabase/sql";
+import { deleteUserImg } from "@/utils/supabase/sql/storage/storage";
 import { useQueryClient } from "@tanstack/react-query";
 import createBrowClient from "@/utils/supabase/services/browerClinet";
-import ToastPopup from "@/components/admin/ui/toast-popup/ToastPopup";
-import { usePopupStore } from "@/hooks/store/usePopupStore";
+import { useToastStore } from "@/hooks/store/useToastStore";
 
 export default function ProfileForm() {
   const queryClient = useQueryClient();
@@ -31,9 +30,9 @@ export default function ProfileForm() {
   const { useOpenAddr } = useHooks();
   const { handleImgFile, handleResetPassword } = handlers();
   const { mutate } = useEditUser();
-  const { isOpen, openWithTimeout } = usePopupStore();
+  const toast = useToastStore();
 
-  const emptyDefaults: FormValues = {
+  const emptyDefaults: userFormValues = {
     username: data?.name ?? "",
     email: data?.email ?? "",
     position: data?.position ?? "",
@@ -48,7 +47,7 @@ export default function ProfileForm() {
     formState: { errors },
     reset,
     control,
-  } = useForm<FormValues>({ defaultValues: emptyDefaults });
+  } = useForm<userFormValues>({ defaultValues: emptyDefaults });
 
   if (isLoading) return <Loading />;
 
@@ -59,11 +58,11 @@ export default function ProfileForm() {
   const [addr, setAddr] = useState({ address: "", zonecode: "" });
   useOpenAddr(setAddr);
 
-  const onSubmit: SubmitHandler<FormValues> = async ({ username, phone, duty, position, addr_detail }) => {
+  const onSubmit: SubmitHandler<userFormValues> = async ({ username, phone, duty, position, addr_detail }) => {
     if (!data?.id) return;
 
     const id = data.id;
-    const newObj: MemberEditPaylod = {
+    const newObj: MemberEditPayload = {
       payload: {
         updated_at: new Date().toISOString(),
         name: username || data?.name,
@@ -76,25 +75,23 @@ export default function ProfileForm() {
       },
       uid: data?.admin_user!,
       memId: id,
-      avatrImg: imgFile,
+      imgFile,
     };
     mutate(newObj, {
       onSuccess: async (data) => {
         if (data.member === undefined) {
-          console.error("저장오류");
+          toast.error("저장이 실패 되었습니다.");
         } else {
-          openWithTimeout();
-
+          toast.success("저장이 완료 되었습니다.");
           queryClient.invalidateQueries({
             queryKey: ["member", "own"],
           });
-
-          openWithTimeout();
           setImgFile(null);
           setPrevImg(null);
         }
       },
       onError: (error) => {
+        toast.error("저장이 실패 되었습니다.");
         console.error(error);
       },
     });
@@ -105,6 +102,7 @@ export default function ProfileForm() {
     if (data?.avatar !== null) {
       const result = await deleteUserImg(data?.id!, supabase);
       if (result === null) {
+        toast.success("사진이 삭제 되었습니다.");
         queryClient.invalidateQueries({
           queryKey: ["member", "own"],
         });
@@ -234,7 +232,7 @@ export default function ProfileForm() {
           </WhitePanel>
         </div>
       </InnerLayout>
-      {isOpen && <ToastPopup />}
+      {/* {isOpen && <ToastPopup />} */}
     </>
   );
 }

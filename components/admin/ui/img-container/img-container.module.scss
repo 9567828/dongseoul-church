@@ -21,16 +21,19 @@
 
 .image {
   position: relative;
-  width: 90px;
-  height: 90px;
+  width: 32px;
+  height: 32px;
   border-radius: 4px;
   overflow: hidden;
+  &.preview {
+    width: 180px;
+    height: 180px;
+    cursor: pointer;
+  }
   img {
     @include position-center;
-    &.preview {
-      width: 100%;
-      height: 100%;
-    }
+    width: 100%;
+    height: 100%;
   }
 }
 

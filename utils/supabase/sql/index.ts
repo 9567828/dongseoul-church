@@ -1,4 +1,5 @@
 import { Tables, Enums } from "@/database.types";
+import { showStateType } from "./boards/select";
 
 export type tablesName = "albums" | "sermons" | "users";
 
@@ -16,7 +17,10 @@ export type RoleWithMember = MemberRow & {
 };
 
 export type AlbumWithName = AlbumRow & {
-  displayName: {
+  origin: {
+    name: string | null;
+  };
+  editor: {
     name: string | null;
   };
   imgUrl: string | null;
@@ -27,22 +31,34 @@ export type AlbumWithName = AlbumRow & {
  */
 export type boardTables = AlbumRow | SermonRow;
 
-export type MemberAddPaylod = {
-  created_at: string;
-  updated_at: string;
-  zonecode?: string | null;
-  addr?: string | null;
-  addr_detail?: string | null;
-  avatar?: string | null;
-  duty?: string | null;
-  email: string;
-  name: string;
-  phone: string;
-  position?: string | null;
-  avatar_url?: string | null;
+export type ChangeShowPayload = {
+  payload: {
+    updated_at: string;
+    is_Show: showStateType;
+    edit_writer: string;
+  };
+  name: tablesName;
+  id: string;
 };
 
-export type MemberEditPaylod = {
+export type MemberAddPayload = {
+  payload: {
+    created_at: string;
+    updated_at: string;
+    zonecode?: string | null;
+    addr?: string | null;
+    addr_detail?: string | null;
+    avatar?: string | null;
+    duty?: string | null;
+    email: string;
+    name: string;
+    phone: string;
+    position?: string | null;
+  };
+  imgFile?: File | null;
+};
+
+export type MemberEditPayload = {
   payload: {
     updated_at: string;
     zonecode?: string | null;
@@ -58,7 +74,7 @@ export type MemberEditPaylod = {
   role?: roleEum;
   uid: string;
   memId: string;
-  avatrImg?: File | null;
+  imgFile?: File | null;
 };
 
 export type AddYoutubePayload = {
@@ -77,7 +93,19 @@ export type AddAlbumPayload = {
     created_at: string;
     updated_at: string | null;
     title: string | null;
-    writer: string | null;
+    origin_writer: string | null;
   };
+  imgFile: File | null;
+};
+
+export type EditAlbumPayload = {
+  payload: {
+    id: number;
+    updated_at: string | null;
+    title: string | null;
+    edit_writer: string | null;
+    is_show: boolean;
+  };
+  imgPath: string;
   imgFile: File | null;
 };

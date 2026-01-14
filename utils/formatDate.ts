@@ -15,3 +15,14 @@ export const formatTwoDigit = (date: number) => {
 
   return two;
 };
+
+export const formatDateTime = (iso: string) => {
+  const d = new Date(iso);
+  const month = formatTwoDigit(d.getMonth() + 1);
+  const day = formatTwoDigit(d.getDate());
+  const hour = formatTwoDigit(d.getHours());
+  const min = formatTwoDigit(d.getMinutes());
+  const second = formatTwoDigit(d.getSeconds());
+
+  return `${d.getFullYear()}.${month}.${day} ${hour}:${min}:${second}`;
+};

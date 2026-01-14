@@ -33,7 +33,6 @@ export default function PhotoBoard({ list = [], variant }: IPhotoBoard) {
         const isAlbum = variant === "album";
         let albumUrl;
         if (isAlbum) {
-          console.log(m.thumbnail);
           const url = getAlbumImgURL(m.thumbnail!);
           albumUrl = url;
         }

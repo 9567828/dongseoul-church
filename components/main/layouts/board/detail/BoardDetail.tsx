@@ -8,6 +8,8 @@ import { useHooks } from "@/hooks/useHooks";
 import { formatDate } from "@/utils/formatDate";
 import { AlbumRow, boardTables } from "@/utils/supabase/sql";
 import { getAlbumImgURL } from "@/utils/supabase/sql/storage/storage";
+import FullImg from "@/components/admin/ui/full-img/FullImg";
+import { useRef, useState } from "react";
 
 interface IPrevNext {
   id: string | number | null;
@@ -22,9 +24,11 @@ interface IDetail {
 }
 
 export default function BoardDetail({ detail, variant, prev, next }: IDetail) {
-  const { useRoute } = useHooks();
+  const { useRoute, useClearBodyScroll } = useHooks();
   const path = usePathname();
+  const [openImg, setOpenImg] = useState(false);
 
+  useClearBodyScroll(openImg);
   // "/"로 path 나누기
   const segments = path.split("/").filter(Boolean);
   // [id] path제외하고 path 합침
@@ -41,37 +45,40 @@ export default function BoardDetail({ detail, variant, prev, next }: IDetail) {
   }
 
   return (
-    <div className="inner">
-      <BackBtn onClick={() => useRoute(basePath)} />
-      <div className={style["board-wrap"]}>
-        <div className={style.head}>
-          <p className="bodyMd-m">{detail.title}</p>
-          <p>{formatDate(detail.created_at!)}</p>
-        </div>
-        <div className={style.content}>
-          {isAlbum ? (
-            <div className={style["content-img"]}>
-              <img src={albumUrl} alt={detail.title!} />
-            </div>
-          ) : (
-            <p>{""}</p>
-          )}
-        </div>
-        <div>
-          <MoveBtn
-            variant="prev"
-            title={prev === null ? "" : prev?.title!}
-            isNull={prev === null}
-            onClick={() => useRoute(`${basePath}/${prev?.id}`)}
-          />
-          <MoveBtn
-            variant="next"
-            title={next === null ? "" : next?.title!}
-            isNull={next === null}
-            onClick={() => useRoute(`${basePath}/${next?.id}`)}
-          />
+    <>
+      <div className="inner">
+        <BackBtn onClick={() => useRoute(basePath)} />
+        <div className={style["board-wrap"]}>
+          <div className={style.head}>
+            <p className="bodyMd-m">{detail.title}</p>
+            <p>{formatDate(detail.created_at!)}</p>
+          </div>
+          <div className={style.content}>
+            {isAlbum ? (
+              <div className={style["content-img"]} onClick={() => setOpenImg(true)}>
+                <img src={albumUrl} alt={detail.title!} />
+              </div>
+            ) : (
+              <p>{""}</p>
+            )}
+          </div>
+          <div>
+            <MoveBtn
+              variant="prev"
+              title={prev === null ? "" : prev?.title!}
+              isNull={prev === null}
+              onClick={() => useRoute(`${basePath}/${prev?.id}`)}
+            />
+            <MoveBtn
+              variant="next"
+              title={next === null ? "" : next?.title!}
+              isNull={next === null}
+              onClick={() => useRoute(`${basePath}/${next?.id}`)}
+            />
+          </div>
         </div>
       </div>
-    </div>
+      {openImg && <FullImg alt={detail.title!} img={albumUrl!} onClick={() => setOpenImg(false)} />}
+    </>
   );
 }

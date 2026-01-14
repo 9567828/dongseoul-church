@@ -1,6 +1,6 @@
 import { UseFormGetValues } from "react-hook-form";
 
-export type FormValues = {
+export type userFormValues = {
   username: string;
   phone: string;
   email: string;

@@ -10,6 +10,7 @@ interface Iimgwrap extends InputHTMLAttributes<HTMLInputElement> {
   addImg?: string | null;
   currImg?: string | null;
   errorMode?: boolean;
+  onClickImg?: () => void;
   onReset: () => void;
 }
 
@@ -19,6 +20,7 @@ export default function ImgContainer({
   addImg,
   currImg,
   errorMode = false,
+  onClickImg,
   onReset,
   ...props
 }: Iimgwrap) {
@@ -26,12 +28,15 @@ export default function ImgContainer({
     <div className={style.container}>
       <div className={style.wrapper}>
         {variant === "image" && (
-          <div className={style[variant]}>
-            <img
-              src={addImg ? addImg : currImg ? currImg : "/imgs/admin/icons/ic_Img.svg"}
-              alt="사진등록"
-              className={addImg || currImg ? style.preview : undefined}
-            />
+          <div
+            className={`${style[variant]} ${addImg || currImg ? style.preview : ""}`.trim()}
+            onClick={addImg || currImg ? onClickImg : undefined}
+          >
+            {addImg || currImg ? (
+              <img src={addImg ? addImg : currImg!} alt="사진등록" />
+            ) : (
+              <img src="/imgs/admin/icons/ic_Img.svg" alt="사진등록" />
+            )}
           </div>
         )}
         {variant === "profile" && <AvatarWrap src={addImg! ? addImg : currImg ? currImg : null} size="xl" />}

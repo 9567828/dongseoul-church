@@ -30,7 +30,7 @@ export const headerMenuList = [
 
 export const adminMenuList = [
   {
-    menu: "신도관리",
+    menu: "교인관리",
     href: "/admin/users",
     rootHref: "/admin/users",
     whiteIcon: "ic_Users-white.svg",
@@ -61,5 +61,5 @@ export const boardTapList: ITab[] = [
 export const userTapList: ITab[] = [
   { id: "all", name: "전체" },
   { id: "active", name: "관리자" },
-  { id: "inActive", name: "일반신도" },
+  { id: "inActive", name: "일반교인" },
 ];

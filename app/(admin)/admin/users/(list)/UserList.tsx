@@ -17,21 +17,23 @@ import TextField from "@/components/admin/ui/board/TextField";
 import Button from "@/components/admin/ui/button/Button";
 import Label from "@/components/admin/ui/label/Label";
 import ChangeRoleModal from "@/components/admin/ui/modal/ChangeRoleModal";
-import DeleteUserModal from "@/components/admin/ui/modal/DeleteUserModal";
+import DeleteModal from "@/components/admin/ui/modal/DeleteModal";
 import InviteModal from "@/components/admin/ui/modal/InviteModal";
 import ModalContent from "@/components/admin/ui/modal/layout/ModalContent";
 import ModalHead from "@/components/admin/ui/modal/layout/ModalHead";
 import ModalLayout from "@/components/admin/ui/modal/layout/ModalLayout";
-import ModalLayout2 from "@/components/admin/ui/modal/layout/ModalLayout";
 import ToggleRole from "@/components/admin/ui/toggle-state/ToggleRole";
 import { useUserSortStore } from "@/hooks/store/useSortState";
+import { useToastStore } from "@/hooks/store/useToastStore";
 import { useHooks } from "@/hooks/useHooks";
 import { useDeleteUsers, useEditUserRole } from "@/tanstack-query/useMutation/users/useMutationUser";
 import { useSelectAllUsers } from "@/tanstack-query/useQuerys/users/useSelectUser";
 import { handlers } from "@/utils/handlers";
 import { userTapList } from "@/utils/menuList";
 import { ISearchParamsInfo, modalActType } from "@/utils/propType";
-import { MemberEditPaylod, roleEum } from "@/utils/supabase/sql";
+import createBrowClient from "@/utils/supabase/services/browerClinet";
+import { MemberEditPayload, roleEum } from "@/utils/supabase/sql";
+import { selectAccounts } from "@/utils/supabase/sql/users/select";
 import { useQueryClient } from "@tanstack/react-query";
 import { useRef, useState } from "react";
 
@@ -45,8 +47,10 @@ const headList = [
 
 export default function UserList({ currPage, listNum, tab }: ISearchParamsInfo) {
   const queryClient = useQueryClient();
-  const { handleCheckedRole, toggleAllChecked, handleAdminInvite, handleChangeRole } = handlers();
+  const toast = useToastStore();
+  const { handleCheckedRole, toggleAllChecked, handleAdminInvite } = handlers();
   const { useOnClickOutSide, useRoute, useClearBodyScroll, useReplce } = useHooks();
+  const { selectHasAdminUsers } = selectAccounts();
   const { sortMap, filterName, toggleSort } = useUserSortStore();
   const { mutate: editRole } = useEditUserRole();
   const { mutate } = useDeleteUsers();
@@ -80,7 +84,17 @@ export default function UserList({ currPage, listNum, tab }: ISearchParamsInfo) 
     handleCheckedRole(role, setSelectRole);
   };
 
-  const handleUserDelete = () => {
+  const handleUserDelete = async () => {
+    const supabase = createBrowClient();
+
+    const result = await selectHasAdminUsers(checkedRow, supabase);
+
+    if (result) {
+      if (!confirm(`관리자 계정이 포함 되어있습니다. 삭제를 계속 진행하시겠습니까?\n삭제 시 로그인이 불가능합니다.`)) {
+        return;
+      }
+    }
+
     mutate(
       { ids: checkedRow },
       {
@@ -90,8 +104,10 @@ export default function UserList({ currPage, listNum, tab }: ISearchParamsInfo) 
           });
           setCheckedRow([]);
           setOpenModal(null);
+          toast.success("유저 삭제 성공 되었습니다.");
         },
         onError: (err) => {
+          toast.error("유저 삭제 실패 되었습니다.");
           console.log(err);
         },
       }
@@ -102,7 +118,7 @@ export default function UserList({ currPage, listNum, tab }: ISearchParamsInfo) 
     <>
       <InnerLayout
         mode="default"
-        title="신도목록"
+        title="교인목록"
         needBtn={true}
         btnName="계정등록"
         onClick={() => useRoute(`/admin/users/add`)}
@@ -111,15 +127,7 @@ export default function UserList({ currPage, listNum, tab }: ISearchParamsInfo) 
         <WhitePanel variants="board">
           <ListCount checkedLength={checkedRow.length} count={count} />
           <BoardTap list={userTapList} size={listNum} tab={tab!} />
-          <ActionField
-            onDelete={() => {
-              if (checkedRow.length < 1) {
-                alert("삭제할 데이터를 선택해 주세요");
-                return;
-              }
-              setOpenModal({ action: "delete" });
-            }}
-          />
+          <ActionField checks={checkedRow.length} onDelete={() => setOpenModal({ action: "delete" })} />
           <BoardLayout>
             <TableHead
               checkBtnId="state"
@@ -181,7 +189,7 @@ export default function UserList({ currPage, listNum, tab }: ISearchParamsInfo) 
                           onClick={() => setOpenEdit((prev) => (prev === id ? "" : id))}
                         />
                         {openEdit === id ? (
-                          <ModalLayout2 variant="row" changeBottm={i >= 5} modalRef={modalRef} left="-100px">
+                          <ModalLayout variant="row" changeBottm={i >= 5} modalRef={modalRef} left="-100px">
                             <ModalHead title="상태선택" fontType="admin-bodySm-b" onClose={() => setOpenEdit("")} />
                             <ModalContent>
                               <ToggleRole
@@ -191,7 +199,7 @@ export default function UserList({ currPage, listNum, tab }: ISearchParamsInfo) 
                                 onChange={(e) => onChangeRole(m.admin_user!, e.target.id as roleEum)}
                               />
                             </ModalContent>
-                          </ModalLayout2>
+                          </ModalLayout>
                         ) : null}
                       </EditField>
                     )}
@@ -207,10 +215,9 @@ export default function UserList({ currPage, listNum, tab }: ISearchParamsInfo) 
         </WhitePanel>
       </InnerLayout>
       {openModal?.action === "delete" && (
-        <DeleteUserModal
-          variant="list"
-          nums={checkedRow.length}
-          onConfirm={() => handleUserDelete()}
+        <DeleteModal
+          title={`유저 ${checkedRow.length}건 삭제`}
+          onConfirm={handleUserDelete}
           onCancel={() => setOpenModal(null)}
         />
       )}
@@ -218,26 +225,29 @@ export default function UserList({ currPage, listNum, tab }: ISearchParamsInfo) 
         <ChangeRoleModal
           role={selectRole!}
           onConfirm={() => {
-            const newObj: MemberEditPaylod = {
+            const newObj: MemberEditPayload = {
               payload: {
                 updated_at: new Date().toISOString(),
               },
               role: selectRole!,
               uid: openModal.key!,
-              memId: openModal.memId!,
+              memId: "",
             };
-            editRole(newObj, {
-              onSuccess: () => {
-                queryClient.invalidateQueries({
-                  queryKey: ["members", openModal.key],
-                });
-                queryClient.invalidateQueries({
-                  queryKey: ["members"],
-                });
 
+            editRole(newObj, {
+              onSuccess: (data) => {
+                console.log(data);
+                queryClient.invalidateQueries({
+                  queryKey: ["member", openModal.key],
+                });
+                queryClient.invalidateQueries({
+                  queryKey: ["members", "all"],
+                });
+                toast.success("변경이 완료 되었습니다.");
                 setOpenModal(null);
               },
               onError: (err) => {
+                toast.error("변경이 실패 되었습니다.");
                 console.log(err);
               },
             });

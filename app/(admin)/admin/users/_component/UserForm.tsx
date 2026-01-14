@@ -6,26 +6,30 @@ import InnerLayout from "@/components/admin/layouts/inner-layout/InnerLayout";
 import WhitePanel from "@/components/admin/layouts/white-panel/WhitePanel";
 import ImgContainer from "@/components/admin/ui/img-container/ImgContainer";
 import LabelInput from "@/components/admin/ui/input-box/LabelInput";
-import { formRuls, FormValues } from "@/hooks/FormRules";
+import { formRuls, userFormValues } from "@/hooks/useForm/userFormRules";
 import { formatPhone } from "@/utils/formatPhone";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { modalActType, FormType } from "@/utils/propType";
 import Button from "@/components/admin/ui/button/Button";
 import ToggleRole from "@/components/admin/ui/toggle-state/ToggleRole";
-import { useState } from "react";
+import { useId, useState } from "react";
 import InputAddr from "@/components/admin/ui/input-box/InputAddr";
 import { useHooks } from "@/hooks/useHooks";
 import { handlers } from "@/utils/handlers";
-import { MemberAddPaylod, MemberEditPaylod, roleEum } from "@/utils/supabase/sql";
+import { MemberAddPayload, MemberEditPayload, roleEum } from "@/utils/supabase/sql";
 import Loading from "@/app/Loading";
 import { useSelectUserById } from "@/tanstack-query/useQuerys/users/useSelectUser";
 import RoleInfo from "@/components/admin/ui/role-info/RoleInfo";
-import { useAddUser, useEditUser } from "@/tanstack-query/useMutation/users/useMutationUser";
+import { useAddUser, useDeleteUsers, useEditUser } from "@/tanstack-query/useMutation/users/useMutationUser";
 import Label from "@/components/admin/ui/label/Label";
 import { useQueryClient } from "@tanstack/react-query";
-import { saveAvatarImg, updateAvatarImg } from "@/utils/supabase/sql/storage/storage";
 import InviteModal from "@/components/admin/ui/modal/InviteModal";
 import ChangeRoleModal from "@/components/admin/ui/modal/ChangeRoleModal";
+import { useToastStore } from "@/hooks/store/useToastStore";
+import createBrowClient from "@/utils/supabase/services/browerClinet";
+import { selectAccounts } from "@/utils/supabase/sql/users/select";
+import WarningModal from "@/components/admin/ui/modal/WarningModal";
+import DeleteModal from "@/components/admin/ui/modal/DeleteModal";
 
 interface IUserForm {
   mode: FormType;
@@ -34,11 +38,14 @@ interface IUserForm {
 
 export default function UserForm({ mode, userId }: IUserForm) {
   const queryClient = useQueryClient();
+  const { selectHasAdminUsers } = selectAccounts();
   const { data, isLoading } = useSelectUserById(userId!);
   const { mutate: addMutate } = useAddUser();
   const { mutate: editMutate } = useEditUser();
+  const { mutate: delMutate } = useDeleteUsers();
+  const toast = useToastStore();
 
-  const emptyDefaults: FormValues = {
+  const emptyDefaults: userFormValues = {
     username: data?.name ?? "",
     email: data?.email ?? "",
     position: data?.position ?? "",
@@ -53,7 +60,7 @@ export default function UserForm({ mode, userId }: IUserForm) {
     formState: { errors, isDirty },
     reset,
     control,
-  } = useForm<FormValues>({ defaultValues: emptyDefaults });
+  } = useForm<userFormValues>({ defaultValues: emptyDefaults });
 
   if ((mode === "edit" || mode === "readOnly") && isLoading && !data) {
     return <Loading />;
@@ -71,40 +78,35 @@ export default function UserForm({ mode, userId }: IUserForm) {
   const [addr, setAddr] = useState({ address: "", zonecode: "" });
   useOpenAddr(setAddr);
 
-  const onSubmit: SubmitHandler<FormValues> = async ({ username, phone, email, duty, position, addr_detail }) => {
+  const onSubmit: SubmitHandler<userFormValues> = async ({ username, phone, email, duty, position, addr_detail }) => {
     if (mode === "add") {
-      const newObj: MemberAddPaylod = {
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-        name: username,
-        email,
-        phone,
-        duty: duty === "" ? "없음" : duty,
-        position: position === "" ? "없음" : position,
-        avatar: null,
-        zonecode: addr.zonecode || null,
-        addr: addr.address || null,
-        addr_detail: addr_detail || null,
+      const newObj: MemberAddPayload = {
+        payload: {
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+          name: username,
+          email,
+          phone,
+          duty: duty === "" ? "없음" : duty,
+          position: position === "" ? "없음" : position,
+          avatar: null,
+          zonecode: addr.zonecode || null,
+          addr: addr.address || null,
+          addr_detail: addr_detail || null,
+        },
+        imgFile: imgFile,
       };
 
       addMutate(newObj, {
         onSuccess: async (data) => {
-          const newId = data;
+          const { id } = data;
 
-          if (imgFile !== null) {
-            const result = await saveAvatarImg(newId, imgFile);
-
-            if (result !== undefined) {
-              const data = await updateAvatarImg(newId, result.path);
-
-              queryClient.invalidateQueries({
-                queryKey: ["members", newId],
-              });
-              queryClient.invalidateQueries({
-                queryKey: ["members"],
-              });
-            }
-          }
+          queryClient.invalidateQueries({
+            queryKey: ["members", id],
+          });
+          queryClient.invalidateQueries({
+            queryKey: ["members", "all"],
+          });
 
           setImgFile(null);
           setPrevImg(null);
@@ -120,7 +122,7 @@ export default function UserForm({ mode, userId }: IUserForm) {
       });
     } else if (mode === "edit") {
       if (!data?.name) return;
-      const newObj: MemberEditPaylod = {
+      const newObj: MemberEditPayload = {
         payload: {
           updated_at: new Date().toISOString(),
           name: username || data?.name,
@@ -134,24 +136,18 @@ export default function UserForm({ mode, userId }: IUserForm) {
         role: selectRole || data?.admin?.role,
         uid: data.admin_user!,
         memId: userId,
+        imgFile,
       };
 
       editMutate(newObj, {
         onSuccess: async (data) => {
-          const user = data?.member.find((v) => v.id);
-          if (imgFile !== null) {
-            const result = await saveAvatarImg(userId, imgFile);
-
-            if (result !== undefined) {
-              const data = await updateAvatarImg(userId, result.path);
-            }
-          }
+          console.log(data);
 
           queryClient.invalidateQueries({
-            queryKey: ["members", userId],
+            queryKey: ["member", userId],
           });
           queryClient.invalidateQueries({
-            queryKey: ["members"],
+            queryKey: ["members", "all"],
           });
           reset();
           setImgFile(null);
@@ -160,6 +156,7 @@ export default function UserForm({ mode, userId }: IUserForm) {
           useRoute(`/admin/users/${userId}`);
         },
         onError: (error) => {
+          toast.error("수정 실패 되었습니다.");
           console.log(error);
         },
       });
@@ -186,15 +183,46 @@ export default function UserForm({ mode, userId }: IUserForm) {
     useRoute(target);
   };
 
+  const handleUserDelete = async () => {
+    const supabase = createBrowClient();
+
+    const result = await selectHasAdminUsers([userId], supabase);
+
+    if (result) {
+      if (!confirm(`관리자 계정 입니다. 삭제를 계속 진행하시겠습니까?\n삭제 시 로그인이 불가능합니다.`)) {
+        return;
+      }
+    }
+
+    delMutate(
+      { ids: [userId] },
+      {
+        onSuccess: (data) => {
+          queryClient.invalidateQueries({
+            queryKey: ["members", "all"],
+          });
+
+          setOpenModal(null);
+          toast.success("유저 삭제 성공 되었습니다.");
+          useRoute("/admin/users");
+        },
+        onError: (err) => {
+          toast.error("유저 삭제 실패 되었습니다.");
+          console.log(err);
+        },
+      }
+    );
+  };
+
   return (
     <>
-      <InnerLayout mode="withFooter" title={mode === "add" ? "신도등록" : mode === "edit" ? "신도수정" : "신도상세"}>
+      <InnerLayout mode="withFooter" title={mode === "add" ? "교인등록" : mode === "edit" ? "교인수정" : "교인상세"}>
         <FormLayout
           mode={mode}
           variants="grid"
           id="userAdd"
           onSubmit={handleSubmit(onSubmit)}
-          onDelete={() => console.log()}
+          onDelete={() => setOpenModal({ action: "delete" })}
           onBack={() => moveBack(mode)}
           onMoveEdit={() => useRoute(`/admin/users/edit/${userId}`)}
           onReset={() => {
@@ -352,6 +380,9 @@ export default function UserForm({ mode, userId }: IUserForm) {
           }}
           onCancel={() => setOpenModal(null)}
         />
+      )}
+      {openModal?.action === "delete" && (
+        <DeleteModal title={`${data?.name} 삭제`} onConfirm={handleUserDelete} onCancel={() => setOpenModal(null)} />
       )}
     </>
   );

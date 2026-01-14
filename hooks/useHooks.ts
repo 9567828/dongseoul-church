@@ -9,8 +9,12 @@ export const useHooks = () => {
   const path = usePathname();
   const route = useRouter();
 
-  const useRoute = (path: string) => {
-    route.push(path);
+  const useRoute = (path: string, setScroll?: boolean) => {
+    if (!setScroll) {
+      route.push(path);
+    } else {
+      route.push(path, { scroll: false });
+    }
   };
 
   const useMoveBack = () => {
@@ -133,6 +137,22 @@ export const useHooks = () => {
     }, []);
   };
 
+  const useBeforeUnload = (path: string) => {
+    useEffect(() => {
+      const preventGoBack = () => {
+        history.pushState(null, "", location.href);
+        if (confirm("변경사항이 저장되지 않을 수 있습니다")) {
+          route.push(path);
+        }
+      };
+
+      history.pushState(null, "", location.href);
+
+      window.addEventListener("popstate", preventGoBack);
+      return () => window.removeEventListener("popstate", preventGoBack);
+    }, []);
+  };
+
   return {
     getPageName,
     useRoute,
@@ -144,5 +164,6 @@ export const useHooks = () => {
     useOnClickOutSide,
     useClearBodyScroll,
     useOpenAddr,
+    useBeforeUnload,
   };
 };

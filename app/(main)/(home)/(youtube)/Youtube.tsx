@@ -7,7 +7,7 @@ import { useSelectList } from "@/tanstack-query/useQuerys/useSelectQueries";
 import { SermonRow } from "@/utils/supabase/sql";
 
 export default function Youtube() {
-  const { data: { list } = { list: [] }, isLoading } = useSelectList<SermonRow>("sermons", 3);
+  const { data: { list } = { list: [] }, isLoading } = useSelectList<SermonRow>("sermons", 3, "show", "title", false);
 
   return (
     <section id="youtubeSection" className={style.section}>

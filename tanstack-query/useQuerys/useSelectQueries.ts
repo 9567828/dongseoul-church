@@ -22,11 +22,17 @@ export const useSelectPageList = <T>(
   });
 };
 
-export const useSelectList = <T>(name: tablesName, limit: number, hasIsShow?: showStateType) => {
+export const useSelectList = <T>(
+  name: tablesName,
+  limit: number,
+  hasIsShow?: showStateType,
+  order?: string,
+  isAscending?: boolean
+) => {
   return useQuery({
-    queryKey: [name, limit, hasIsShow],
+    queryKey: [name, limit, hasIsShow, order, isAscending],
     queryFn: async () => {
-      return await selectList<T>({ name, limit, hasIsShow, supabase });
+      return await selectList<T>({ name, limit, hasIsShow, supabase, order, isAscending });
     },
   });
 };

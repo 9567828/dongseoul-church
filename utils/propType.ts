@@ -33,7 +33,7 @@ export type FormType = "add" | "edit" | "readOnly" | "list";
 
 export const roleList = ["super", "admin"];
 
-type actionMode = "delete" | "state" | "invite";
+type actionMode = "delete" | "state" | "invite" | "openImg";
 export type modalActType = { key?: string; memId?: string; action: actionMode };
 
 type addrKey = "address" | "zonecode";

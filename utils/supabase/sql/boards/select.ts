@@ -1,12 +1,13 @@
 import { SupabaseClient } from "@supabase/supabase-js";
-import { AlbumWithName, tablesName } from "..";
+import { tablesName } from "..";
 import { filterSortType } from "@/utils/propType";
-import { getAlbumImgURL } from "../storage/storage";
 
 export type showStateType = "all" | "show" | "noShow";
 
 export interface ISelect {
   name: tablesName;
+  order?: string;
+  isAscending?: boolean;
   limit?: number;
   page?: number;
   id?: number | string;
@@ -51,7 +52,12 @@ export const select = () => {
     let query;
 
     if (name === "albums") {
-      query = supabase.from(name).select("*, displayName:members(name)", { count: "exact" }).range(from, to);
+      query = supabase
+        .from(name)
+        .select("*, origin:members!albums_origin_writer_fkey(name), editor:members!albums_edit_writer_fkey(name)", {
+          count: "exact",
+        })
+        .range(from, to);
     } else {
       query = supabase.from(name).select("*", { count: "exact" }).range(from, to);
     }
@@ -64,7 +70,14 @@ export const select = () => {
     return { count: count ?? 0, list: (data as T[]) ?? [] };
   };
 
-  const selectList = async <T>({ name, limit, supabase, hasIsShow }: ISelect): Promise<{ list: T[] }> => {
+  const selectList = async <T>({
+    name,
+    limit,
+    supabase,
+    order = "id",
+    isAscending = true,
+    hasIsShow,
+  }: ISelect): Promise<{ list: T[] }> => {
     let query = supabase.from(name).select("*");
     if (hasIsShow) {
       query = query.eq("is_show", true);
@@ -72,7 +85,7 @@ export const select = () => {
       query = query.eq("is_show", false);
     }
 
-    const { data, error } = await query.order("id", { ascending: true }).limit(limit!);
+    const { data, error } = await query.order(order, { ascending: isAscending }).limit(limit!);
 
     if (error) throw error;
 
@@ -89,7 +102,9 @@ export const select = () => {
     let baseQuery;
 
     if (name === "albums") {
-      baseQuery = supabase.from(name).select("*, displayName:members(name)");
+      baseQuery = supabase
+        .from(name)
+        .select("*, origin:members!albums_origin_writer_fkey(name), editor:members!albums_edit_writer_fkey(name)");
     } else {
       baseQuery = supabase.from(name).select("*");
     }
@@ -109,8 +124,8 @@ export const select = () => {
       nextQuery = nextQuery.eq("is_show", true);
     }
 
-    const { data: prev } = await prevQuery.order("id", { ascending: false }).limit(1).maybeSingle();
-    const { data: next } = await nextQuery.order("id", { ascending: true }).limit(1).maybeSingle();
+    const { data: prev } = await nextQuery.order("id", { ascending: true }).limit(1).maybeSingle();
+    const { data: next } = await prevQuery.order("id", { ascending: false }).limit(1).maybeSingle();
 
     const data = {
       ...table,
