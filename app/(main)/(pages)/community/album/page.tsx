@@ -15,7 +15,7 @@ export default async function Page({ searchParams }: ISearchParams) {
 
   return (
     <Suspense>
-      <ListPage currPage={currPage} listNum={listNum} />
+      <ListPage currPage={currPage} size={listNum} />
     </Suspense>
   );
 }

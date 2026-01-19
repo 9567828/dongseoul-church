@@ -2,24 +2,24 @@
 
 import InnerLayout from "@/components/admin/layouts/inner-layout/InnerLayout";
 import PanelLayout from "@/app/(admin)/admin/search/(layout)/Panel";
-import {useSelectSearchByBoard} from "@/tanstack-query/useQuerys/useSelectQueries";
-import {tablesName} from "@/utils/supabase/sql";
+import { useSelectSearchByBoard } from "@/tanstack-query/useQuerys/useSelectQueries";
+import { viewName } from "@/utils/supabase/sql";
 import SearchResult from "@/app/(admin)/admin/search/(layout)/SearchResult";
 import Loading from "@/app/Loading";
 import Pagenation from "@/components/admin/ui/board/Pagenation";
-import {useHooks} from "@/hooks/useHooks";
-import {useState} from "react";
+import { useHooks } from "@/hooks/useHooks";
+import { useState } from "react";
 
 interface IDetailPorps {
   keyword: string;
-  table: tablesName;
+  table: viewName;
   page: number;
   size: number;
 }
 
 export default function SearchDetail({ keyword, table, page, size }: IDetailPorps) {
   const tableName = table === "album_search" ? "앨범" : table === "sermon_search" ? "말씀영상" : "";
-  const { data, isLoading } = useSelectSearchByBoard(table, keyword, page, size);
+  const { data, isLoading } = useSelectSearchByBoard({ name: table, search: keyword, page, limit: size });
   const { useRoute } = useHooks();
   const [param, setParam] = useState("");
 

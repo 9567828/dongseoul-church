@@ -7,7 +7,7 @@ export const useEditShow = () => {
     mutationFn: async ({ payload, name, id }: ChangeShowPayload) => {
       const supabase = createBrowClient();
 
-      const isShow = payload.is_Show === "show" ? true : false;
+      const isShow = payload.is_Show === "show";
 
       const { data, error } = await supabase
         .from(name)

@@ -1,18 +1,18 @@
-import type { Metadata } from 'next';
-import QueryProvider from './providers';
-import '@/styles/common.scss';
+import type { Metadata } from "next";
+import QueryProvider from "./providers";
+import "@/styles/common.scss";
 
 export const metadata: Metadata = {
   title: {
-    default: '...loading',
-    template: '하남 동서울교회 | %s',
+    default: "...loading",
+    template: "하남 동서울교회 | %s",
   },
-  description: '하남 동서울교회',
+  description: "하남 동서울교회",
   icons: {
-    icon: '/favicon/favicon.ico',
-    apple: '/favicon/apple-touch-icon.png',
+    icon: "/favicon/favicon.ico",
+    apple: "/favicon/apple-touch-icon.png",
   },
-  manifest: '/favicon/site.webmanifest',
+  manifest: "/favicon/site.webmanifest",
 };
 
 export default function RootLayout({
@@ -26,7 +26,7 @@ export default function RootLayout({
         <QueryProvider>{children}</QueryProvider>
         <script
           type="text/javascript"
-          src={`/dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.KAKAOMAP_KEY}&libraries=services,clusterer`}
+          src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.KAKAOMAP_KEY}&libraries=services,clusterer`}
         ></script>
       </body>
     </html>

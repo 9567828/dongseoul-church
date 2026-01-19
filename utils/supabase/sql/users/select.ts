@@ -111,8 +111,14 @@ export const selectAccounts = () => {
       }
     }
 
-    if (search) {
+    if (search !== undefined) {
       query = query.or(`name.like.%${search}%,email.like.%${search}%`);
+
+      const { count } = await query;
+
+      if (count === 0 || total! > count!) {
+        safeFrom = 0;
+      }
     }
 
     const completeFrom = safeFrom === 0 ? safeFrom : from;

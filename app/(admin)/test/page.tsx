@@ -83,6 +83,7 @@ export default function Page() {
       <RadioBtn text="선택하세요" />
       <ToggleBtn id="toggle" />
       <ImgContainer
+        onReset={() => console.log()}
         variant="image"
         mode="default"
         onChange={handlePreview}
@@ -91,6 +92,7 @@ export default function Page() {
         currImg={"/imgs/admin/Frame 35574.png"}
       />
       <ImgContainer
+        onReset={() => console.log()}
         variant="profile"
         mode="readonly"
         onChange={handlePreview}
