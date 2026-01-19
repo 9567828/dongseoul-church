@@ -82,7 +82,7 @@ export const select = () => {
       }
     }
 
-    if (search !== "undefined") {
+    if (search !== undefined && search !== "undefined") {
       query = query.or(`title.ilike.%${search}%,description.ilike.%${search}%`);
 
       const { count } = await query;

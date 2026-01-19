@@ -27,7 +27,9 @@ export default function Header() {
                 <ul className={style["sub-menu"]}>
                   {m.subMenu.map((s, i) => (
                     <li key={i}>
-                      <Link href={`${m.href}/${s.href}`}>{s.submenu}</Link>
+                      <Link href={`${m.href}/${s.href}`} className={path.includes(s.href) ? style.active : ""}>
+                        {s.submenu}
+                      </Link>
                     </li>
                   ))}
                 </ul>
