@@ -15,7 +15,7 @@ export default function SideMenu({ role }: { role: roleEum }) {
   const { isSubOpen, toggleSideMenu } = useSideMenuSubOpenStore();
   const { isClose } = useSideBarStateStore();
 
-  const sliceList = adminMenuList.filter((v) => !v.menu.startsWith("신도"));
+  const sliceList = adminMenuList.filter((v) => !v.menu.startsWith("교인"));
   const roleAllow = role === "super" ? adminMenuList : sliceList;
 
   return (

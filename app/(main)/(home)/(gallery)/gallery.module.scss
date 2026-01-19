@@ -2,8 +2,10 @@
 
 .section {
   width: 100%;
+  max-width: 1440px;
   height: 100%;
   padding: 100px 150px;
+  margin: 0 auto;
 }
 
 .img-wrap {

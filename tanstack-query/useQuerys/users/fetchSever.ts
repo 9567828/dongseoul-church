@@ -2,6 +2,7 @@ import { tabStatusType } from "@/components/admin/ui/board/BoardTab";
 import { createServClient } from "@/utils/supabase/services/serverClinet";
 import { selectAccounts } from "@/utils/supabase/sql/users/select";
 import { queryOptions } from "@tanstack/react-query";
+
 const { selectLoginUser, selectUserById, selectAllUsers } = selectAccounts();
 
 export const fetchServer = async () => {
@@ -9,19 +10,21 @@ export const fetchServer = async () => {
 
   const fetchLoginUser = () => {
     return queryOptions({
-      queryKey: ["members", "own"],
+      queryKey: ["member", "own"],
       queryFn: async () => {
         return await selectLoginUser({ supabase });
       },
+      staleTime: 1000 * 60 * 5,
     });
   };
 
   const fetchUserById = (id: string) => {
     return queryOptions({
-      queryKey: ["members", id],
+      queryKey: ["member", id],
       queryFn: async () => {
         return await selectUserById({ supabase, id });
       },
+      staleTime: 1000 * 60 * 5,
     });
   };
 
@@ -31,6 +34,7 @@ export const fetchServer = async () => {
       queryFn: async () => {
         return await selectAllUsers({ supabase, page, limit });
       },
+      staleTime: 1000 * 60 * 5,
     });
   };
 

@@ -1,11 +1,11 @@
-import { UserFormType } from "@/utils/propType";
+import { FormType } from "@/utils/propType";
 import Button from "../button/Button";
 import style from "./input.module.scss";
 import InputBox from "./InputBox";
 import { InputHTMLAttributes } from "react";
 
 interface IAddr extends InputHTMLAttributes<HTMLInputElement> {
-  mode: UserFormType;
+  mode: FormType;
   addr: string | null;
   code: string | null;
   errMode?: boolean;

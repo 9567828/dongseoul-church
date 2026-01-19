@@ -1,7 +1,9 @@
 import { tabStatusType } from "@/components/admin/ui/board/BoardTab";
+import { filterDateType, filterSortType } from "@/utils/propType";
 import createBrowClient from "@/utils/supabase/services/browerClinet";
-import { filterSortType, selectAccounts } from "@/utils/supabase/sql/users/select";
+import { selectAccounts } from "@/utils/supabase/sql/users/select";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+
 const { selectLoginUser, selectUserById, selectAllUsers } = selectAccounts();
 
 const supabase = createBrowClient();
@@ -12,25 +14,35 @@ export const useSelectLogginUser = () => {
     queryFn: async () => {
       return await selectLoginUser({ supabase });
     },
+    staleTime: 1000 * 60 * 5,
   });
 };
 
 export const useSelectUserById = (id: string) => {
   return useQuery({
-    queryKey: ["members", id],
+    queryKey: ["member", id],
     queryFn: async () => {
       return await selectUserById({ id, supabase });
     },
     enabled: !!id,
+    staleTime: 1000 * 60 * 5,
   });
 };
 
-export const useSelectAllUsers = (page: number, limit: number, tabStatus: tabStatusType, filter: filterSortType) => {
+export const useSelectAllUsers = (
+  page: number,
+  limit: number,
+  tabStatus: tabStatusType,
+  filter: filterSortType,
+  dates?: filterDateType,
+  search?: string,
+) => {
   return useQuery({
-    queryKey: ["members", "all", page, limit, tabStatus, filter],
+    queryKey: ["members", "all", page, limit, tabStatus, filter, dates, search],
     queryFn: async () => {
-      return await selectAllUsers({ supabase, page, limit, tabStatus, filter });
+      return await selectAllUsers({ supabase, page, limit, tabStatus, filter, dates, search });
     },
+    staleTime: 1000 * 60 * 5,
   });
 };
 

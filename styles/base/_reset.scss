@@ -1,3 +1,4 @@
+/* prettier-ignore */
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -23,13 +24,28 @@ time, mark, audio, video, button, input {
   overflow-wrap: break-word;
 }
 /* HTML5 display-role reset for older browsers */
+/* prettier-ignore */
 article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section {
   display: block;
 }
 body {
   line-height: 1;
-  font-family: 'SUIT Variable', -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+  font-family:
+    'SUIT Variable',
+    -apple-system,
+    BlinkMacSystemFont,
+    system-ui,
+    Roboto,
+    'Helvetica Neue',
+    'Segoe UI',
+    'Apple SD Gothic Neo',
+    'Noto Sans KR',
+    'Malgun Gothic',
+    'Apple Color Emoji',
+    'Segoe UI Emoji',
+    'Segoe UI Symbol',
+    sans-serif;
 }
 textarea {
   font-family: inherit;
@@ -38,12 +54,15 @@ a {
   text-decoration: none;
   color: inherit;
 }
+/* prettier-ignore */
 ol, ul, li {
   list-style: none;
 }
+/* prettier-ignore */
 blockquote, q {
   quotes: none;
 }
+/* prettier-ignore */
 blockquote:before, blockquote:after,
 q:before, q:after {
   content: '';

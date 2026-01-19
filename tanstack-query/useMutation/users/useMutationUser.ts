@@ -1,6 +1,6 @@
 import { request } from "@/lib/api";
 import createBrowClient from "@/utils/supabase/services/browerClinet";
-import { MemberAddPaylod, MemberEditPaylod, roleEum } from "@/utils/supabase/sql";
+import { MemberAddPayload, MemberEditPayload, roleEum } from "@/utils/supabase/sql";
 import { deleteUserImg, saveAvatarImg, updateAvatarImg } from "@/utils/supabase/sql/storage/storage";
 import { useMutation } from "@tanstack/react-query";
 import { error } from "console";
@@ -9,23 +9,41 @@ const supabase = createBrowClient();
 
 export const useAddUser = () => {
   return useMutation({
-    mutationFn: async (payload: MemberAddPaylod) => {
-      const { data, error } = await supabase.from("members").insert(payload).select().single();
+    mutationFn: async (values: MemberAddPayload) => {
+      const imgFile = values.imgFile;
+      const payload = values.payload;
+
+      let avatarUrl;
+
+      const { data: user, error } = await supabase.from("members").insert(payload).select().single();
       if (error) throw error;
 
-      return data.id;
+      if (imgFile !== null) {
+        const result = await saveAvatarImg(user.id, imgFile!);
+        avatarUrl = result.path;
+      }
+
+      const { data, error: memberErr } = await supabase.from("members").update({ avatar: avatarUrl }).eq("id", user.id).single();
+      if (memberErr) throw memberErr;
+
+      const result = {
+        data,
+        id: user.id,
+      };
+
+      return result;
     },
   });
 };
 
 export const useEditUser = () => {
   return useMutation({
-    mutationFn: async ({ uid, payload, role, memId, avatrImg }: MemberEditPaylod) => {
+    mutationFn: async ({ uid, payload, role, memId, imgFile }: MemberEditPayload) => {
       let roleChange;
       let avatarUrl;
 
-      if (avatrImg !== null) {
-        const result = await saveAvatarImg(memId, avatrImg!);
+      if (imgFile !== null) {
+        const result = await saveAvatarImg(memId, imgFile!);
         avatarUrl = result.path;
       }
 
@@ -61,12 +79,12 @@ export const useEditUser = () => {
 
 export const useEditUserRole = () => {
   return useMutation({
-    mutationFn: async ({ payload, uid, role }: MemberEditPaylod) => {
+    mutationFn: async ({ payload, uid, role }: MemberEditPayload) => {
       const { data, error } = await supabase
         .from("users")
         .update({ updated_at: payload.updated_at, role })
         .eq("id", uid)
-        .select();
+        .single();
       if (error) throw error;
 
       return data;
@@ -92,7 +110,7 @@ export const useDeleteUsers = () => {
             await deleteUserImg(id, supabase);
           }
 
-          // 3. admin 아닌 경우 users 테이블 논리 삭제
+          // 3. admin 계정인 경우 users 테이블 같이 논리삭제
           if (mem.admin_user !== null) {
             const { error } = await supabase.from("users").update({ is_deleted: true }).eq("id", mem.admin_user);
 

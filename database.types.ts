@@ -18,37 +18,55 @@ export type Database = {
         Row: {
           created_at: string
           description: string | null
+          edit_writer: string | null
           id: number
           is_show: boolean | null
+          origin_writer: string | null
           src: string | null
           thumbnail: string | null
           title: string | null
           updated_at: string | null
-          writer: string | null
         }
         Insert: {
           created_at?: string
           description?: string | null
+          edit_writer?: string | null
           id?: number
           is_show?: boolean | null
+          origin_writer?: string | null
           src?: string | null
           thumbnail?: string | null
           title?: string | null
           updated_at?: string | null
-          writer?: string | null
         }
         Update: {
           created_at?: string
           description?: string | null
+          edit_writer?: string | null
           id?: number
           is_show?: boolean | null
+          origin_writer?: string | null
           src?: string | null
           thumbnail?: string | null
           title?: string | null
           updated_at?: string | null
-          writer?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "albums_edit_writer_fkey"
+            columns: ["edit_writer"]
+            isOneToOne: false
+            referencedRelation: "members"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "albums_origin_writer_fkey"
+            columns: ["origin_writer"]
+            isOneToOne: false
+            referencedRelation: "members"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       members: {
         Row: {
@@ -113,43 +131,61 @@ export type Database = {
         Row: {
           created_at: string
           description: string | null
+          edit_writer: string | null
           id: number
           is_show: boolean | null
+          origin_writer: string | null
           published_date: string | null
           thumbnail: string | null
           title: string | null
-          updated_at: string | null
+          updated_at: string
           video_id: string
-          writer: string | null
-          youtube_URL: string | null
+          youtube_url: string | null
         }
         Insert: {
           created_at?: string
           description?: string | null
+          edit_writer?: string | null
           id?: number
           is_show?: boolean | null
+          origin_writer?: string | null
           published_date?: string | null
           thumbnail?: string | null
           title?: string | null
-          updated_at?: string | null
+          updated_at?: string
           video_id: string
-          writer?: string | null
-          youtube_URL?: string | null
+          youtube_url?: string | null
         }
         Update: {
           created_at?: string
           description?: string | null
+          edit_writer?: string | null
           id?: number
           is_show?: boolean | null
+          origin_writer?: string | null
           published_date?: string | null
           thumbnail?: string | null
           title?: string | null
-          updated_at?: string | null
+          updated_at?: string
           video_id?: string
-          writer?: string | null
-          youtube_URL?: string | null
+          youtube_url?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "sermons_edit_writer_fkey"
+            columns: ["edit_writer"]
+            isOneToOne: false
+            referencedRelation: "members"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "sermons_origin_writer_fkey"
+            columns: ["origin_writer"]
+            isOneToOne: false
+            referencedRelation: "members"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       users: {
         Row: {
@@ -177,7 +213,17 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      album_search: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          id: number | null
+          thumbnail: string | null
+          title: string | null
+          writer: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       [_ in never]: never

@@ -1,13 +1,12 @@
 "use client";
 import style from "./youtube.module.scss";
-import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import Link from "next/link";
 import { useSelectList } from "@/tanstack-query/useQuerys/useSelectQueries";
 import { SermonRow } from "@/utils/supabase/sql";
 
 export default function Youtube() {
-  const { data: { list } = { list: [] }, isLoading } = useSelectList<SermonRow>("sermons", 3);
+  const { data: { list } = { list: [] }, isLoading } = useSelectList<SermonRow>("sermons", 3, "show", "title", false);
 
   return (
     <section id="youtubeSection" className={style.section}>
@@ -19,7 +18,7 @@ export default function Youtube() {
           <div>로딩중</div>
         ) : (
           list.map((v, i) => (
-            <Link key={i} href={v.youtube_URL!} target="_blank">
+            <Link key={i} href={v.youtube_url!} target="_blank">
               <div className={`${style["img-wrap"]}`.trim()}>
                 <div className={style.dim}>
                   <div className={style.logo}></div>

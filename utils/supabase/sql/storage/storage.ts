@@ -1,6 +1,7 @@
 import { SupabaseClient } from "@supabase/supabase-js";
 import createBrowClient from "../../services/browerClinet";
 import { getExtFromMime } from "@/utils/propType";
+import { formatTwoDigit } from "@/utils/formatDate";
 
 export const saveAvatarImg = async (id: string, file: File) => {
   const supabase = createBrowClient();
@@ -56,4 +57,59 @@ export const deleteUserImg = async (id: string, supabase: SupabaseClient) => {
       return update;
     }
   }
+};
+
+export const saveAlbumImg = async (file: File) => {
+  const supabase = createBrowClient();
+  const ext = getExtFromMime(file);
+  const month = formatTwoDigit(new Date().getMonth() + 1);
+  const path = `/albums/${new Date().getFullYear()}/${month}/${Date.now()}.${ext}`;
+
+  const { data: url, error } = await supabase.storage.from("photos").upload(path, file, {
+    upsert: true,
+    contentType: file.type,
+  });
+  if (error) throw error;
+
+  return url;
+};
+
+export const getAlbumImgURL = (path: string) => {
+  const supabase = createBrowClient();
+
+  const {
+    data: { publicUrl },
+  } = supabase.storage.from("photos").getPublicUrl(path);
+
+  return publicUrl;
+};
+
+export const getAlbumImg = async (path: string) => {
+  const supabase = createBrowClient();
+
+  const { data, error } = await supabase.storage.from("photos").exists(path);
+
+  if (error) return error.name;
+
+  return data;
+};
+
+export const deleteAlbumImg = async (path: string) => {
+  const supabase = createBrowClient();
+
+  let result;
+
+  const exists = await getAlbumImg(path);
+
+  if (exists === "StorageUnknownError") {
+    throw new Error("올바른 이미지 경로가 아닙니다.", { cause: "경로오류" });
+  }
+
+  if (exists) {
+    const { data, error } = await supabase.storage.from("photos").remove([path]);
+    if (error) throw error;
+    result = data;
+  }
+
+  return result;
 };

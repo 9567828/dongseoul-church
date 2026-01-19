@@ -1,14 +1,11 @@
-// "use client";
-
 import { useHooks } from "@/hooks/useHooks";
 import SelectBox from "../select-box/SelectBox";
 import style from "./board.module.scss";
 import { handlers } from "@/utils/handlers";
 import { tabStatusType } from "./BoardTab";
-import { sortTypes } from "@/hooks/store/useSortState";
-import { filterSortType } from "@/utils/supabase/sql/users/select";
 
-const pageCnt = ["6", "12", "24", "48", "100"];
+// const pageCnt = ["6", "12", "24", "48", "100"];
+export const pageCnt = ["10", "25", "50", "100"];
 
 interface ISelectPage {
   value: string;

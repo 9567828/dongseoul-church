@@ -19,17 +19,3 @@ export default function InputBox({ variants, height = "sm", error = false, ...pr
     </div>
   );
 }
-
-// const InputBox = forwardRef<HTMLInputElement, Iinput>(({ variants, height = "md", error, ...props }, ref) => {
-//   return (
-//     <input
-//       {...props}
-//       ref={ref}
-//       className={`${style[variants]} ${style[height]} ${variants === "solid" || variants === "outline" ? style.default : ""} ${
-//         error ? style.error : ""
-//       }`.trim()}
-//     />
-//   );
-// });
-
-// export default InputBox;

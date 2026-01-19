@@ -194,3 +194,34 @@
     }
   }
 }
+
+// data input
+.date-container {
+  @include flex(null, center, center, 10px);
+}
+.date-input {
+  position: relative;
+  width: 100%;
+  padding: 6px 35px 6px 12px;
+  border: 1px solid $cms-gray-400;
+  border-radius: 8px;
+  @include font-theme($bodySm, $m);
+  color: $cms-gray-800;
+  cursor: pointer;
+  input {
+    width: 100%;
+    &::placeholder {
+      color: $cms-gray-800;
+    }
+  }
+  .label {
+    display: block;
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    @include bgImg("/imgs/admin/icons/ic_calendar.svg");
+  }
+}

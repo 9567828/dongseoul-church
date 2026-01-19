@@ -6,18 +6,15 @@ import StateView from "@/components/main/ui/state-view/StateView";
 import { useSelectPageList } from "@/tanstack-query/useQuerys/useSelectQueries";
 import { AlbumRow } from "@/utils/supabase/sql";
 import { ISearchParamsInfo } from "@/utils/propType";
-import { getTotalPage } from "@/utils/pagenation";
 
 export default function ListPage({ listNum, currPage }: ISearchParamsInfo) {
   const { data: { list, count } = { list: [], count: 0 }, isLoading } = useSelectPageList<AlbumRow>(
     "albums",
     listNum,
     currPage,
-    "show"
+    "show",
+    { filter: "id", sort: "desc" }
   );
-
-  const totalPage = getTotalPage(count, listNum);
-  const pagesPerBlock = 5;
 
   return (
     <div className="inner">
@@ -28,9 +25,7 @@ export default function ListPage({ listNum, currPage }: ISearchParamsInfo) {
       ) : (
         <PhotoBoard list={list} variant="album" />
       )}
-      {list.length > 0 && (
-        <Pagenation currPage={currPage} pagesPerBlock={pagesPerBlock} totalPage={totalPage} listNum={listNum} />
-      )}
+      {list.length > 0 && <Pagenation currPage={currPage} count={count} listNum={listNum} />}
     </div>
   );
 }

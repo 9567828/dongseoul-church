@@ -20,13 +20,6 @@
   @include flex(null, space-between, center, null);
 }
 
-// 모달 공통부분
-.modal-wrap {
-  position: relative;
-  width: 100%;
-  height: 100%;
-}
-
 @include gen-font-class(true, $cms-font, $displayXl);
 @include gen-font-class(true, $cms-font, $titleXl);
 @include gen-font-class(true, $cms-font, $titleLg);

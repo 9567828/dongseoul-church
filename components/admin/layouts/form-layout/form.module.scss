@@ -4,6 +4,10 @@
   @include grid-col(1fr 374px, $gap: 18px);
 }
 
+.column {
+  @include flex(column, null, null, 18px);
+}
+
 .footer {
   width: calc(100% - 250px);
   padding: 12px 45px;

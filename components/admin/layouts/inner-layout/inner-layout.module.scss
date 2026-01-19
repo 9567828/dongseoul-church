@@ -4,10 +4,17 @@
   padding: 100px 30px 30px;
   min-height: calc(100vh - 130px);
   background-color: $cms-gray-50;
+  overflow: hidden;
   &.height {
-    height: 100;
-    min-height: calc(100vh - 130px - 73px);
+    margin-bottom: 73px;
+    min-height: calc(100vh - 203px);
   }
+}
+
+.container {
+  width: 100%;
+  max-width: 1536px;
+  margin: 0 auto;
 }
 
 .wrap {
@@ -15,4 +22,33 @@
   padding: 0 8px;
   margin-bottom: 12px;
   @include flex($justi: space-between, $align: center);
+}
+
+.sub-wrap {
+  width: 100%;
+  padding: 8px 10px;
+  margin-bottom: 10px;
+  @include font-theme($bodySm, $m);
+  @include flex(null, null, center, 32px);
+  background-color: $cms-gray-100;
+  border-radius: 8px;
+  color: $cms-gray-800;
+  &.widthFooter {
+    justify-content: flex-start;
+  }
+  &.default {
+    justify-content: flex-end;
+  }
+  .line {
+    position: relative;
+    &::before {
+      position: absolute;
+      content: "";
+      top: 2px;
+      left: -15px;
+      height: 80%;
+      width: 1px;
+      background-color: $cms-dark;
+    }
+  }
 }

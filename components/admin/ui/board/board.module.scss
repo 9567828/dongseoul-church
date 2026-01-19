@@ -49,10 +49,10 @@
     padding: 12px;
     &.add-sort-icon {
       cursor: pointer;
-      -webkit-user-select:none;
-      -moz-user-select:none;
-      -ms-user-select:none;
-      user-select:none;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
       gap: 8px;
     }
   }
@@ -60,7 +60,7 @@
 
 .table-content {
   width: 100%;
-  height: 80px;
+  height: 85px;
   @include grid-col(72px repeat(2, 1fr) repeat(3, auto));
   border-top: 1px solid $cms-gray-100;
   &:hover {
@@ -74,6 +74,7 @@
 .text-field-wrap {
   width: 100%;
   min-width: 130px;
+  height: 100%;
   @include grid-col($col: auto 1fr, $align: center, $gap: 8px);
   padding: 8px 12px;
   .text-box {
@@ -191,12 +192,31 @@
 
 // thumbnail
 .thumbnail-wrap {
-  width: 80px;
-  height: 80px;
   padding: 12px;
+  &.boards {
+    width: 85px;
+    height: 85px;
+  }
+  &.search {
+    width: 100px;
+    height: 100px;
+  }
+  .inner {
+    overflow: hidden;
+    border-radius: 8px;
+    width: 100%;
+    height: 100%;
+  }
   img {
     width: 100%;
     height: 100%;
-    border-radius: 10px;
+    object-fit: cover;
   }
+}
+
+// 리스트 수정모달
+.modal-wrap {
+  position: relative;
+  width: 100%;
+  height: 100%;
 }

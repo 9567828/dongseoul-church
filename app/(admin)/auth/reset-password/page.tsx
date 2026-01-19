@@ -3,7 +3,7 @@
 import Button from "@/components/admin/ui/button/Button";
 import InfoMessage from "@/components/admin/ui/info-message/InfoMessage";
 import InputBox from "@/components/admin/ui/input-box/InputBox";
-import { formRuls, FormValues } from "@/hooks/FormRules";
+import { formRuls, userFormValues } from "@/hooks/useForm/userFormRules";
 import { handlers } from "@/utils/handlers";
 import { SubmitHandler, useForm } from "react-hook-form";
 import style from "../_components/login.module.scss";
@@ -21,9 +21,9 @@ export default function Page() {
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<FormValues>();
+  } = useForm<userFormValues>();
 
-  const onSubmit: SubmitHandler<FormValues> = async ({ email }) => {
+  const onSubmit: SubmitHandler<userFormValues> = async ({ email }) => {
     if (confirm(`입력하신 이메일 주소 "${email}" 맞으신가요?`)) {
       const req = await request({ method: "POST", url: "/auth/reset-password", data: email });
       if (req) {

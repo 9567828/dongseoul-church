@@ -1,0 +1,28 @@
+@use "../../../../../styles/admin/abstract/index" as *;
+
+.title {
+  @include flex(null, space-between, center, null);
+  margin-bottom: 24px;
+}
+
+.more-btn {
+  @include font-theme($bodySm, $m);
+  color: $cms-gray-700;
+}
+
+.panel-wrap {
+  @include flex(column, null, null, 18px);
+}
+
+.content-container {
+  width: 100%;
+  border-top: 1px solid $cms-gray-100;
+}
+
+.content-wrap {
+  width: 100%;
+  height: 100px;
+  @include grid-col(100px 1fr);
+  border-bottom: 1px solid $cms-gray-100;
+  margin-bottom: 24px;
+}

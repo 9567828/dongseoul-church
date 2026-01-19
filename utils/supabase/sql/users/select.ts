@@ -2,10 +2,8 @@ import { SupabaseClient } from "@supabase/supabase-js";
 import { getUserId } from "./auth";
 import { RoleWithMember } from "..";
 import { tabStatusType } from "@/components/admin/ui/board/BoardTab";
-import { sortTypes } from "@/hooks/store/useSortState";
 import { getUserImgUrl } from "../storage/storage";
-
-export type filterSortType = { filter: string; sort: sortTypes };
+import { filterDateType, filterSortType } from "@/utils/propType";
 
 interface ISelect {
   id?: string;
@@ -13,6 +11,8 @@ interface ISelect {
   limit?: number;
   tabStatus?: tabStatusType;
   filter?: filterSortType;
+  dates?: filterDateType;
+  search?: string;
   supabase: SupabaseClient;
 }
 
@@ -20,7 +20,11 @@ export const selectAccounts = () => {
   const selectLoginUser = async ({ supabase }: ISelect): Promise<RoleWithMember> => {
     const id = await getUserId(supabase);
 
-    const { data: item, error } = await supabase.from("members").select(`*, admin:users(role)`).eq("admin_user", id!).single();
+    const { data: item, error } = await supabase
+      .from("members")
+      .select(`*, admin:users(role)`)
+      .eq("admin_user", id!)
+      .single();
     if (error) throw error;
 
     let avatar_url: string | null = null;
@@ -78,7 +82,7 @@ export const selectAccounts = () => {
     return data.role;
   };
 
-  const selectAllUsers = async ({ supabase, limit, page, tabStatus, filter }: ISelect) => {
+  const selectAllUsers = async ({ supabase, limit, page, tabStatus, filter, dates, search }: ISelect) => {
     const from = (page! - 1) * limit!;
     const to = from + limit! - 1;
 
@@ -93,9 +97,29 @@ export const selectAccounts = () => {
       query = supabase.from("members").select("*", { count: "exact" }).is("admin_user", null);
     }
 
+    let safeFrom;
+
+    const { count: total } = await supabase.from("members").select("*", { count: "exact" });
+
+    if (dates?.startDate && dates.endDate) {
+      query = query.gte("created_at", dates.startDate).lt("created_at", dates.endDate);
+
+      const { count } = await query;
+
+      if (count === 0 || total! > count!) {
+        safeFrom = 0;
+      }
+    }
+
+    if (search) {
+      query = query.or(`name.like.%${search}%,email.like.%${search}%`);
+    }
+
+    const completeFrom = safeFrom === 0 ? safeFrom : from;
+
     const { data, count, error } = await query
       ?.order(filterName, { ascending: isAscending })
-      .range(from, to)
+      .range(completeFrom, to)
       .eq("is_deleted", false);
 
     const list: RoleWithMember[] = await Promise.all(
@@ -107,7 +131,7 @@ export const selectAccounts = () => {
         if (error) throw error;
 
         return { ...item, avatar_url: signed.signedUrl ?? null };
-      })
+      }),
     );
 
     if (error) throw error;
@@ -115,5 +139,14 @@ export const selectAccounts = () => {
     return { list, count: count ?? 0 };
   };
 
-  return { selectLoginUser, selectUserById, selectUserRole, selectAllUsers, selectDeletedUser };
+  const selectHasAdminUsers = async (ids: string[], supabase: SupabaseClient) => {
+    const { data, error } = await supabase.from("members").select("*").in("id", ids).select();
+    if (error) throw error;
+
+    const row = data.map((user) => user.admin_user !== null);
+
+    return row.some(Boolean);
+  };
+
+  return { selectLoginUser, selectUserById, selectUserRole, selectAllUsers, selectDeletedUser, selectHasAdminUsers };
 };

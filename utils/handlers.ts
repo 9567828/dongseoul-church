@@ -2,6 +2,7 @@ import { ChangeEvent, Dispatch, SetStateAction } from "react";
 import { roleEum } from "./supabase/sql";
 import { request } from "@/lib/api";
 import { tabStatusType } from "@/components/admin/ui/board/BoardTab";
+import { showStateType } from "./supabase/sql/boards/select";
 
 export const handlers = () => {
   const handleCheckedRole = (role: roleEum, setState: Dispatch<SetStateAction<roleEum | null>>) => {
@@ -12,6 +13,10 @@ export const handlers = () => {
     } else {
       setState(null);
     }
+  };
+
+  const toggleCheckedRow = (id: string, setState: Dispatch<SetStateAction<string[]>>) => {
+    setState((prev) => (prev.includes(id) ? prev.filter((v) => v !== id) : [...prev, id]));
   };
 
   const toggleAllChecked = (allChecked: boolean, setState: Dispatch<SetStateAction<string[]>>, list: any[]) => {
@@ -40,18 +45,26 @@ export const handlers = () => {
     }
   };
 
-  const handleChangeRole = (id: string, role: roleEum, fn?: () => void) => {
-    if (role) {
-      console.log(id, role);
+  const handleCheckedIsShow = (
+    state: string,
+    setState: Dispatch<SetStateAction<showStateType | null>>,
+    fn: () => void,
+  ) => {
+    if (state === "show") {
+      setState("noShow");
+    } else {
+      setState("show");
     }
-    fn;
+    fn();
   };
 
-  const handlePageSizeQuery = (page: string, size: string, tab: tabStatusType) => {
+  const handlePageSizeQuery = (page: string, size: string, tab?: tabStatusType) => {
     const params = new URLSearchParams();
     params.set("page", page);
     params.set("size", size);
-    params.set("tab", tab);
+    if (tab) {
+      params.set("tab", tab);
+    }
     return `?${params.toString()}`;
   };
 
@@ -80,13 +93,24 @@ export const handlers = () => {
     return { result, message };
   };
 
+  const handleDateConfirm = (start: string, end: string, fn: () => void) => {
+    if (start && !end) {
+      alert("종료날짜를 선택해 주세요");
+      return;
+    }
+
+    fn();
+  };
+
   return {
     handleCheckedRole,
     toggleAllChecked,
+    toggleCheckedRow,
+    handleCheckedIsShow,
     handleAdminInvite,
-    handleChangeRole,
     handlePageSizeQuery,
     handleImgFile,
     handleResetPassword,
+    handleDateConfirm,
   };
 };

@@ -2,7 +2,7 @@ import style from "./white.module.scss";
 
 interface IPanel {
   title?: string;
-  variants: "board" | "profile";
+  variants: "board" | "profile" | "detail";
   children: React.ReactNode;
 }
 

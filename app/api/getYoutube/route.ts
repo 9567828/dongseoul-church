@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 export const GET = async (req: Request) => {
   try {
     const video = await fetch(
-      `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=10&channelId=${process.env.YOUTUBE_CHANNEL_KEY}&order=date&pageToken=CMIDEAA&key=${process.env.YOUTUBE_API_KEY}`,
+      `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=10&channelId=${process.env.YOUTUBE_CHANNEL_KEY}&order=date&key=${process.env.YOUTUBE_API_KEY}`,
       {
         method: "GET",
         headers: {

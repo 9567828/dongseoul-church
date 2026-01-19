@@ -1,7 +1,6 @@
 import { handlers } from "@/utils/handlers";
 import style from "./board.module.scss";
 import { useHooks } from "@/hooks/useHooks";
-import { filterSortType } from "@/utils/supabase/sql/users/select";
 
 export type tabStatusType = "all" | "active" | "inActive";
 
@@ -14,15 +13,14 @@ interface ITabProps {
   list: ITab[];
   size?: number;
   tab: tabStatusType;
-  filter: filterSortType;
 }
 
-export default function BoardTap({ list, size, tab, filter }: ITabProps) {
+export default function BoardTap({ list, size, tab }: ITabProps) {
   const { handlePageSizeQuery } = handlers();
   const { useRoute } = useHooks();
 
   const handleTab = (id: tabStatusType) => {
-    const query = handlePageSizeQuery("1", String(size), id, filter);
+    const query = handlePageSizeQuery("1", String(size), id);
     useRoute(query);
   };
 
@@ -35,7 +33,6 @@ export default function BoardTap({ list, size, tab, filter }: ITabProps) {
           id={v.id}
           className={`${style["tab-btn"]} ${tab === v.id ? style.active : ""}`.trim()}
           onClick={() => handleTab(v.id)}
-          // onClick={() => toggleTab(v.id)}
         >
           <span>{v.name}</span>
         </button>

@@ -1,4 +1,5 @@
 import { tabStatusType } from "@/components/admin/ui/board/BoardTab";
+import { sortTypes } from "@/hooks/store/useSortState";
 import { EmailOtpType } from "@supabase/supabase-js";
 
 export interface ISearchParams {
@@ -22,15 +23,19 @@ export type pageQueryProps = string | string[] | undefined;
 
 export interface ISearchParamsInfo {
   currPage: number;
-  listNum: number;
-  tab: tabStatusType;
+  size: number;
+  tab?: tabStatusType;
 }
 
-export type UserFormType = "add" | "edit" | "readOnly" | "list";
+export type filterSortType = { filter: string; sort: sortTypes };
+
+export type filterDateType = { startDate: string | null; endDate: string | null; isOneDay: boolean };
+
+export type FormType = "add" | "edit" | "readOnly" | "list";
 
 export const roleList = ["super", "admin"];
 
-type actionMode = "delete" | "state" | "invite";
+type actionMode = "delete" | "state" | "invite" | "openImg" | "filter";
 export type modalActType = { key?: string; memId?: string; action: actionMode };
 
 type addrKey = "address" | "zonecode";
@@ -46,3 +51,13 @@ export const getExtFromMime = (file: File) => {
 
   return map[file.type] ?? "png";
 };
+
+export interface YoutubeApiItem {
+  id: { videoId: string };
+  snippet: {
+    publishedAt: string;
+    title: string;
+    thumbnails: { high: { url: string } };
+    description: string;
+  };
+}

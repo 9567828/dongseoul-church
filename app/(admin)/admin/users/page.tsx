@@ -24,7 +24,7 @@ export default async function Page({ searchParams }: ISearchParams) {
   const { fetchAllUsers } = await fetchServer();
 
   const currPage = getSearchQuerys(page, 1);
-  const listNum = getSearchQuerys(size, 6);
+  const listNum = getSearchQuerys(size, 10);
   const tabStatus = getTabQuery(tab, "all");
 
   await queryClient.prefetchQuery(fetchAllUsers(currPage, listNum, tabStatus));
@@ -32,7 +32,7 @@ export default async function Page({ searchParams }: ISearchParams) {
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
       <Suspense fallback={<Loading />}>
-        <UserList currPage={currPage} listNum={listNum} tab={tabStatus} />
+        <UserList currPage={currPage} size={listNum} tab={tabStatus} />
       </Suspense>
     </HydrationBoundary>
   );

@@ -1,10 +1,9 @@
 import style from "./board.module.scss";
 import CheckBox from "../check-box/CheckBox";
-import { sortTypes, useSortState } from "@/hooks/store/useSortState";
+import { sortMapType, sortTypes } from "@/hooks/store/useSortState";
 import { ChangeEvent } from "react";
 import { handlers } from "@/utils/handlers";
 import { tabStatusType } from "./BoardTab";
-import { filterSortType } from "@/utils/supabase/sql/users/select";
 import { useHooks } from "@/hooks/useHooks";
 
 export type tableHeadType = {
@@ -22,17 +21,28 @@ type tableHead = {
   checked: boolean;
   listNum: number;
   tab: tabStatusType;
+  onClick: (id: string) => void;
+  sortMap: sortMapType;
 };
 
-export default function TableHead({ checkBtnId, headList, gridCol, onChange, checked, listNum, tab }: tableHead) {
-  const { sortMap, toggleSort } = useSortState();
+export default function TableHead({
+  checkBtnId,
+  headList,
+  gridCol,
+  onChange,
+  checked,
+  listNum,
+  tab,
+  onClick,
+  sortMap,
+}: tableHead) {
   const { handlePageSizeQuery } = handlers();
   const { useRoute } = useHooks();
 
   const handleFilter = (id: string) => {
     const query = handlePageSizeQuery("1", String(listNum), tab);
     useRoute(query);
-    toggleSort(id);
+    onClick(id);
   };
 
   return (

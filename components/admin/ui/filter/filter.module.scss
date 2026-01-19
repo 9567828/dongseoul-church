@@ -1,0 +1,209 @@
+@use "../../../../styles/admin/abstract/index.scss" as *;
+
+.dim {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: 400;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(7.5px);
+}
+
+.container {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 350px;
+  height: 100%;
+  background-color: white;
+}
+
+.content-container {
+  width: 100%;
+  height: calc(100vh - 53px);
+  padding: 16px;
+}
+
+.content {
+  height: 100%;
+  @include flex(column, space-between, null, 12px);
+  .title {
+    @include font-theme($bodySm, $m);
+    color: $cms-gray-600;
+    padding: 10px 0;
+  }
+}
+
+// dates
+.select-period {
+  @include flex(null, space-between, center, null);
+  margin-bottom: 12px;
+}
+
+.period-wrap {
+  width: fit-content;
+  border-radius: 8px;
+  border: 1px solid $cms-gray-400;
+  background-color: white;
+  overflow: hidden;
+  .period {
+    padding: 6px 8px;
+    @include font-theme($bodySm, $r);
+    color: $cms-gray-600;
+    &.active {
+      background-color: $cms-main-color;
+      color: white;
+    }
+    &:nth-of-type(2) {
+      border-left: 1px solid $cms-gray-400;
+      border-right: 1px solid $cms-gray-400;
+    }
+    &:nth-of-type(3) {
+      border-right: 1px solid $cms-gray-400;
+    }
+  }
+}
+
+.label {
+  @include font-theme($bodySm, $r);
+  color: $cms-gray-800;
+}
+
+// 달력
+.cal-container {
+  margin-top: 8px;
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px solid $cms-gray-400;
+  .header-text {
+    @include font-theme($bodySm, $r);
+    color: $cms-gray-700;
+  }
+
+  .date-header {
+    @include flex(null, space-between, center, null);
+    margin-bottom: 12px;
+    .header-meta {
+      @include flex(null, null, center, 4px);
+      @include font-theme($bodySm, $b);
+      color: $cms-dark;
+    }
+  }
+
+  .btn-wrap {
+    height: 20px;
+    .move-btn {
+      width: 20px;
+      height: 20px;
+      img {
+        width: 100%;
+        height: 100%;
+      }
+      &:first-child {
+        margin-right: 8px;
+      }
+    }
+  }
+
+  .date-wrap {
+    // @include flex($justi: space-between, $align: center);
+    @include grid-col(repeat(7, 1fr));
+    li {
+      @include font-theme($bodySm, $m);
+      line-height: 37px;
+      // padding: 10px 2px;
+      height: 40px;
+      text-transform: capitalize;
+      button {
+        width: 100%;
+      }
+      p, button span {
+        color: $cms-gray-900;
+        text-align: center;
+      }
+      &.weekend {
+        p, button span {
+          color: $cms-red;
+        }
+      }
+      &.other {
+        p, button span {
+          color: $cms-gray-600;
+        }
+      }
+
+      &.dates {
+        &:hover:not(:has(button:disabled)) {
+          cursor: pointer;
+          border-radius: 8px;
+          background-color: $cms-main-10P;
+        }
+        &.active {
+          border-radius: 8px;
+          background-color: $cms-main-color;
+          p, button span {
+            color: white;
+          }
+        }
+        &.range {
+          background-color: $cms-main-100;
+          p, button span {
+            color: $cms-main-color;
+          }
+        }
+        &.rangeStart {
+          border-top-left-radius: 8px;
+          border-bottom-left-radius: 8px;
+          background-color: $cms-main-color;
+          p, button span {
+            color: white;
+          }
+        }
+        &.rangeEnd {
+          border-top-right-radius: 8px;
+          border-bottom-right-radius: 8px;
+          background-color: $cms-main-color;
+          p, button span {
+            color: white;
+          }
+        }
+        .today {
+          border-radius: 100%;
+          border: 1px solid $cms-main-color;
+        }
+      }
+    }
+  }
+}
+
+.date-container {
+  @include flex(column, null, null, 4px);
+  margin-top: 4px;
+}
+
+.sel-btn-wrap {
+  @include flex(null, flex-end, center, 10px);
+  margin-top: 20px;
+
+  .sel-btn {
+    padding: 8px 16px;
+    border-radius: 8px;
+    @include font-theme($bodySm, $m);
+    &.cancel {
+      color: $cms-main-color;
+      &:hover {
+        font-weight: $b;
+        color: $cms-main-700;
+      }
+    }
+    &.confirm {
+      color: white;
+      background-color: $cms-main-color;
+      &:hover {
+        background-color: $cms-main-700;
+      }
+    }
+  }
+}

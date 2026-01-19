@@ -1,17 +1,19 @@
 import { SupabaseClient } from "@supabase/supabase-js";
-import { tablesName } from "..";
-import { tabStatusType } from "@/components/admin/ui/board/BoardTab";
-import { filterSortType } from "../users/select";
+import { boardTables, SearchAllType, tablesName } from "..";
+import { filterDateType, filterSortType } from "@/utils/propType";
 
 export type showStateType = "all" | "show" | "noShow";
 
 export interface ISelect {
   name: tablesName;
+  order?: string;
+  isAscending?: boolean;
   limit?: number;
   page?: number;
   id?: number | string;
-  tab?: tabStatusType;
   filter?: filterSortType;
+  dates?: filterDateType;
+  search?: string;
   hasIsShow?: showStateType;
   supabase: SupabaseClient;
 }
@@ -39,27 +41,62 @@ export const select = () => {
     name,
     limit,
     page,
-    tab,
     filter,
+    dates,
+    search,
     hasIsShow = "all",
     supabase,
   }: ISelect): Promise<{ count: number; list: T[] }> => {
-    console.log(tab, filter);
-
     const from = (page! - 1) * limit!;
     const to = from + limit! - 1;
 
-    let query = supabase.from(name).select("*", { count: "exact" }).range(from, to);
+    let filterName = filter?.filter!;
+    let isAscending = filter?.sort === "desc" ? false : true;
+
+    let query = supabase
+      .from(name)
+      .select(`*, origin:members!${name}_origin_writer_fkey(name), editor:members!${name}_edit_writer_fkey(name)`, {
+        count: "exact",
+      });
 
     handleHasShow(hasIsShow, query);
 
-    const { data, count, error } = await query.order("id", { ascending: true });
+    let safeFrom;
+    const { count: total } = await supabase.from(name).select("*", { count: "exact" });
 
+    if (dates?.startDate && dates.endDate) {
+      query = query.gte("created_at", dates.startDate).lt("created_at", dates.endDate);
+
+      const { count } = await query;
+
+      if (count === 0 || total! > count!) {
+        safeFrom = 0;
+      }
+    }
+
+    if (search !== "") {
+      query = query.or(`title.ilike.%${search}%,description.ilike.%${search}%`);
+    }
+
+    const completeFrom = safeFrom === 0 ? safeFrom : from;
+
+    const { data, count, error } = await query
+      .range(completeFrom, to)
+      .order(filterName, { ascending: isAscending })
+      .order("id", { ascending: false });
     if (error) throw error;
+
     return { count: count ?? 0, list: (data as T[]) ?? [] };
   };
 
-  const selectList = async <T>({ name, limit, supabase, hasIsShow }: ISelect): Promise<{ list: T[] }> => {
+  const selectList = async <T>({
+    name,
+    limit,
+    supabase,
+    order = "id",
+    isAscending = false,
+    hasIsShow,
+  }: ISelect): Promise<{ list: T[] }> => {
     let query = supabase.from(name).select("*");
     if (hasIsShow) {
       query = query.eq("is_show", true);
@@ -67,7 +104,7 @@ export const select = () => {
       query = query.eq("is_show", false);
     }
 
-    const { data, error } = await query.order("id", { ascending: true }).limit(limit!);
+    const { data, error } = await query.order(order, { ascending: isAscending }).limit(limit!);
 
     if (error) throw error;
 
@@ -78,12 +115,14 @@ export const select = () => {
     name,
     id,
     supabase,
-    hasIsShow = "all",
+    hasIsShow = "show",
     defaultValue,
   }: ISelect & { defaultValue: T }): Promise<{ data: WithPrevNext<T> }> => {
-    let baseQuery = supabase.from(name).select("*");
+    let baseQuery = supabase
+      .from(name)
+      .select(`*, origin:members!${name}_origin_writer_fkey(name), editor:members!${name}_edit_writer_fkey(name)`);
 
-    if (hasIsShow) {
+    if (hasIsShow === "show") {
       baseQuery = baseQuery.eq("is_show", true);
     }
 
@@ -93,13 +132,13 @@ export const select = () => {
     let prevQuery = supabase.from(name).select("id, title").lt("id", id);
     let nextQuery = supabase.from(name).select("id, title").gt("id", id);
 
-    if (hasIsShow) {
+    if (hasIsShow === "show") {
       prevQuery = prevQuery.eq("is_show", true);
       nextQuery = nextQuery.eq("is_show", true);
     }
 
-    const { data: prev } = await prevQuery.order("id", { ascending: false }).limit(1).maybeSingle();
-    const { data: next } = await nextQuery.order("id", { ascending: true }).limit(1).maybeSingle();
+    const { data: prev } = await nextQuery.order("id", { ascending: true }).limit(1).maybeSingle();
+    const { data: next } = await prevQuery.order("id", { ascending: false }).limit(1).maybeSingle();
 
     const data = {
       ...table,
@@ -110,5 +149,73 @@ export const select = () => {
     return { data: (data as WithPrevNext<T>) ?? defaultValue };
   };
 
-  return { selectPageList, selectList, selectOne };
+  const getLatestUpdateUser = async <T>({ name, supabase }: ISelect) => {
+    const { data, error } = await supabase
+      .from(name)
+      .select(`*`)
+      .order("updated_at", { ascending: false })
+      .limit(1)
+      .single();
+    if (error) throw error;
+
+    return data as boardTables;
+  };
+
+  const searchAll = async (supabase: SupabaseClient, search: string) => {
+    const [album, sermon] = await Promise.all([
+      supabase
+        .from("album_search")
+        .select("*", { count: "exact" })
+        .or(`title.ilike.%${search}%,description.ilike.%${search}%,writer.ilike.%${search}%`)
+        .order("created_at", { ascending: false })
+        .limit(5),
+      supabase
+        .from("sermon_search")
+        .select("*", { count: "exact" })
+        .or(`title.ilike.%${search}%,description.ilike.%${search}%,writer.ilike.%${search}%`)
+        .order("published_date", { ascending: false })
+        .limit(5),
+    ]);
+
+    const { data: albumData, count: albumCnt, error: albumErr } = album;
+    if (albumErr) throw albumErr;
+    const { data: sermonData, count: sermonCnt, error: sermonErr } = sermon;
+    if (sermonErr) throw sermonErr;
+
+    const result: SearchAllType[] = [
+      { table: "album_search", data: albumData, count: albumCnt ?? 0 },
+      { table: "sermon_search", data: sermonData, count: sermonCnt ?? 0 },
+    ];
+
+    return {
+      result,
+    };
+  };
+
+  const searchGetByBoard = async ({ name, supabase, search, page, limit }: ISelect) => {
+    const from = (page! - 1) * limit!;
+    const to = from + limit! - 1;
+
+    let filterName = "created_at";
+
+    if (name === "sermon_search") {
+      filterName = "published_date";
+    }
+
+    const { data, error, count } = await supabase
+      .from(name)
+      .select("*", { count: "exact" })
+      .or(`title.ilike.%${search}%,description.ilike.%${search}%,writer.ilike.%${search}%`)
+      .order(filterName, { ascending: false })
+      .range(from, to);
+
+    if (error) throw error;
+
+    return {
+      data,
+      count,
+    };
+  };
+
+  return { selectPageList, selectList, selectOne, getLatestUpdateUser, searchAll, searchGetByBoard };
 };

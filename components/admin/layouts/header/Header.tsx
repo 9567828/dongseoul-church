@@ -15,6 +15,7 @@ export default function Header({ user }: { user: RoleWithMember }) {
   const [alret, setAlert] = useState(false);
   const { isClose, toggleSideBar } = useSideBarStateStore();
   const [openModal, setOpenModal] = useState(false);
+  const [value, setValue] = useState("");
   // const { data } = useQuery({ queryKey: ["member", "own"], queryFn: () => useSelectLogginUser() });
   const modalRef = useRef<HTMLDivElement | null>(null);
   // useOnClickOutSide(modalRef, () => setOpenModal((prev) => !prev));
@@ -32,7 +33,22 @@ export default function Header({ user }: { user: RoleWithMember }) {
             <button onClick={toggleSideBar}>
               <img src="/imgs/admin/icons/ic_menu.svg" alt="메뉴버튼" />
             </button>
-            <SearchInput id="headerSearch" variants="header" />
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                if (value.trim() === "") {
+                  return;
+                }
+                useRoute(`/admin/search?keyword=${value}`);
+              }}
+            >
+              <SearchInput
+                id="headerSearch"
+                variants="header"
+                value={value}
+                onChange={(e) => setValue(e.target.value)}
+              />
+            </form>
           </div>
           <div className={style["menu-wrap"]}>
             <Link href={"/"} title="홈으로 이동">
