@@ -1,7 +1,8 @@
 import { Enums, Tables } from "@/database.types";
 import { showStateType } from "./boards/select";
 
-export type tablesName = "albums" | "sermons" | "users" | "album_search" | "sermon_search";
+export type tablesName = "albums" | "sermons" | "users";
+export type viewName = "album_search" | "sermon_search";
 
 export type AlbumRow = Tables<"albums">;
 export type SermonRow = Tables<"sermons">;
@@ -130,7 +131,7 @@ export type searchList = {
 };
 
 export type SearchAllType = {
-  table: tablesName;
+  table: viewName;
   data: searchList[];
   count: number;
 };

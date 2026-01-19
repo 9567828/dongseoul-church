@@ -1,6 +1,6 @@
 import { filterDateType, filterSortType } from "@/utils/propType";
 import createBrowClient from "@/utils/supabase/services/browerClinet";
-import { tablesName } from "@/utils/supabase/sql";
+import { tablesName, viewName } from "@/utils/supabase/sql";
 import { select, showStateType } from "@/utils/supabase/sql/boards/select";
 import { useQuery } from "@tanstack/react-query";
 
@@ -67,11 +67,21 @@ export const useSelectSearchAll = (keyword: string) => {
   });
 };
 
-export const useSelectSearchByBoard = (name: tablesName, keyword: string, page: number, size: number) => {
+export const useSelectSearchByBoard = ({
+  name,
+  search,
+  page,
+  limit,
+}: {
+  name: viewName;
+  search: string;
+  page: number;
+  limit: number;
+}) => {
   return useQuery({
-    queryKey: [name, keyword, page, size],
+    queryKey: [name, search, page, limit],
     queryFn: async () => {
-      return await searchGetByBoard({ name, supabase, search: keyword, page, limit: size });
+      return await searchGetByBoard({ name, supabase, search, page, limit });
     },
   });
 };

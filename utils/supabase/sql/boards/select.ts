@@ -1,5 +1,5 @@
 import { SupabaseClient } from "@supabase/supabase-js";
-import { boardTables, SearchAllType, tablesName } from "..";
+import { boardTables, SearchAllType, tablesName, viewName } from "..";
 import { filterDateType, filterSortType } from "@/utils/propType";
 
 export type showStateType = "all" | "show" | "noShow";
@@ -16,6 +16,14 @@ export interface ISelect {
   search?: string;
   hasIsShow?: showStateType;
   supabase: SupabaseClient;
+}
+
+export interface ISearch {
+  name: viewName;
+  supabase: SupabaseClient;
+  search: string;
+  page: number;
+  limit: number;
 }
 
 interface PrevNext {
@@ -74,8 +82,14 @@ export const select = () => {
       }
     }
 
-    if (search !== "") {
+    if (search !== undefined) {
       query = query.or(`title.ilike.%${search}%,description.ilike.%${search}%`);
+
+      const { count } = await query;
+
+      if (count === 0 || total! > count!) {
+        safeFrom = 0;
+      }
     }
 
     const completeFrom = safeFrom === 0 ? safeFrom : from;
@@ -192,7 +206,7 @@ export const select = () => {
     };
   };
 
-  const searchGetByBoard = async ({ name, supabase, search, page, limit }: ISelect) => {
+  const searchGetByBoard = async ({ name, supabase, search, page, limit }: ISearch) => {
     const from = (page! - 1) * limit!;
     const to = from + limit! - 1;
 

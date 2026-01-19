@@ -15,7 +15,7 @@ export default async function Page({ searchParams }: ISearchParams) {
 
   return (
     <Suspense>
-      <SermonList currPage={currPage} listNum={listNum} />
+      <SermonList currPage={currPage} size={listNum} />
     </Suspense>
   );
 }

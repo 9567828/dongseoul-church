@@ -7,13 +7,13 @@ import StateView from "@/components/main/ui/state-view/StateView";
 import { SermonRow } from "@/utils/supabase/sql";
 import { ISearchParamsInfo } from "@/utils/propType";
 
-export default function SermonList({ currPage, listNum }: ISearchParamsInfo) {
+export default function SermonList({ currPage, size }: ISearchParamsInfo) {
   const { data: { list, count } = { list: [], count: 0 }, isLoading } = useSelectPageList<SermonRow>(
     "sermons",
-    listNum,
+    size,
     currPage,
     "show",
-    { filter: "published_date", sort: "desc" }
+    { filter: "published_date", sort: "desc" },
   );
 
   return (
@@ -25,7 +25,7 @@ export default function SermonList({ currPage, listNum }: ISearchParamsInfo) {
       ) : (
         <PhotoBoard list={list} variant="sermon" />
       )}
-      {list.length > 0 && <Pagenation currPage={currPage} count={count} listNum={listNum} />}
+      {list.length > 0 && <Pagenation currPage={currPage} count={count} listNum={size} />}
     </div>
   );
 }

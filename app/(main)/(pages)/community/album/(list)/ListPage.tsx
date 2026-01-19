@@ -7,13 +7,13 @@ import { useSelectPageList } from "@/tanstack-query/useQuerys/useSelectQueries";
 import { AlbumRow } from "@/utils/supabase/sql";
 import { ISearchParamsInfo } from "@/utils/propType";
 
-export default function ListPage({ listNum, currPage }: ISearchParamsInfo) {
+export default function ListPage({ size, currPage }: ISearchParamsInfo) {
   const { data: { list, count } = { list: [], count: 0 }, isLoading } = useSelectPageList<AlbumRow>(
     "albums",
-    listNum,
+    size,
     currPage,
     "show",
-    { filter: "id", sort: "desc" }
+    { filter: "id", sort: "desc" },
   );
 
   return (
@@ -25,7 +25,7 @@ export default function ListPage({ listNum, currPage }: ISearchParamsInfo) {
       ) : (
         <PhotoBoard list={list} variant="album" />
       )}
-      {list.length > 0 && <Pagenation currPage={currPage} count={count} listNum={listNum} />}
+      {list.length > 0 && <Pagenation currPage={currPage} count={count} listNum={size} />}
     </div>
   );
 }

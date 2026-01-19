@@ -1,13 +1,13 @@
 import style from "@/app/(admin)/admin/search/(layout)/search.module.scss";
 import ThumbNail from "@/components/admin/ui/board/ThumbNail";
 import TextField from "@/components/admin/ui/board/TextField";
-import { searchList, tablesName } from "@/utils/supabase/sql";
+import { searchList, tablesName, viewName } from "@/utils/supabase/sql";
 import { formatDate } from "@/utils/formatDate";
 import { getAlbumImgURL } from "@/utils/supabase/sql/storage/storage";
 
 interface ISearchResultProps {
   list: searchList[];
-  table: tablesName;
+  table: viewName;
 }
 
 export default function SearchResult({ list, table }: ISearchResultProps) {
