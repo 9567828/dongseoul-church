@@ -42,40 +42,27 @@ export default function Header({ user }: { user: RoleWithMember }) {
                 useRoute(`/admin/search?keyword=${value}`);
               }}
             >
-              <SearchInput
-                id="headerSearch"
-                variants="header"
-                value={value}
-                onChange={(e) => setValue(e.target.value)}
-              />
+              <SearchInput id="headerSearch" variants="header" value={value} onChange={(e) => setValue(e.target.value)} />
             </form>
           </div>
           <div className={style["menu-wrap"]}>
-            <Link href={"/"} title="홈으로 이동">
+            <Link href={"/"} title="홈으로 이동" target="_blank">
               <img src="/imgs/admin/icons/ic_home.svg" alt="홈으로이동" />
             </Link>
-            <button type="button">
+            {/* <button type="button">
               {!alret ? (
                 <img src="/imgs/admin/icons/ic_alert=off.svg" alt="알림아이콘" />
               ) : (
                 <img src="/imgs/admin/icons/ic_alert=on.svg" alt="알림아이콘" />
               )}
-            </button>
+            </button> */}
             <button type="button" onClick={() => setOpenModal((prev) => !prev)}>
               <AvatarWrap size="sm" src={user.avatar_url || null} />
             </button>
           </div>
         </nav>
       </header>
-      {openModal && (
-        <ProfileModal
-          modalRef={modalRef}
-          name={user.name}
-          email={user.email}
-          avatar={user.avatar_url!}
-          onClick={onClickProfile}
-        />
-      )}
+      {openModal && <ProfileModal modalRef={modalRef} name={user.name} email={user.email} avatar={user.avatar_url!} onClick={onClickProfile} />}
     </>
   );
 }
