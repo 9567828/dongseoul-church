@@ -143,6 +143,7 @@ export default function ProfileForm() {
                           setImgFile(result?.file || null);
                           setFileErr(result?.err || false);
                         }}
+                        accept="image/*"
                       />
                       <img src="/imgs/admin/icons/ic_pen-edit.svg" alt="사진수정" />
                     </label>

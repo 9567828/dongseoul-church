@@ -126,6 +126,7 @@ export default function AlbumAddPage() {
                     addImg={prevImg}
                     onClickImg={() => setOpenImg(true)}
                     onReset={allReset}
+                    accept="image/*"
                     onChange={(e) => {
                       const result = handleImgFile(e, setPrevImg);
                       if (result?.file) {
