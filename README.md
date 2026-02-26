@@ -5,13 +5,13 @@
 권한 기반 접근 제어와 실무형 데이터 모델링에 중점을 두었습니다.<br/>
 ---
 ### test 계정
-1. super 계정
+1. super 계정<br />
    id: super@testdomain.com <br/>
    pw: qwer1234@
-2. admin 계정
-   id: admin@naver.com
-   pw: qwer1234@
-
+2. admin 계정<br />
+   id: admin@naver.com<br />
+   pw: qwer1234@ <br/>
+👉 사이트바로가기: https://dodam-church-zeta.vercel.app/auth/login
 
 ## 🧱 Tech Stack
 
