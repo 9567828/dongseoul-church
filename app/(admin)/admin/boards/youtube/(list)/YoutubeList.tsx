@@ -104,8 +104,8 @@ export default function YoutubeList({ currPage, size, tab, keyword }: ISearchPar
 
     const videos: AddYoutubePayload[] = items.map((t: YoutubeApiItem) => ({
       title: t.snippet.title,
-      video_id: t.id.videoId,
-      youtube_url: `https://www.youtube.com/watch?v=${t.id.videoId}`,
+      video_id: t.snippet.resourceId.videoId,
+      youtube_url: `https://www.youtube.com/watch?v=${t.snippet.resourceId.videoId}`,
       published_date: t.snippet.publishedAt,
       thumbnail: t.snippet.thumbnails.high.url,
       description: t.snippet.description,

@@ -9,8 +9,22 @@ export default function ToastPopup() {
   return (
     <div className={style.container}>
       {toasts.map((t) => {
-        const styleName = t.type === "success" ? style.success : t.type === "fetching" ? style.fetching : t.type === "info" ? style.info : style.error;
-        const iconSrc = t.type === "success" ? `ic_check-toast` : t.type === "fetching" ? `ic_fetching` : t.type === "info" ? `ic_info` : `ic_Fail`;
+        const styleName =
+          t.type === "success"
+            ? style.success
+            : t.type === "fetching"
+              ? style.fetching
+              : t.type === "info"
+                ? style.info
+                : style.error;
+        const iconSrc =
+          t.type === "success"
+            ? `ic_check-toast`
+            : t.type === "fetching"
+              ? `ic_fetching`
+              : t.type === "info"
+                ? `ic_Info`
+                : `ic_Fail`;
 
         return (
           <div key={t.id} className={`${style["toast-wrap"]} ${styleName}`}>

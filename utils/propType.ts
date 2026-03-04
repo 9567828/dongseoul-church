@@ -54,11 +54,22 @@ export const getExtFromMime = (file: File) => {
 };
 
 export interface YoutubeApiItem {
-  id: { videoId: string };
   snippet: {
     publishedAt: string;
     title: string;
     thumbnails: { high: { url: string } };
     description: string;
+    resourceId: { videoId: string };
   };
 }
+
+// 예전거
+// export interface YoutubeApiItem {
+//   id: { videoId: string };
+//   snippet: {
+//     publishedAt: string;
+//     title: string;
+//     thumbnails: { high: { url: string } };
+//     description: string;
+//   };
+// }
