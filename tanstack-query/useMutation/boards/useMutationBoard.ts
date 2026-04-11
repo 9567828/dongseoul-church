@@ -15,7 +15,7 @@ export const useAddYoutubeMutation = () => {
 
       const { data, error } = await supabase
         .from("sermons")
-        .upsert(rows, { onConflict: "video_id", ignoreDuplicates: true })
+        .upsert(rows, { onConflict: "video_id", ignoreDuplicates: false })
         .select();
 
       if (error) throw error;
